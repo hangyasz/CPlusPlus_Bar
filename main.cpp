@@ -8,8 +8,10 @@
 
 int main() {
 
-    Bor ital(bor);
-    ital_kiir(ital);
-    std::cout<<ital<<std::endl;
+    Italok italok;
+    italok.addItal();
+    italok.addItal();
+    italok.kiir_index();
+    std::cout<<italok.getItal(0)<<std::endl;
     return 0;
 }

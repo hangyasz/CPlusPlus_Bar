@@ -274,11 +274,16 @@ public:
 class Italok {
     Ital** ListaItalok;
     size_t db;
+    Ital* italok_bevitel();
 public:
     Italok();
     ~Italok();
     Italok(const Italok &italok);
     Italok &operator=(const Italok &italok);
+    void addItal();
+    void removeItal();
+    void kiir_index();
+    Ital &getItal(size_t index);
 };
 
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
@@ -292,7 +297,5 @@ std::ostream& operator<<(std::ostream& os, const Sor& ital);
 std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
 
 
-
-Ital* italok_bevitel();
 
 #endif //ITALOK_H

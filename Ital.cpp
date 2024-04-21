@@ -633,7 +633,7 @@ void Gyumolcsle::kiir() {
 
 //>>italok
 std::ostream& operator<<(std::ostream& os, const Ital& ital) {
-    os <<"Nev: "<< ital.getNev()<<"\nGyarto "<< ital.getGyarto() << "\ntipus:"<< ital.getTipusNev(ital.getTipus());
+    os <<"Nev: "<< ital.getNev()<<" Gyarto "<< ital.getGyarto() << " tipus:"<< ital.getTipusNev(ital.getTipus());
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital) {
@@ -641,26 +641,26 @@ std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital) {
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const Bor& ital) {
-    os<< (SzeszesItalok&)ital<< "\nEvjarat: " << ital.getEvjarat() << "\nSzin:" << ital.getSzin() << "\nFajta db: " << ital.getFajta_db();
+    os<< (SzeszesItalok&)ital<< "\nEvjarat: " << ital.getEvjarat() << "Szin: " << ital.getSzin() << " Fajta db: " << ital.getFajta_db();
     for (int i = 0; i < ital.getFajta_db(); i++) {
-        os <<"\nFajta:"<< ital.getFajtaindex(i);
+        os <<" Fajta:"<< ital.getFajtaindex(i);
     }
         return os;
     }
 std::ostream& operator<<(std::ostream& os, const Wiskey& ital) {
-    os<<(SzeszesItalok&)ital<<"\nTipus:" << ital.getTipus_wiskey() << "\nErleles:" << ital.getErleses();
+    os<<(SzeszesItalok&)ital<<"\nTipus:" << ital.getTipus_wiskey() << " Erleles:" << ital.getErleses();
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const Gin& ital) {
-    os<<(SzeszesItalok&)ital << "\nSzin:" << ital.getSzin() << "\n";
+    os<<(SzeszesItalok&)ital << "\nSzin:" << ital.getSzinNev(ital.getSzin());
     if (ital.getIz() != nullptr) {
-        os <<"Ize"<< ital.getIz();
+        os <<" Ize "<< ital.getIz();
     }
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Rum& ital) {
-    os<<(SzeszesItalok&)ital << "\nFajta:" << ital.getFajtaNev(ital.getFajta());
+    os<<(SzeszesItalok&)ital << "\nFajta: " << ital.getFajtaNev(ital.getFajta());
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const Tequila& ital) {
