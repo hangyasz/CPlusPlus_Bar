@@ -284,6 +284,7 @@ public:
     void removeItal();
     void kiir_index();
     Ital &getItal(size_t index);
+    void setItal(size_t index);
 };
 
 std::ostream& operator<<(std::ostream& os, const Ital& ital);

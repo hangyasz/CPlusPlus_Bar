@@ -90,6 +90,14 @@ Ital &Italok::getItal(size_t index) {
     return *ListaItalok[index];
 }
 
+void Italok::setItal(size_t index) {
+    if (index >= db) {
+        throw "Hibas index!";
+    }
+    delete ListaItalok[index];
+    ListaItalok[index] = italok_bevitel();
+}
+
 
 Ital* Italok::italok_bevitel() {
     int tipus=0;

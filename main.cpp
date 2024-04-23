@@ -11,7 +11,8 @@ int main() {
     Italok italok;
     italok.addItal();
     italok.addItal();
+    italok.addItal();
+    italok.removeItal();
     italok.kiir_index();
-    std::cout<<italok.getItal(0)<<std::endl;
     return 0;
 }
