@@ -12,7 +12,6 @@ int main() {
     italok.addItal();
     italok.addItal();
     italok.addItal();
-    italok.removeItal();
-    italok.kiir_index();
+    ital_kiir(italok);
     return 0;
 }

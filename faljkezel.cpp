@@ -5,12 +5,62 @@
 #include "faljkezel.h"
 #include <iostream>
 #include <fstream>
+#include "Ital.h"
 
-std::ofstream& operator<<(std::ofstream& os,const Ital &ital) {
-    os<<"<"<<getTipusszam(ital.getTipus())<<"><"<<ital.getNev()<<"><"<<ital.getGyarto()<<">";;
-    return os;
+
+void Ital::kiirF(std::ofstream& os) const {
+    os<<"<"<<getTipusszam(tipus)<<"><"<<nev<<"><"<<gyarto<<">";
 }
 
+void SzeszesItalok::kiirF(std::ofstream& os) const {
+    Ital::kiirF(os);
+    os<<"<"<<alkoholTartalom<<">";
+}
+void Bor::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<getBorSzin(szin)<<"><"<<fajta_db<<">{";
+    if(fajta_db>=1)
+        os<<fajta[0];
+    for(size_t i=1;i<fajta_db;i++){
+        os<<","<<fajta[i];
+    }
+    os<<"}";
+}
+void Wiskey::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<tipus<<"><"<<erleses<<">";
+}
+
+void Gin::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<getGinSzin(szin)<<"><"<<iz<<">";
+}
+void Rum::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<getRumtipus(fajta)<<">";
+}
+
+void Tequila::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<getTequilaTipus(fajta)<<">";
+}
+
+void Sor::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<tipus_sor<<">";
+}
+
+void Gyumolcsle::kiirF(std::ofstream& os) const {
+    Ital::kiirF(os);
+    os<<"<"<<gyumolcsszazalek<<">";
+}
+
+
+std::ofstream& operator<<(std::ofstream& os,const Ital &ital) {
+    ital.kiirF(os);
+    return os;
+}
+/*
 std::ofstream& operator<<(std::ofstream& os,const SzeszesItalok &ital) {
     os<<(Ital&)ital<<"<"<<ital.getAlkoholTartalom()<<">";
     return os;
@@ -51,7 +101,7 @@ std::ofstream& operator<<(std::ofstream& os,const Gyumolcsle &ital) {
     os<<(Ital&)ital<<"<"<<ital.getGyumolcsszazalek()<<">";
     return os;
 }
-
+*/
 int getTipusszam(ital_tipus tipus) {
     switch (tipus) {
         case alkohols: return 8;
@@ -105,11 +155,13 @@ int getRumtipus(rum_fajta fajta) {
     }
 }
 
-void ital_kiir(const Ital &ital) {
+void ital_kiir(const Italok &kap) {
     std::ofstream file;
     file.open("italok.txt");
     if (!file.is_open())
         throw"nem nyilt meg az italok.txt";
-    file<<ital;
+    for(size_t i=0;i<kap.getdb();i++){
+        file<<kap.getItal(i)<<"\n";
+    }
     file.close();
 }

@@ -67,8 +67,14 @@ public:
     //beálitja/átálitja az ital gyártóját
     void setGyarto();
 
+    //beálitja/átálitja az ital tipusát
+    void setTipus();
     //kiirja az ital adatait
-    virtual void kiir();
+    virtual void kiir() const;
+    //kiirja az ital adatait fájlba
+    virtual void kiirF(std::ofstream& os) const;
+    //valtoztatas menü
+    virtual void Set();
 
 
 };
@@ -87,7 +93,11 @@ public:
     void setAlkoholTartalom();
 
     //ki írja az itall alkohol tartalmat
-    virtual void kiir();
+    virtual void kiir() const;
+    //kiirja az ital adatait fájlba
+    virtual void kiirF(std::ofstream& os) const;
+    //valtoztatas menü
+    virtual void Set();
 };
 
 //Bor osztály
@@ -136,7 +146,11 @@ public:
 
 
     //borok adatai kiirása
-    void kiir();
+    void kiir() const;
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+    //valtoztatas menü
+    void Set();
 };
 
 //Wiskey osztály
@@ -158,13 +172,19 @@ public:
     unsigned int getErleses() const;
 
     //tipus beálitása
-    void setTipus();
+    void setTipus_wiskey();
 
     //ereleses beálitása
     void setErleses();
 
     //wiksey adatainak kiirása
-    void kiir();
+    void kiir() const;
+
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+
+    //valtoztatas menü
+    void Set();
 };
 
 // Gin osztály
@@ -192,7 +212,12 @@ public:
     void setIz();
 
     //gin adatok kiirása
-    void kiir();
+    void kiir() const;
+
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+    //valtoztatas menü
+    void Set();
 };
 //Rum osztály
 class Rum : public SzeszesItalok {
@@ -211,7 +236,13 @@ public:
     const char* getFajtaNev(rum_fajta fajta) const;
 
     //rum adatainak kiirása
-    void kiir();
+    void kiir() const;
+
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+
+    //valtoztatas menü
+    void Set();
 };
 //Tequila osztály
 class Tequila : public SzeszesItalok {
@@ -231,7 +262,13 @@ public:
     const char* getFajtaNev(tequli_fajta fajta) const;
 
     //Tequila adatainak kiirása
-    void kiir();
+    void kiir() const;
+
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+
+    //valtoztatas menü
+    void Set();
 };
 //Sor osztály
 class Sor : public SzeszesItalok {
@@ -245,13 +282,19 @@ public:
     char *getTipus_sor() const;
 
     //Sor tipus beálitása
-    void setTipus(char *tipus);
+    void setTipus_sor();
 
     //Sor adatainak kiirása
-    void kiir();
+    void kiir() const;
+
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
 
     //sor destruktor
     ~Sor();
+
+    //valtoztatas menü
+    void Set();
 };
 //gyumolcsle osztály
 class Gyumolcsle : public Ital {
@@ -268,9 +311,14 @@ public:
     void setGyumolcsszazalek();
 
     //kiirja a gyumolcsle adatait
-    void kiir();
-};
+    void kiir() const;
 
+    //kiirja az ital adatait fájlba
+    void kiirF(std::ofstream& os) const;
+
+    //valtoztatas menü
+    void Set();
+};
 
 //alapnyagok osztálya;
 class Italok {
@@ -285,11 +333,13 @@ public:
     void addItal(); //ital hozzá adása
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
-    Ital &getItal(size_t index); //ital vissza adása index alapján
-    void setItal(size_t index); //ital beálitása index alapján
+    size_t getdb() const; //italok számának kiirása
+    Ital &getItal(size_t index) const; //ital vissza adása index alapján
+    void setItalok(); //ital beálitása men
 };
 //os stream operatorokkal kiiratás
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
+/*
 std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital);
 std::ostream& operator<<(std::ostream& os, const Bor& ital);
 std::ostream& operator<<(std::ostream& os, const Wiskey& ital);
@@ -298,7 +348,6 @@ std::ostream& operator<<(std::ostream& os, const Rum& ital);
 std::ostream& operator<<(std::ostream& os, const Tequila& ital);
 std::ostream& operator<<(std::ostream& os, const Sor& ital);
 std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
-
-
+*/
 
 #endif //ITALOK_H
