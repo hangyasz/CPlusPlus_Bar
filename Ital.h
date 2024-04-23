@@ -90,11 +90,12 @@ public:
     virtual void kiir();
 };
 
+//Bor osztály
 class Bor : public SzeszesItalok {
-    char **fajta;
-    size_t fajta_db;
-    unsigned int evjarat;
-    szinek_bor szin;
+    char **fajta; //bor fajtái tartalmatát
+    size_t fajta_db;  //bor fajtáinak száma
+    unsigned int evjarat;  //bor éjrára
+    szinek_bor szin; //bor szine
 
 public:
     //bor konstruktor
@@ -138,9 +139,10 @@ public:
     void kiir();
 };
 
+//Wiskey osztály
 class Wiskey : public SzeszesItalok {
-    char *tipus;
-    unsigned int erleses;
+    char *tipus; //wiskey tipusa pl: single malt, blended
+    unsigned int erleses; //wiskey erleses éve
 
 public:
     //wiskey konstruktor
@@ -165,10 +167,10 @@ public:
     void kiir();
 };
 
-
+// Gin osztály
 class Gin : public SzeszesItalok {
-    gin_szin szin;
-    char *iz;
+    gin_szin szin;//gin szine
+    char *iz; //gin iz ha nem borokás
 
 public:
     //gin konstruktor
@@ -192,9 +194,9 @@ public:
     //gin adatok kiirása
     void kiir();
 };
-
+//Rum osztály
 class Rum : public SzeszesItalok {
-    rum_fajta fajta;
+    rum_fajta fajta; //rum fajta
 
 public:
     //rum konstruktor
@@ -211,9 +213,9 @@ public:
     //rum adatainak kiirása
     void kiir();
 };
-
+//Tequila osztály
 class Tequila : public SzeszesItalok {
-    tequli_fajta fajta;
+    tequli_fajta fajta; //tequila fajta
 
 public:
     //Tequila konstruktor
@@ -231,9 +233,9 @@ public:
     //Tequila adatainak kiirása
     void kiir();
 };
-
+//Sor osztály
 class Sor : public SzeszesItalok {
-    char *tipus_sor;
+    char *tipus_sor; //sor tipusa stringként
 
 public:
     //Sor konstruktor
@@ -251,9 +253,9 @@ public:
     //sor destruktor
     ~Sor();
 };
-
+//gyumolcsle osztály
 class Gyumolcsle : public Ital {
-    unsigned int gyumolcsszazalek;
+    unsigned int gyumolcsszazalek; //gyumolcsszazalek
 
 public:
     //konstruktor
@@ -272,21 +274,21 @@ public:
 
 //alapnyagok osztálya;
 class Italok {
-    Ital** ListaItalok;
-    size_t db;
-    Ital* italok_bevitel();
+    Ital** ListaItalok; //italok listája dinamikus memóriában
+    size_t db;// italok száma
+    Ital* italok_bevitel(); //private függvény ami beolvas egy italt
 public:
-    Italok();
-    ~Italok();
-    Italok(const Italok &italok);
-    Italok &operator=(const Italok &italok);
-    void addItal();
-    void removeItal();
-    void kiir_index();
-    Ital &getItal(size_t index);
-    void setItal(size_t index);
+    Italok(); //konstruktor
+    ~Italok(); //destruktor
+    Italok(const Italok &italok); //másoló konstruktor
+    Italok &operator=(const Italok &italok); //másoló értékadás
+    void addItal(); //ital hozzá adása
+    void removeItal(); //ital törlése
+    void kiir_index(); //italok kiirása index kell
+    Ital &getItal(size_t index); //ital vissza adása index alapján
+    void setItal(size_t index); //ital beálitása index alapján
 };
-
+//os stream operatorokkal kiiratás
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
 std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital);
 std::ostream& operator<<(std::ostream& os, const Bor& ital);

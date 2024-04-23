@@ -7,7 +7,7 @@
 
 
 
-char *hoszusor_olvas();
+char *hoszusor_olvas(); //hoszusoros beolvasása sztendert bementröl
 
 
 

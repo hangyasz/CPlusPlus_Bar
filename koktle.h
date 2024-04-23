@@ -8,13 +8,12 @@
 
 #include  "Ital.h"
 
+//koktelok tipusai
 struct Koktle {
-    char *nev;
-	size_t alapanyag_db;
-    Ital** alapanyagok;
-    unsigned int *menyiseg;
-    Koktle* kov;
-    Koktle* elo;
+    char *nev; //koktel neve
+	size_t alapanyag_db; //alapanyagok száma
+    Ital** alapanyagok; //alapanyagok tömbje
+    unsigned int *menyiseg; //alapanyagok mennyisége menyi kell belőle
 };
 
 //kotelok láncolat lista bovitése

@@ -9,10 +9,7 @@
 #include "koktle.h"
 #include "Ital.h"
 
-
 void ital_kiir(const Ital &ital);
-
-
 int getTipusszam(ital_tipus tipus);
 int getBorSzin(szinek_bor szin);
 int getGinSzin(gin_szin szin);
