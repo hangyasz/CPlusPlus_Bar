@@ -7,11 +7,13 @@
 
 
 int main() {
-
-    Italok italok;
+    /*Italok italok;
     italok.addItal();
     italok.addItal();
     italok.addItal();
     ital_kiir(italok);
+   */ Italok italok2;
+    italok_beolvas(italok2);
+    italok2.kiir_index();
     return 0;
 }

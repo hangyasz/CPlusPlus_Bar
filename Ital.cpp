@@ -18,6 +18,11 @@ Ital::Ital(ital_tipus tipus) {
     this->tipus = tipus;
 }
 
+Ital::Ital() {
+    nev=nullptr;
+    gyarto=nullptr;
+}
+
 Ital::~Ital() {
     delete[] nev;
     delete[] gyarto;
@@ -117,6 +122,10 @@ void Ital::setTipus() {
     } while(tipus<1 || tipus>9);
 }
 
+void Ital::setTipus(ital_tipus kap) {
+    tipus=kap;
+}
+
 
 
 void Ital::Set() {
@@ -156,6 +165,10 @@ SzeszesItalok::SzeszesItalok(ital_tipus tipus) : Ital(tipus) {
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
 }
+
+SzeszesItalok::SzeszesItalok() : Ital(){
+}
+
 float SzeszesItalok::getAlkoholTartalom() const {
     return alkoholTartalom;
 }
@@ -257,6 +270,10 @@ Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus) {
         std::cout << "Adja meg a fajtat: " << std::endl;
         fajta[i] = hoszusor_olvas();
     }
+}
+
+Bor::Bor():SzeszesItalok() {
+    fajta=nullptr;
 }
 
 Bor::~Bor() {
@@ -404,7 +421,7 @@ void Bor::kiir() const {
     if (fajta_db > 1) {
         std::cout << " Fajtak: ";
     } else {
-        std::cout << " Fajta: ";
+        std::cout << " Fajta:";
     }
     for (int i = 0; i < fajta_db; i++) {
         std::cout <<" "<< fajta[i];
@@ -464,6 +481,10 @@ Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
+}
+
+Wiskey::Wiskey():SzeszesItalok() {
+    tipus=nullptr;
 }
 
 Wiskey::~Wiskey() {
@@ -581,6 +602,10 @@ Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
     }
 }
 
+Gin::Gin() :SzeszesItalok(){
+    iz=nullptr;
+}
+
 gin_szin Gin::getSzin() const {
     return szin;
 }
@@ -650,7 +675,7 @@ void Gin::setIz(char* kap) {
 
 void Gin::kiir()  const{
     SzeszesItalok::kiir();
-    std::cout << "Szin: " << getSzinNev(szin);
+    std::cout << " Szin: " << getSzinNev(szin);
     if (iz != nullptr) {
         std::cout << " Iz: " << iz;
     }
@@ -721,6 +746,9 @@ Rum::Rum(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
             break;
         }
     }
+}
+
+Rum::Rum():SzeszesItalok() {
 }
 
 rum_fajta Rum::getFajta() const {
@@ -835,6 +863,9 @@ Tequila::Tequila(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
     }
 }
 
+Tequila::Tequila():SzeszesItalok() {
+}
+
 tequli_fajta Tequila::getFajta() const {
     return fajta;
 }
@@ -920,6 +951,11 @@ Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss) {
     this->tipus_sor = hoszusor_olvas();
 }
 
+Sor::Sor():SzeszesItalok() {
+    tipus_sor=nullptr;
+}
+
+
 char * Sor::getTipus_sor() const{
     return tipus_sor;
 }
@@ -987,6 +1023,10 @@ Gyumolcsle::Gyumolcsle(ital_tipus ital_tipus) : Ital(ital_tipus) {
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
 }
+
+Gyumolcsle::Gyumolcsle():Ital() {
+}
+
 
 unsigned int Gyumolcsle::getGyumolcsszazalek() const {
     return gyumolcsszazalek;

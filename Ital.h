@@ -45,6 +45,7 @@ class Ital {
 public:
     //konstruktor ami beállítja az ital nevét, gyártóját és tipusát
     Ital(ital_tipus tipus);
+    Ital();
 
     //desturktor ami felszabadítja a dinamikus memóriát
     virtual ~Ital();
@@ -71,6 +72,7 @@ public:
 
     //beálitja/átálitja az ital tipusát
     void setTipus();
+    void setTipus(ital_tipus kap);
     //kiirja az ital adatait
     virtual void kiir() const;
     //kiirja az ital adatait fájlba
@@ -87,6 +89,7 @@ class SzeszesItalok : public Ital {
 public:
     //konstruktor ami beállítja az alkohol tartalmat
     SzeszesItalok(ital_tipus tipus);
+    SzeszesItalok();
 
     //viszaadja az alkohol tartalmat
     float getAlkoholTartalom() const;
@@ -113,6 +116,7 @@ class Bor : public SzeszesItalok {
 public:
     //bor konstruktor
     Bor(ital_tipus tipus);
+    Bor();
 
     //bor destruktor
     ~Bor();
@@ -169,6 +173,7 @@ public:
     //wiskey konstruktor
     Wiskey(ital_tipus ital_tipus);
 
+    Wiskey();
     //destruktor
     ~Wiskey();
 
@@ -204,6 +209,7 @@ public:
     //gin konstruktor
     Gin(ital_tipus ital_tipus);
 
+    Gin();
     //gin szin visza adása
     gin_szin getSzin() const;
 
@@ -236,7 +242,7 @@ class Rum : public SzeszesItalok {
 public:
     //rum konstruktor
     Rum(ital_tipus ital_tipus);
-
+    Rum();
     //rum fajta visza adása
     rum_fajta getFajta() const;
     //rum fajta beálitása
@@ -263,6 +269,7 @@ public:
     //Tequila konstruktor
     Tequila(ital_tipus ital_tipus);
 
+    Tequila();
     //Tequila fajta visza adása
     tequli_fajta getFajta() const;
 
@@ -289,7 +296,7 @@ class Sor : public SzeszesItalok {
 public:
     //Sor konstruktor
     Sor(ital_tipus tipuss);
-
+    Sor();
     //Sor tipus visza adása
     char *getTipus_sor() const;
 
@@ -317,6 +324,7 @@ public:
     //konstruktor
     Gyumolcsle(ital_tipus ital_tipus);
 
+    Gyumolcsle();
     //visza adja a gyumolcsszazalekot
     unsigned int getGyumolcsszazalek() const;
 
@@ -345,6 +353,7 @@ public:
     Italok(const Italok &italok); //másoló konstruktor
     Italok &operator=(const Italok &italok); //másoló értékadás
     void addItal(); //ital hozzá adása
+    void addItal(Ital* kap); //ital hozzá adása
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
     size_t getdb() const; //italok számának kiirása
