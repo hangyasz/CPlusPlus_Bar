@@ -419,7 +419,7 @@ void Bor::kiir() const {
     std::cout << " Evjarat: " << evjarat;
     std::cout << " Szin: " << getSzinNev(szin);
     if (fajta_db > 1) {
-        std::cout << " Fajtak: ";
+        std::cout << " Fajtak:";
     } else {
         std::cout << " Fajta:";
     }

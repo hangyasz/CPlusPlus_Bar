@@ -358,7 +358,6 @@ Gyumolcsle* gyumolcsle_olvas(std::ifstream &file) {
 
 void italok_beolvas(Italok &kap) {
     std::ifstream file;
-    std::cout<<"beolvasas"<<std::endl;
     file.open("italok.txt");
     if (!file.is_open())
         throw"nem nyilt meg az italok.txt";
