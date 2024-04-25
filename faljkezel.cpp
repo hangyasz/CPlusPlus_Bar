@@ -9,7 +9,7 @@
 
 
 void Ital::kiirF(std::ofstream& os) const {
-    os<<"<"<<getTipusszam(tipus)<<"><"<<nev<<"><"<<gyarto<<">";
+    os<<getTipusszam(tipus)<<"<"<<nev<<"><"<<gyarto<<">";
 }
 
 void SzeszesItalok::kiirF(std::ofstream& os) const {
@@ -18,13 +18,13 @@ void SzeszesItalok::kiirF(std::ofstream& os) const {
 }
 void Bor::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<getBorSzin(szin)<<"><"<<fajta_db<<">{";
+    os<<"<"<<getBorSzin(szin)<<"><"<<fajta_db<<"><";
     if(fajta_db>=1)
         os<<fajta[0];
     for(size_t i=1;i<fajta_db;i++){
-        os<<","<<fajta[i];
+        os<<"><"<<fajta[i];
     }
-    os<<"}";
+    os<<">";
 }
 void Wiskey::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
@@ -165,3 +165,89 @@ void ital_kiir(const Italok &kap) {
     }
     file.close();
 }
+
+char *szoveg_olvas(std::ifstream &file) {
+    char *szoveg=nullptr;
+    char c;
+    size_t db=0;
+    while(file.get(c) && c!='>'){
+        if(szoveg==nullptr) {
+            szoveg = new char[db + 1];
+            szoveg[db] = c;
+            szoveg[db++] = '\0';
+        }
+        else{
+            char *uj=new char[db+1];
+            for(size_t i=0;i<db;i++){
+                uj[i]=szoveg[i];
+            }
+            uj[db]=c;
+            uj[db++]='\0';
+            delete[] szoveg;
+            szoveg=uj;
+        }
+    }
+    return szoveg;
+}
+
+int szam_olvas(std::ifstream &file) {
+    char kacsacsor;
+    unsigned int szam;
+    file>>kacsacsor>>szam>>kacsacsor;
+    return szam;
+}
+
+size_t size_olvs(std::ifstream &file) {
+    char kacsacsor;
+    size_t szam;
+    file>>kacsacsor>>szam>>kacsacsor;
+    return szam;
+}
+
+float float_olvas(std::ifstream &file) {
+    char kacsacsor;
+    float szam;
+    file>>kacsacsor>>szam>>kacsacsor;
+    return szam;
+}
+
+Ital* ital_olvas(std::ifstream &file) {
+    Ital *olvas=new Ital(alkohol_mentes);
+    return  olvas;
+}
+
+Bor *bor_olvas(std::ifstream &file) {
+    Bor *olvas=new Bor(bor);
+    return olvas;
+}
+
+
+Ital * italok_beolvas(Italok &kap) {
+    std::ifstream file;
+    file.open("italok.txt");
+    if (!file.is_open())
+        throw"nem nyilt meg az italok.txt";
+    int tipus;
+    while (!file.eof()){
+        file>>tipus;
+        switch (tipus) {
+            case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            default: throw "Hibás típus!";
+        }
+    }
+}
+

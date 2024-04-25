@@ -16,6 +16,8 @@ int getGinSzin(gin_szin szin);
 int getRumtipus(rum_fajta fajta);
 int getTequilaTipus(tequli_fajta fajta);
 std::ofstream& operator<<(std::ofstream& os,const Ital &ital);
+//ittalok beolvasasa
+Ital * italok_beolvas(Italok &kap);
 /*
 std::ofstream& operator<<(std::ofstream& os,const SzeszesItalok &ital);
 std::ofstream& operator<<(std::ofstream& os,const Bor &ital);

@@ -63,9 +63,11 @@ public:
 
     //beálitja/átálitja az ital nevét
     void setNev();
+    void setNev(char* kap );
 
     //beálitja/átálitja az ital gyártóját
     void setGyarto();
+    void setGyarto(char* kap);
 
     //beálitja/átálitja az ital tipusát
     void setTipus();
@@ -91,6 +93,7 @@ public:
 
     //átálitja az alkohol fokot
     void setAlkoholTartalom();
+    void setAlkoholTartalom(float kap);
 
     //ki írja az itall alkohol tartalmat
     virtual void kiir() const;
@@ -125,10 +128,14 @@ public:
 
     //éjrárat beálitása
     void setEvjarat();
-
+    void setEvjarat(unsigned int kap);
     //bor szine átalitása
     void setSzin();
+    void setSzin(szinek_bor kap);
+    //fajta db beálitása
+    void setFajta_db(size_t kap);
 
+    void setFajta_string(char **kap);
     //fajta hozzá adása
     void addFajta();
 
@@ -173,10 +180,11 @@ public:
 
     //tipus beálitása
     void setTipus_wiskey();
+    void setTipus_wiskey(char * kap);
 
     //ereleses beálitása
     void setErleses();
-
+    void setErleses(unsigned int kap);
     //wiksey adatainak kiirása
     void kiir() const;
 
@@ -204,12 +212,14 @@ public:
 
     //gin szin beálitása
     void setSzin();
+    void setSzin(gin_szin kap);
 
     //gin iz visza adása
     const char *getIz() const;
 
     // gin iz beálitása
     void setIz();
+    void setIz(char* kap);
 
     //gin adatok kiirása
     void kiir() const;
@@ -231,6 +241,7 @@ public:
     rum_fajta getFajta() const;
     //rum fajta beálitása
     void setFajta();
+    void setFajta(rum_fajta kap);
 
     //rum fajta nevének visza adása
     const char* getFajtaNev(rum_fajta fajta) const;
@@ -257,6 +268,7 @@ public:
 
     //Tequila fajta beálitása
     void setFajta();
+    void setFajta(tequli_fajta kap);
 
     //Tequila fajta nevének visza adása
     const char* getFajtaNev(tequli_fajta fajta) const;
@@ -283,6 +295,7 @@ public:
 
     //Sor tipus beálitása
     void setTipus_sor();
+    void setTipus_sor(char *kap);
 
     //Sor adatainak kiirása
     void kiir() const;
@@ -309,6 +322,7 @@ public:
 
     //gyumolcsszazalek beálitása
     void setGyumolcsszazalek();
+    void setGyumolcsszazalek(unsigned int kap);
 
     //kiirja a gyumolcsle adatait
     void kiir() const;

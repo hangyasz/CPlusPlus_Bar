@@ -57,10 +57,20 @@ void Ital::setNev() {
     this->nev = hoszusor_olvas();
 }
 
+void Ital::setNev(char* kap ) {
+    delete [] this->nev;
+    nev=kap;
+}
+
 void Ital::setGyarto() {
     delete[] this->gyarto;
     std::cout << "Adja meg az ital gyarojat: " << std::endl;
     this->gyarto = hoszusor_olvas();
+}
+
+void Ital::setGyarto(char* kap) {
+    delete [] this->gyarto;
+    gyarto=kap;
 }
 
 void Ital:: kiir()  const{
@@ -157,6 +167,10 @@ void SzeszesItalok::setAlkoholTartalom() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
+}
+
+void SzeszesItalok::setAlkoholTartalom(float kap) {
+    alkoholTartalom=kap;
 }
 
 void SzeszesItalok::kiir() const {
@@ -287,6 +301,10 @@ void Bor::setEvjarat() {
     }
 }
 
+void Bor::setEvjarat(unsigned int kap) {
+        evjarat=kap;
+}
+
 
 void Bor::setSzin() {
     int szin = 0;
@@ -311,6 +329,18 @@ void Bor::setSzin() {
             break;
         }
     }
+}
+
+void Bor::setSzin(szinek_bor kap) {
+    szin=kap;
+}
+
+void Bor::setFajta_db(size_t kap) {
+    fajta_db=kap;
+}
+
+void Bor::setFajta_string(char **kap) {
+    fajta=kap;
 }
 
 void Bor::addFajta() {
@@ -454,6 +484,11 @@ void Wiskey::setTipus_wiskey() {
     this->tipus = hoszusor_olvas();
 }
 
+void Wiskey::setTipus_wiskey(char * kap) {
+    delete [] this->tipus;
+    tipus=kap;
+}
+
 void Wiskey::setErleses() {
     std::cout << "Adja meg az erleses evet: " << std::endl;
     while(!(std::cin >> erleses)) {
@@ -461,6 +496,10 @@ void Wiskey::setErleses() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
+}
+
+void Wiskey::setErleses(unsigned int kap) {
+    erleses=kap;
 }
 
 void Wiskey::kiir() const {
@@ -579,6 +618,10 @@ void Gin::setSzin() {
     }
 }
 
+void Gin::setSzin(gin_szin kap) {
+    szin=kap;
+}
+
 const char *Gin::getIz() const {
     return iz;
 }
@@ -598,6 +641,11 @@ void Gin::setIz() {
     } else {
         this->iz = nullptr;
     }
+}
+
+void Gin::setIz(char* kap) {
+    delete [] this->iz;
+    iz=kap;
 }
 
 void Gin::kiir()  const{
@@ -708,6 +756,10 @@ void Rum::setFajta() {
     }
 }
 
+void Rum::setFajta(rum_fajta kap) {
+    fajta=kap;
+}
+
 const char* Rum::getFajtaNev(rum_fajta fajta) const{
     switch (fajta) {
         case fuszeres_rum: return "fuszeres_rum";
@@ -811,6 +863,10 @@ void Tequila::setFajta() {
     }
 }
 
+void Tequila::setFajta(tequli_fajta kap) {
+    fajta=kap;
+}
+
 const char* Tequila::getFajtaNev(tequli_fajta fajta) const {
     switch (fajta) {
         case silver: return "silver";
@@ -872,6 +928,11 @@ void Sor::setTipus_sor() {
     delete[] this->tipus_sor;
     std::cout << "Adja meg a sor tipusat: " << std::endl;
     this->tipus_sor = hoszusor_olvas();
+}
+
+void Sor::setTipus_sor(char *kap) {
+    delete[] this->tipus_sor;
+    tipus_sor=kap;
 }
 
 void Sor::kiir() const {
@@ -938,6 +999,10 @@ void Gyumolcsle::setGyumolcsszazalek() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
     }
+}
+
+void Gyumolcsle::setGyumolcsszazalek(unsigned int kap) {
+    gyumolcsszazalek=kap;
 }
 
 void Gyumolcsle::kiir() const {
