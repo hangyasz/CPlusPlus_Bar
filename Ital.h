@@ -45,6 +45,7 @@ class Ital {
 public:
     //konstruktor ami beállítja az ital nevét, gyártóját és tipusát
     Ital(ital_tipus tipus);
+    Ital();
 
     //desturktor ami felszabadítja a dinamikus memóriát
     virtual ~Ital();
@@ -63,12 +64,15 @@ public:
 
     //beálitja/átálitja az ital nevét
     void setNev();
+    void setNev(char* kap );
 
     //beálitja/átálitja az ital gyártóját
     void setGyarto();
+    void setGyarto(char* kap);
 
     //beálitja/átálitja az ital tipusát
     void setTipus();
+    void setTipus(ital_tipus kap);
     //kiirja az ital adatait
     virtual void kiir() const;
     //kiirja az ital adatait fájlba
@@ -85,12 +89,14 @@ class SzeszesItalok : public Ital {
 public:
     //konstruktor ami beállítja az alkohol tartalmat
     SzeszesItalok(ital_tipus tipus);
+    SzeszesItalok();
 
     //viszaadja az alkohol tartalmat
     float getAlkoholTartalom() const;
 
     //átálitja az alkohol fokot
     void setAlkoholTartalom();
+    void setAlkoholTartalom(float kap);
 
     //ki írja az itall alkohol tartalmat
     virtual void kiir() const;
@@ -110,6 +116,7 @@ class Bor : public SzeszesItalok {
 public:
     //bor konstruktor
     Bor(ital_tipus tipus);
+    Bor();
 
     //bor destruktor
     ~Bor();
@@ -125,10 +132,14 @@ public:
 
     //éjrárat beálitása
     void setEvjarat();
-
+    void setEvjarat(unsigned int kap);
     //bor szine átalitása
     void setSzin();
+    void setSzin(szinek_bor kap);
+    //fajta db beálitása
+    void setFajta_db(size_t kap);
 
+    void setFajta_string(char **kap);
     //fajta hozzá adása
     void addFajta();
 
@@ -162,6 +173,7 @@ public:
     //wiskey konstruktor
     Wiskey(ital_tipus ital_tipus);
 
+    Wiskey();
     //destruktor
     ~Wiskey();
 
@@ -173,10 +185,11 @@ public:
 
     //tipus beálitása
     void setTipus_wiskey();
+    void setTipus_wiskey(char * kap);
 
     //ereleses beálitása
     void setErleses();
-
+    void setErleses(unsigned int kap);
     //wiksey adatainak kiirása
     void kiir() const;
 
@@ -196,6 +209,7 @@ public:
     //gin konstruktor
     Gin(ital_tipus ital_tipus);
 
+    Gin();
     //gin szin visza adása
     gin_szin getSzin() const;
 
@@ -204,12 +218,14 @@ public:
 
     //gin szin beálitása
     void setSzin();
+    void setSzin(gin_szin kap);
 
     //gin iz visza adása
     const char *getIz() const;
 
     // gin iz beálitása
     void setIz();
+    void setIz(char* kap);
 
     //gin adatok kiirása
     void kiir() const;
@@ -226,11 +242,12 @@ class Rum : public SzeszesItalok {
 public:
     //rum konstruktor
     Rum(ital_tipus ital_tipus);
-
+    Rum();
     //rum fajta visza adása
     rum_fajta getFajta() const;
     //rum fajta beálitása
     void setFajta();
+    void setFajta(rum_fajta kap);
 
     //rum fajta nevének visza adása
     const char* getFajtaNev(rum_fajta fajta) const;
@@ -252,11 +269,13 @@ public:
     //Tequila konstruktor
     Tequila(ital_tipus ital_tipus);
 
+    Tequila();
     //Tequila fajta visza adása
     tequli_fajta getFajta() const;
 
     //Tequila fajta beálitása
     void setFajta();
+    void setFajta(tequli_fajta kap);
 
     //Tequila fajta nevének visza adása
     const char* getFajtaNev(tequli_fajta fajta) const;
@@ -277,12 +296,13 @@ class Sor : public SzeszesItalok {
 public:
     //Sor konstruktor
     Sor(ital_tipus tipuss);
-
+    Sor();
     //Sor tipus visza adása
     char *getTipus_sor() const;
 
     //Sor tipus beálitása
     void setTipus_sor();
+    void setTipus_sor(char *kap);
 
     //Sor adatainak kiirása
     void kiir() const;
@@ -304,11 +324,13 @@ public:
     //konstruktor
     Gyumolcsle(ital_tipus ital_tipus);
 
+    Gyumolcsle();
     //visza adja a gyumolcsszazalekot
     unsigned int getGyumolcsszazalek() const;
 
     //gyumolcsszazalek beálitása
     void setGyumolcsszazalek();
+    void setGyumolcsszazalek(unsigned int kap);
 
     //kiirja a gyumolcsle adatait
     void kiir() const;
@@ -331,6 +353,7 @@ public:
     Italok(const Italok &italok); //másoló konstruktor
     Italok &operator=(const Italok &italok); //másoló értékadás
     void addItal(); //ital hozzá adása
+    void addItal(Ital* kap); //ital hozzá adása
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
     size_t getdb() const; //italok számának kiirása

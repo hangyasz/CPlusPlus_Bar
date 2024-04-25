@@ -46,6 +46,17 @@ void Italok::addItal() {
     db++;
 }
 
+void Italok::addItal(Ital *kap) {
+    Ital **uj=new Ital*[db+1];
+    for(size_t i=0;i<db;i++){
+        uj[i]=ListaItalok[i];
+    }
+    uj[db]=kap;
+    delete [] ListaItalok;
+    ListaItalok=uj;
+    db++;
+}
+
 size_t Italok::getdb() const {
     return db;
 }
