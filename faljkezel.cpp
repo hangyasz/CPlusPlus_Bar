@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "Ital.h"
-#include "../../../../Program Files/JetBrains/CLion 2024.1/bin/mingw/x86_64-w64-mingw32/include/complex.h"
+#include <limits>
 
 
 void Ital::kiirF(std::ofstream& os) const {
@@ -284,6 +284,17 @@ Bor *bor_olvas(std::ifstream &file) {
     olvas->setGyarto(szoveg_olvas(file));
     olvas->setAlkoholTartalom(float_olvas(file));
     olvas->setEvjarat(uszam_olvas(file));
+    if(!evjarat_teszt(olvas->getEvjarat())) {
+        std::cout<<"Hibas evjarat!"<<std::endl;
+        std::cout << "Adja meg az evjaratot: " << std::endl;
+        unsigned int bevitel;
+        while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+        }
+        olvas->setEvjarat(bevitel);
+    }
     olvas->setSzin(getSzinBor(szam_olvas(file)));
     olvas->setFajta_db(size_olvas(file));
     char **fajatk=new char*[olvas->getFajta_db()];

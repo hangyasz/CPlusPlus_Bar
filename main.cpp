@@ -7,13 +7,12 @@
 
 
 int main() {
+    Italok italok2;
+    italok_beolvas(italok2);
+    Koktle koktel(italok2);
+    koktel.kiir();
     /*Italok italok;
     italok.addItal();
-    italok.addItal();
-    italok.addItal();
-    ital_kiir(italok);
-   */ Italok italok2;
-    italok_beolvas(italok2);
-    italok2.kiir_index();
+    italok.kiir_index();*/
     return 0;
 }

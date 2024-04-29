@@ -60,6 +60,7 @@ public:
     ital_tipus getTipus() const ;
 
     //visszaadja az ital tipusát szövegesen
+    const char*  getTipusNev() const;
     const char* getTipusNev(ital_tipus tipus) const;
 
     //beálitja/átálitja az ital nevét
@@ -358,6 +359,7 @@ public:
     void kiir_index(); //italok kiirása index kell
     size_t getdb() const; //italok számának kiirása
     Ital &getItal(size_t index) const; //ital vissza adása index alapján
+    Ital *getItalCsilag(size_t index) const; //ital vissza adása index alapján
     void setItalok(); //ital beálitása men
 };
 //os stream operatorokkal kiiratás
@@ -372,5 +374,8 @@ std::ostream& operator<<(std::ostream& os, const Tequila& ital);
 std::ostream& operator<<(std::ostream& os, const Sor& ital);
 std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
 */
+
+//bor éjrárat elenöriz;
+bool evjarat_teszt(unsigned int evjarat);
 
 #endif //ITALOK_H

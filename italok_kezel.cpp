@@ -105,6 +105,14 @@ Ital &Italok::getItal(size_t index) const {
     return *ListaItalok[index];
 }
 
+Ital *Italok::getItalCsilag(size_t index) const {
+    if (index >= db) {
+        throw "Hibas index!";
+    }
+    return ListaItalok[index];
+}
+
+
 void Italok::setItalok() {
     size_t valaszto;
     do{

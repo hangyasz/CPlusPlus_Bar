@@ -56,6 +56,22 @@ const char*  Ital::getTipusNev(ital_tipus tipus) const {
     }
 }
 
+const char*  Ital::getTipusNev() const {
+    ital_tipus tipus=this->tipus;
+    switch (tipus) {
+        case alkohols: return "alkohols";
+        case alkohol_mentes: return "alkohol_mentes";
+        case bor: return "bor";
+        case whiskey: return "whiskey";
+        case gin: return "gin";
+        case rum: return "rum";
+        case tequila: return "tequila";
+        case sor: return "sor";
+        case gyumolcsle: return "gyumolcsle";
+        default: return "ismeretlen";
+    }
+}
+
 void Ital::setNev() {
     delete[] this->nev;
     std::cout << "Adja meg az ital nevet: " << std::endl;
@@ -223,20 +239,25 @@ void SzeszesItalok::Set() {
 
 //bor
 
-Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus) {
-    std::cout << "Adja meg az evjaratot: " << std::endl;
+bool evjarat_teszt(unsigned int evjarat) {
     time_t now = time(0);
     tm *ltm = localtime(&now);
-    evjarat=1901 + ltm->tm_year;
-    while (evjarat > 1900 + ltm->tm_year) {
-        while(!(std::cin >> evjarat)) {
+    if (evjarat > 1900 + ltm->tm_year) {
+        return false;
+    }
+    return true;
+}
+
+
+Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus) {
+    std::cout << "Adja meg az evjaratot: " << std::endl;
+    unsigned int bevitel;
+        while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
         }
-        std::cout << "Hibas evjarat!" << std::endl;
-    }
-
+    evjarat=bevitel;
     int szin = 0;
     while (szin != 1 && szin != 2 && szin != 3) {
         std::cout << "valasza kia bor szinet [1]voros,[2]rose,[3]feher" << std::endl;
