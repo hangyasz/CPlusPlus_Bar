@@ -8,6 +8,7 @@
 
 #include  "Ital.h"
 #include "faljkezel.h"
+#include <fstream>
 
 //koktelok osztalya
 class Koktle {
@@ -39,7 +40,7 @@ public:
     //visszaadja a koktelok számát
     size_t getKoktelDb() const;
     //visszaadja a koktelokat
-    Koktle* getKoktel(size_t index) const;
+    Koktle& getKoktel(size_t index) const;
     //kiirja a koktelokat
     void kiir() const;
     //koktel hozzá adása
@@ -50,11 +51,14 @@ public:
     //koktelok kiirása index kell
     void kiir_index() const;
     //koktelok kiirása fájlba
-    void kiirF(std::ofstream& os) const;
+    void kiirF() const;
     //koktelok beolvasása fájlból
     void beolvasF(std::ifstream& is, Italok &italok);
     ~Koktlok();
 };
+
+
+std::ofstream& operator<<(std::ofstream& os,const Koktle &koktel);
 
 
 

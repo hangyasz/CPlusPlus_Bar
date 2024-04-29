@@ -8,8 +8,7 @@
 #include <fstream>
 #include "koktle.h"
 #include "Ital.h"
-//italok fajba írása
-void ital_kiir(const Italok &kap);
+
 //az ital tipusát számá alakitja
 int getTipusszam(ital_tipus tipus);
 //a bor szinét számá alakitja
@@ -30,8 +29,6 @@ int getTequilaTipus(tequli_fajta fajta);
 tequli_fajta getFajtaTequila(int fajta);
 //ki írja az italt a fájba
 std::ofstream& operator<<(std::ofstream& os,const Ital &ital);
-//ittalok beolvasasa
-void italok_beolvas(Italok &kap);
 //egy szoveg részt olvas be
 char *szoveg_olvas(std::ifstream &file);
 //egy számot olvas be

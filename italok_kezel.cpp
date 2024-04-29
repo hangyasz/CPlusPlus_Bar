@@ -44,6 +44,7 @@ void Italok::addItal() {
     delete [] ListaItalok;
     ListaItalok=uj;
     db++;
+    this->kiirF();
 }
 
 void Italok::addItal(Ital *kap) {
@@ -71,6 +72,7 @@ void Italok::kiir_index() {
         std::cout<<"\n["<<i<<"] "<<*ListaItalok[i];
     }
 }
+
 
 void Italok::removeItal() {
     this->kiir_index();

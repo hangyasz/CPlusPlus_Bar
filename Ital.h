@@ -357,6 +357,8 @@ public:
     void addItal(Ital* kap); //ital hozzá adása
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
+    void kiirF() const; //italok kiirása fájlba
+    void olvasF(); //italok beolvasása fájlból
     size_t getdb() const; //italok számának kiirása
     Ital &getItal(size_t index) const; //ital vissza adása index alapján
     Ital *getItalCsilag(size_t index) const; //ital vissza adása index alapján

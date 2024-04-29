@@ -34,7 +34,10 @@ void Wiskey::kiirF(std::ofstream& os) const {
 
 void Gin::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<getGinSzin(szin)<<"><"<<iz<<">";
+    os<<"<"<<getGinSzin(szin)<<"><";
+    if(iz!=nullptr)
+        os<<iz;
+    os<<">";
 }
 void Rum::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
@@ -194,13 +197,13 @@ rum_fajta getFajtaRum(int fajta) {
     }
 }
 
-void ital_kiir(const Italok &kap) {
+ void Italok::kiirF() const{
     std::ofstream file;
     file.open("italok.txt");
     if (!file.is_open())
         throw"nem nyilt meg az italok.txt";
-    for(size_t i=0;i<kap.getdb();i++){
-        file<<kap.getItal(i)<<"\n";
+    for(size_t i=0;i<db;i++){
+        file<<this->getItal(i)<<"\n";
     }
     file.close();
 }
@@ -367,7 +370,7 @@ Gyumolcsle* gyumolcsle_olvas(std::ifstream &file) {
 }
 
 
-void italok_beolvas(Italok &kap) {
+void Italok::olvasF() {
     std::ifstream file;
     file.open("italok.txt");
     if (!file.is_open())
@@ -376,35 +379,65 @@ void italok_beolvas(Italok &kap) {
     while ((file>>tipus)){
         switch (tipus) {
             case 1:
-                kap.addItal(bor_olvas(file));
+                this->addItal(bor_olvas(file));
                 break;
             case 2:
-                kap.addItal(wiskey_olvas(file));
+                this->addItal(wiskey_olvas(file));
                 break;
             case 3:
-                kap.addItal(gin_olvas(file));
+                this->addItal(gin_olvas(file));
                 break;
             case 4:
-                kap.addItal(rum_olvas(file));
+               this->addItal(rum_olvas(file));
                 break;
             case 5:
-                kap.addItal(tequila_olvas(file));
+               this->addItal(tequila_olvas(file));
                 break;
             case 6:
-                kap.addItal(sor_olvas(file));
+                this->addItal(sor_olvas(file));
                 break;
             case 7:
-                kap.addItal(gyumolcsle_olvas(file));
+               this->addItal(gyumolcsle_olvas(file));
                 break;
             case 8:
-                kap.addItal(szeszes_olvas(file));
+                this->addItal(szeszes_olvas(file));
             break;
             case 9:
-                kap.addItal(ital_olvas(file));
+               this->addItal(ital_olvas(file));
                 break;
             default: std::cout<<"Hibás típus"<<std::endl;
             break;
         }
     }
 }
+
+
+void Koktle::kiirF(std::ofstream &os) const {
+    os<<"<"<<this->nev<<"><";
+    os<<this->alapanyag_db<<">{";
+    for (size_t i=0; i<this->alapanyag_db; i++){
+        os<<"<"<<getTipusszam( this->alapanyagok[i]->getTipus())<<"><"<<this->alapanyagok[i]->getNev()<<"><";
+        os<<this->menyiseg[i]<<">";
+    }
+    os<<"}";
+}
+
+void Koktlok::kiirF() const {
+    std::ofstream file;
+    file.open("koktelok.txt");
+    if (!file.is_open())
+        throw"nem nyilt meg a koktelok.txt";
+    for (size_t i=0; i<koktel_db; i++){
+        file<<this->getKoktel(i);
+        file<<"\n";
+    }
+}
+
+
+
+std::ofstream& operator<<(std::ofstream& os,const Koktle &koktle) {
+    koktle.kiirF(os);
+    return os;
+}
+
 

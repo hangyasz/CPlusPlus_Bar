@@ -40,6 +40,7 @@ Koktle::Koktle(Italok &italok) {
         }
         if(index==italok.getdb()){
             italok.addItal();
+            italok.kiirF();
         }
         alapanyagok[i] = italok.getItalCsilag(index);
         std::cout<<" Mennyiseg: ";
@@ -85,16 +86,6 @@ Koktle::Koktle(Italok &italok, char *nev, size_t alapanyag_db, Ital **alapanyago
     }
 }
 
-void Koktle::kiirF(std::ofstream &os) const {
-    os<<this->nev<<"><";
-    os<<this->alapanyag_db<<">{";
-    for (size_t i=0; i<this->alapanyag_db; i++){
-        os<<"<"<<this->alapanyagok[i]->getNev()<<"><";
-        os<<this->menyiseg[i]<<">";
-    }
-    os<<"}";
-}
-
 Koktlok::Koktlok() {
     this->koktel_db = 0;
     this->koktelok = nullptr;
@@ -104,11 +95,11 @@ size_t Koktlok::getKoktelDb() const {
     return  this->koktel_db;
 }
 
-Koktle* Koktlok::getKoktel(size_t index) const {
+Koktle& Koktlok::getKoktel(size_t index) const {
     if(index>=this->koktel_db){
         throw "tulindexeles";
     }
-    return this->koktelok[index];
+    return *this->koktelok[index];
 }
 
 void Koktlok::kiir() const {
@@ -131,5 +122,21 @@ void Koktlok::addKoktel(Italok &italok, Koktle *kap) {
 void Koktlok::addKoktel(Italok &italok) {
     Koktle* uj = new Koktle(italok);
     this->addKoktel(italok, uj);
+}
+
+void Koktlok::kiir_index() const {
+    for (size_t i=0; i<koktel_db;++i) {
+        std::cout << "[" << i << "] ";
+        koktelok[i]->kiir();
+        std::cout << '\n';
+    }
+}
+
+
+Koktlok::~Koktlok() {
+    for (size_t i=0; i<this->koktel_db; i++){
+        delete this->koktelok[i];
+    }
+    delete [] this->koktelok;
 }
 
