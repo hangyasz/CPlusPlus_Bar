@@ -53,7 +53,7 @@ public:
     //koktelok kiirása fájlba
     void kiirF() const;
     //koktelok beolvasása fájlból
-    void beolvasF(std::ifstream& is, Italok &italok);
+    void olvasF(Italok &italok);
     ~Koktlok();
 };
 

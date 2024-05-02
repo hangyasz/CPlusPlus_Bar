@@ -78,12 +78,8 @@ Koktle::~Koktle() {
 Koktle::Koktle(Italok &italok, char *nev, size_t alapanyag_db, Ital **alapanyagok, unsigned int *menyiseg) {
     this->nev = nev;
     this->alapanyag_db = alapanyag_db;
-    this->alapanyagok = new Ital*[this->alapanyag_db];
-    this->menyiseg = new unsigned int[this->alapanyag_db];
-    for (size_t i=0; i<this->alapanyag_db; i++){
-        this->alapanyagok[i] = alapanyagok[i];
-        this->menyiseg[i] = menyiseg[i];
-    }
+    this->alapanyagok = alapanyagok;
+    this->menyiseg = menyiseg;
 }
 
 Koktlok::Koktlok() {
@@ -117,6 +113,7 @@ void Koktlok::addKoktel(Italok &italok, Koktle *kap) {
     delete [] this->koktelok;
     this->koktelok = uj;
     this->koktel_db++;
+    this->kiirF();
 }
 
 void Koktlok::addKoktel(Italok &italok) {

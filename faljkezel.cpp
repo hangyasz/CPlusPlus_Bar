@@ -413,13 +413,12 @@ void Italok::olvasF() {
 
 
 void Koktle::kiirF(std::ofstream &os) const {
-    os<<"<"<<this->nev<<"><";
-    os<<this->alapanyag_db<<">{";
+    os<<this->alapanyag_db;
+    os<<"<"<<this->nev<<">";
     for (size_t i=0; i<this->alapanyag_db; i++){
         os<<"<"<<getTipusszam( this->alapanyagok[i]->getTipus())<<"><"<<this->alapanyagok[i]->getNev()<<"><";
         os<<this->menyiseg[i]<<">";
     }
-    os<<"}";
 }
 
 void Koktlok::kiirF() const {
@@ -431,6 +430,74 @@ void Koktlok::kiirF() const {
         file<<this->getKoktel(i);
         file<<"\n";
     }
+}
+
+void Koktlok::olvasF(Italok &italok ) {
+    std::ifstream file;
+    file.open("koktelok.txt");
+    if (!file.is_open())
+        throw"nem nyilt meg a koktelok.txt";
+    size_t alapanyag_db;
+    while (file>>alapanyag_db){
+        char *nev=szoveg_olvas(file);
+        Ital **alapanyagok=new Ital*[alapanyag_db];
+        unsigned int *menyiseg=new unsigned int[alapanyag_db];
+        for (size_t i=0; i<alapanyag_db; i++){
+            int tipus=szam_olvas(file);
+            switch (tipus) {
+                case 1:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),bor);
+                    break;
+                case 2:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),whiskey);
+                    break;
+                case 3:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),gin);
+                    break;
+                case 4:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),rum);
+                    break;
+                case 5:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),tequila);
+                    break;
+                case 6:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),sor);
+                    break;
+                case 7:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),gyumolcsle);
+                    break;
+                case 8:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),alkohols);
+                    break;
+                case 9:
+                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),alkohol_mentes);
+                    break;
+                default:
+                    char *nev_ital=szoveg_olvas(file);
+                    std::cout<<"Hibás típus ital nev: "<<nev_ital<<  " mi legyen az uj tipus: "<<std::endl;
+                    ital_tipus bevit=tipus_bevitel();
+                    italok.addItal(nev_ital,bevit);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,bevit);
+                    break;
+            }
+            menyiseg[i]=uszam_olvas(file);
+        }
+        this->addKoktel(italok,new Koktle(italok,nev,alapanyag_db,alapanyagok,menyiseg));
+    }
+}
+
+
+Ital* ital_letezik_e(Italok &italok,  char *nev, ital_tipus tipus) {
+    size_t db=italok.getdb();
+    for(size_t i=0; i<db; i++){
+        Ital *akt=&italok.getItal(i);
+        if(akt->getTipus()==tipus and strcmp(akt->getNev(),nev)==0){
+            return akt;
+        }
+    }
+    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a tipus: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
+    italok.addItal(nev,tipus);
+    return &italok.getItal(db);
 }
 
 

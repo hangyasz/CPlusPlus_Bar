@@ -1,16 +1,16 @@
 # ninja log v5
-24	1709	7361251664291238	CMakeFiles/hazzi_lion.dir/main.cpp.obj	9ae7cbac9d8adc26
-2085	2300	7361251886287711	hazzi_lion.exe	ab17a643378ca774
-67	1784	7361154643393297	CMakeFiles/hazzi_lion.dir/Ital.cpp.obj	73452306d71875df
+13	1692	7363558710337817	CMakeFiles/hazzi_lion.dir/main.cpp.obj	9ae7cbac9d8adc26
+1184	1377	7363559858537406	hazzi_lion.exe	ab17a643378ca774
 53	1483	7346227833031927	CMakeFiles/hazzi_lion.dir/string_kezel.cpp.obj	46c0241df438a45a
+22	2079	7363558714188752	CMakeFiles/hazzi_lion.dir/Ital.cpp.obj	73452306d71875df
 20	1619	7347359460645936	CMakeFiles/hazzi_lion.dir/italok.cpp.obj	97550b9d13c778b3
-33	1570	7361251662849220	CMakeFiles/hazzi_lion.dir/koktle.cpp.obj	ccd042f0d9f8b47f
-64	1410	7361168684415085	CMakeFiles/hazzi_lion.dir/italok_kezel.cpp.obj	b250b29f6821f782
+28	1665	7363558710125099	CMakeFiles/hazzi_lion.dir/koktle.cpp.obj	ccd042f0d9f8b47f
+17	1063	7363559855470587	CMakeFiles/hazzi_lion.dir/italok_kezel.cpp.obj	b250b29f6821f782
 1186	1406	7350589114220944	CMakeFiles/hazzi_lion.dir/memtrace.cpp.obj	e8bf317bfebc2ada
 968	1798	7350601429616741	CMakeFiles/hazzi_lion.dir/string5.cpp.obj	59a12cb8f5dfde68
 15	1049	7361121048012946	CMakeFiles/hazzi_lion.dir/string_kezez.cpp.obj	12e214301f43f185
-19	2084	7361251884218624	CMakeFiles/hazzi_lion.dir/faljkezel.cpp.obj	e5a1d61ee9d32a23
-22	739	7361252314805095	CMakeFiles/hazzi_lion.dir/main.cpp.obj	9ae7cbac9d8adc26
-740	958	7361252316877596	hazzi_lion.exe	ab17a643378ca774
-15	918	7361256360728681	CMakeFiles/hazzi_lion.dir/faljkezel.cpp.obj	e5a1d61ee9d32a23
-919	1197	7361256363254786	hazzi_lion.exe	ab17a643378ca774
+28	1184	7363559856716816	CMakeFiles/hazzi_lion.dir/faljkezel.cpp.obj	e5a1d61ee9d32a23
+20	1944	7363560543116064	CMakeFiles/hazzi_lion.dir/Ital.cpp.obj	73452306d71875df
+1945	2213	7363560545726807	hazzi_lion.exe	ab17a643378ca774
+20	1198	7363561975246573	CMakeFiles/hazzi_lion.dir/faljkezel.cpp.obj	e5a1d61ee9d32a23
+1199	1408	7363561977306807	hazzi_lion.exe	ab17a643378ca774

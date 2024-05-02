@@ -58,6 +58,9 @@ Sor* sor_olvas(std::ifstream &file);
 //gyumolcslet olvas be és tárolja el
 Gyumolcsle* gyumolcsle_olvas(std::ifstream &file);
 
+//viszaadja az ittalt ha létezik külöben felveszük
+Ital* ital_letezik_e(Italok &italok, char *nev, ital_tipus tipus);
+
 /*
 std::ofstream& operator<<(std::ofstream& os,const SzeszesItalok &ital);
 std::ofstream& operator<<(std::ofstream& os,const Bor &ital);

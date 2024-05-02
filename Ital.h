@@ -16,6 +16,9 @@ enum ital_tipus {
     alkohols, alkohol_mentes, bor, whiskey, gin, rum, tequila, sor, gyumolcsle
 };
 
+//italok tipusainak nevei
+const char* get_tipus_nev_str(ital_tipus tipus);
+
 //bor szinei
 enum szinek_bor {
     voros, rose, feher
@@ -46,6 +49,7 @@ public:
     //konstruktor ami beállítja az ital nevét, gyártóját és tipusát
     Ital(ital_tipus tipus);
     Ital();
+    Ital(char *nev, ital_tipus tipus);
 
     //desturktor ami felszabadítja a dinamikus memóriát
     virtual ~Ital();
@@ -91,6 +95,7 @@ public:
     //konstruktor ami beállítja az alkohol tartalmat
     SzeszesItalok(ital_tipus tipus);
     SzeszesItalok();
+    SzeszesItalok(char *nev, ital_tipus tipus);
 
     //viszaadja az alkohol tartalmat
     float getAlkoholTartalom() const;
@@ -118,6 +123,7 @@ public:
     //bor konstruktor
     Bor(ital_tipus tipus);
     Bor();
+    Bor(char* nev, ital_tipus tipus);
 
     //bor destruktor
     ~Bor();
@@ -173,8 +179,8 @@ class Wiskey : public SzeszesItalok {
 public:
     //wiskey konstruktor
     Wiskey(ital_tipus ital_tipus);
-
     Wiskey();
+    Wiskey(char *nev, ital_tipus tipus);
     //destruktor
     ~Wiskey();
 
@@ -209,8 +215,8 @@ class Gin : public SzeszesItalok {
 public:
     //gin konstruktor
     Gin(ital_tipus ital_tipus);
-
     Gin();
+    Gin(char *nev, ital_tipus tipus);
     //gin szin visza adása
     gin_szin getSzin() const;
 
@@ -244,6 +250,7 @@ public:
     //rum konstruktor
     Rum(ital_tipus ital_tipus);
     Rum();
+    Rum(char * nev, ital_tipus tipus);
     //rum fajta visza adása
     rum_fajta getFajta() const;
     //rum fajta beálitása
@@ -269,8 +276,8 @@ class Tequila : public SzeszesItalok {
 public:
     //Tequila konstruktor
     Tequila(ital_tipus ital_tipus);
-
     Tequila();
+    Tequila(char *nev, ital_tipus tipus);
     //Tequila fajta visza adása
     tequli_fajta getFajta() const;
 
@@ -298,6 +305,7 @@ public:
     //Sor konstruktor
     Sor(ital_tipus tipuss);
     Sor();
+    Sor(char *nev, ital_tipus tipus);
     //Sor tipus visza adása
     char *getTipus_sor() const;
 
@@ -324,8 +332,8 @@ class Gyumolcsle : public Ital {
 public:
     //konstruktor
     Gyumolcsle(ital_tipus ital_tipus);
-
     Gyumolcsle();
+    Gyumolcsle(char *nev, ital_tipus tipus);
     //visza adja a gyumolcsszazalekot
     unsigned int getGyumolcsszazalek() const;
 
@@ -355,6 +363,7 @@ public:
     Italok &operator=(const Italok &italok); //másoló értékadás
     void addItal(); //ital hozzá adása
     void addItal(Ital* kap); //ital hozzá adása
+    void addItal(char *nev, ital_tipus tipus); //ital hozzá adása
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
     void kiirF() const; //italok kiirása fájlba
@@ -379,5 +388,6 @@ std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
 
 //bor éjrárat elenöriz;
 bool evjarat_teszt(unsigned int evjarat);
+ital_tipus tipus_bevitel();
 
 #endif //ITALOK_H

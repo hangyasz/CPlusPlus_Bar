@@ -9,6 +9,21 @@
 #include <limits>
 #include <ctime>
 
+const char* get_tipus_nev_str(ital_tipus tipus){
+switch (tipus) {
+    case alkohols: return "alkohols";
+    case alkohol_mentes: return "alkohol_mentes";
+    case bor: return "bor";
+    case whiskey: return "whiskey";
+    case gin: return "gin";
+    case rum: return "rum";
+    case tequila: return "tequila";
+    case sor: return "sor";
+    case gyumolcsle: return "gyumolcsle";
+    default: return "ismeretlen";
+}
+}
+
 
 Ital::Ital(ital_tipus tipus) {
     std::cout << "Adja meg az ital nevet: " << std::endl;
@@ -21,6 +36,11 @@ Ital::Ital(ital_tipus tipus) {
 Ital::Ital() {
     nev=nullptr;
     gyarto=nullptr;
+}
+
+Ital::Ital(char *nev, ital_tipus tipus): nev(nev), tipus(tipus){
+    std::cout << "Adja meg az ital gyarojat: " << std::endl;
+    this->gyarto = hoszusor_olvas();
 }
 
 Ital::~Ital() {
@@ -185,6 +205,15 @@ SzeszesItalok::SzeszesItalok(ital_tipus tipus) : Ital(tipus) {
 SzeszesItalok::SzeszesItalok() : Ital(){
 }
 
+SzeszesItalok::SzeszesItalok(char *nev, ital_tipus tipus): Ital(nev,tipus) {
+    std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
+    while(!(std::cin >> alkoholTartalom)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+}
+
 float SzeszesItalok::getAlkoholTartalom() const {
     return alkoholTartalom;
 }
@@ -295,6 +324,51 @@ Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus) {
 
 Bor::Bor():SzeszesItalok() {
     fajta=nullptr;
+}
+
+Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+    std::cout << "Adja meg az evjaratot: " << std::endl;
+    unsigned int bevitel;
+    while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+    evjarat=bevitel;
+    int szin = 0;
+    while (szin != 1 && szin != 2 && szin != 3) {
+        std::cout << "valasza kia bor szinet [1]voros,[2]rose,[3]feher" << std::endl;
+        std::cin.sync();
+        std::cin >> szin;
+        switch (szin) {
+            case 1:
+                this->szin = voros;
+            break;
+            case 2:
+                this->szin = rose;
+            break;
+            case 3:
+                this->szin = feher;
+            break;
+            default:
+                std::cout << "nem megfelelo szamot adott meg" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        }
+    }
+    std::cout << "Adja meg a fajtak szamat: " << std::endl;
+    while(!(std::cin >> fajta_db)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+    this->fajta = new char *[fajta_db];
+    for (int i = 0; i < fajta_db; i++) {
+        std::cout << "Adja meg a fajtat: " << std::endl;
+        fajta[i] = hoszusor_olvas();
+    }
+
 }
 
 Bor::~Bor() {
@@ -508,6 +582,18 @@ Wiskey::Wiskey():SzeszesItalok() {
     tipus=nullptr;
 }
 
+Wiskey::Wiskey(char *nev,ital_tipus tipus):SzeszesItalok(nev,tipus) {
+    std::cout << "Adja meg a wiskey tipust: " << std::endl;
+    this->tipus = hoszusor_olvas();
+    std::cout << "Adja meg az erleses evet: " << std::endl;
+    while(!(std::cin >> erleses)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+
+}
+
 Wiskey::~Wiskey() {
     delete[] tipus;
 }
@@ -626,6 +712,44 @@ Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
 Gin::Gin() :SzeszesItalok(){
     iz=nullptr;
 }
+
+Gin::Gin(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+    int szin = 0;
+    iz = nullptr;
+    while (szin != 1 && szin != 2 && szin != 3) {
+        std::cout << "válasza ki a gin szinet [1]szintelen, [2]pink, [3]egyeb" << std::endl;
+        std::cin >> szin;
+        switch (szin) {
+            case 1:
+                this->szin = szintelen;
+            break;
+            case 2:
+                this->szin = pink;
+            break;
+            case 3:
+                this->szin = egyeb;
+            break;
+            default:
+                std::cout << "nem megfelelo szamot adott meg" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        }
+    }
+    int iz = 0;
+    std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
+    while(!(std::cin >> iz)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+    if (iz == 1) {
+        std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
+        this->iz = hoszusor_olvas();
+    }
+
+}
+
 
 gin_szin Gin::getSzin() const {
     return szin;
@@ -772,6 +896,37 @@ Rum::Rum(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
 Rum::Rum():SzeszesItalok() {
 }
 
+Rum::Rum(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+    int szin = 0;
+    while (szin != 1 && szin != 2 && szin != 3 && szin != 4) {
+        std::cout << "válasza ki a rum tipist [1]fuszeres_rum, [2]fuszeres_rum, [3]arany_rum, [4]feher_rum" <<
+                std::endl;
+        std::cin >> szin;
+        switch (szin) {
+            case 1:
+                this->fajta = fuszeres_rum;
+            break;
+            case 2:
+                this->fajta = fuszeres_rum;
+            break;
+            case 3:
+                this->fajta = arany_rum;
+            break;
+            case 4:
+                this->fajta = feher_rum;
+            break;
+
+            default:
+                std::cout << "nem megfelelo szamot adott meg" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        }
+    }
+
+}
+
+
 rum_fajta Rum::getFajta() const {
     return fajta;
 }
@@ -887,6 +1042,31 @@ Tequila::Tequila(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
 Tequila::Tequila():SzeszesItalok() {
 }
 
+Tequila::Tequila(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+    int szin = 0;
+    while (szin != 1 && szin != 2 && szin != 3) {
+        std::cout << "válasza ki a tequila tipist [1]silver, [2]gold, [3]aged" << std::endl;
+        std::cin >> szin;
+        switch (szin) {
+            case 1:
+                this->fajta = silver;
+            break;
+            case 2:
+                this->fajta = gold;
+            break;
+            case 3:
+                this->fajta = aged;
+            break;
+            default:
+                std::cout << "nem megfelelo szamot adott meg" << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            break;
+        }
+    }
+}
+
+
 tequli_fajta Tequila::getFajta() const {
     return fajta;
 }
@@ -976,6 +1156,12 @@ Sor::Sor():SzeszesItalok() {
     tipus_sor=nullptr;
 }
 
+Sor::Sor(char *nev, ital_tipus tipus): SzeszesItalok(nev,tipus) {
+    std::cout << "Adja meg a sor tipusat: " << std::endl;
+    this->tipus_sor = hoszusor_olvas();
+}
+
+
 
 char * Sor::getTipus_sor() const{
     return tipus_sor;
@@ -1047,6 +1233,16 @@ Gyumolcsle::Gyumolcsle(ital_tipus ital_tipus) : Ital(ital_tipus) {
 
 Gyumolcsle::Gyumolcsle():Ital() {
 }
+
+Gyumolcsle::Gyumolcsle(char *nev, ital_tipus tipus):Ital(nev,tipus) {
+    std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
+    while(!(std::cin >> gyumolcsszazalek)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    }
+}
+
 
 
 unsigned int Gyumolcsle::getGyumolcsszazalek() const {

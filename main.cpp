@@ -9,10 +9,8 @@
 int main() {
     Italok italok2;
     italok2.olvasF();
-    Koktlok kok;
-    kok.addKoktel(italok2);
-    kok.addKoktel(italok2);
-    kok.kiir_index();
-    kok.kiirF();
+    Koktlok koktlok;
+    koktlok.olvasF(italok2);
+    koktlok.kiir_index();
     return 0;
 }

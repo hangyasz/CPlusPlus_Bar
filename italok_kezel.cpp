@@ -58,6 +58,45 @@ void Italok::addItal(Ital *kap) {
     db++;
 }
 
+
+void Italok::addItal(char *nev, ital_tipus tipus) {
+    switch(tipus) {
+        case bor:
+            this->addItal(new Bor(nev,bor));
+            break;
+        case whiskey:
+            this->addItal(new Wiskey(nev,whiskey));
+            break;
+        case gin:
+            this->addItal(new Gin(nev,gin));
+            break;
+        case rum:
+            this->addItal(new Rum(nev,rum));
+            break;
+        case tequila:
+            this->addItal(new Tequila(nev,tequila));
+            break;
+        case sor:
+            this->addItal(new Sor(nev,sor));
+            break;
+        case gyumolcsle:
+            this->addItal(new Gyumolcsle(nev,gyumolcsle));
+            break;
+        case alkohols:
+            this->addItal(new SzeszesItalok(nev,alkohols));
+            break;
+        case alkohol_mentes:
+            this->addItal(new  Ital(nev,alkohol_mentes));
+            break;
+        default:
+            std::cout << "Hibás típus! Nem létezik ilyen tipus kerem vigye fel" << std::endl;
+            this->addItal();
+            delete [] nev;
+        break;
+    }
+    this->kiirF();
+}
+
 size_t Italok::getdb() const {
     return db;
 }
@@ -71,6 +110,7 @@ void Italok::kiir_index() {
     for(size_t i=1;i<db;i++){
         std::cout<<"\n["<<i<<"] "<<*ListaItalok[i];
     }
+    std::cout<<std::endl;
 }
 
 
@@ -160,6 +200,34 @@ void Italok::setItalok() {
 
 
 Ital* Italok::italok_bevitel() {
+    ital_tipus tipus=tipus_bevitel();
+    switch(tipus) {
+        case bor:
+            return new Bor(bor);
+        case whiskey:
+            return new Wiskey(whiskey);
+        case gin:
+            return new Gin(gin);
+        case rum:
+            return new Rum(rum);
+        case tequila:
+            return new Tequila(tequila);
+        case sor:
+            return new Sor(sor);
+        case gyumolcsle:
+            return new Gyumolcsle(gyumolcsle);
+        case alkohols:
+            return new SzeszesItalok(alkohols);
+        case alkohol_mentes:
+            return new  Ital(alkohol_mentes);
+        default:
+            std::cout << "Hibás típus!" << std::endl;
+        break;
+    }
+}
+
+
+ital_tipus tipus_bevitel() {
     int tipus=0;
     do{
         std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
@@ -171,26 +239,26 @@ Ital* Italok::italok_bevitel() {
 
         switch(tipus) {
             case 1:
-                return new Bor(ital_tipus::bor);
+                return bor;
             case 2:
-                return new Wiskey(ital_tipus::whiskey);
+                return whiskey;
             case 3:
-                return new Gin(ital_tipus::gin);
+                return gin;
             case 4:
-                return new Rum(ital_tipus::rum);
+                return rum;
             case 5:
-                return new Tequila(ital_tipus::tequila);
+                return tequila;
             case 6:
-                return new Sor(ital_tipus::sor);
+                return sor;
             case 7:
-                return new Gyumolcsle(ital_tipus::gyumolcsle);
+                return gyumolcsle;
             case 8:
-                return new SzeszesItalok(ital_tipus::alkohols);
+                return alkohols;
             case 9:
-                return new  Ital(ital_tipus::alkohol_mentes);
+                return alkohol_mentes;
             default:
                 std::cout << "Hibás típus!" << std::endl;
-                break;
+            break;
         }
     } while(tipus<1 || tipus>9);
 }
