@@ -2,7 +2,7 @@
 // Created by Zoli on 2024. 04. 17..
 //
 
-#include "string_kezez.h"
+#include "bevitel_kezel.h"
 #include <iostream>
 #include <cstring>
 #include <limits>
@@ -59,5 +59,47 @@ char* hoszusor_olvas() {
     s[length] = '\0';  // Lezárjuk a stringet
     return s;
 }
+
+
+int int_beolvas() {
+    int olvas;
+    while(!(std::cin >> olvas)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+    }
+    return olvas;
+}
+
+float float_beolvas() {
+    float olvas;
+    while(!(std::cin >> olvas)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+    }
+    return olvas;
+}
+
+unsigned int unsigned_int_beolvas() {
+    unsigned int olvas;
+    while(!(std::cin >> olvas)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+    }
+    return olvas;
+}
+
+size_t size_beolvas() {
+    size_t olvas;
+    while(!(std::cin >> olvas)){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+    }
+    return olvas;
+}
+
 
 

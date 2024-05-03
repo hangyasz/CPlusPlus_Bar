@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <cstring>
-#include "string_kezez.h"
+#include "bevitel_kezel.h"
 
 
 //italok tipusai
@@ -65,7 +65,7 @@ public:
 
     //visszaadja az ital tipusát szövegesen
     const char*  getTipusNev() const;
-    const char* getTipusNev(ital_tipus tipus) const;
+    const char* getTipusNev(ital_tipus tipus_kap) const;
 
     //beálitja/átálitja az ital nevét
     void setNev();
@@ -135,7 +135,7 @@ public:
     szinek_bor getSzin() const;
 
     //bor szine nevének visza adása
-    const char* getSzinNev(szinek_bor szin)const;
+    const char* getSzinNev()const;
 
     //éjrárat beálitása
     void setEvjarat();
@@ -173,7 +173,7 @@ public:
 
 //Wiskey osztály
 class Wiskey : public SzeszesItalok {
-    char *tipus; //wiskey tipusa pl: single malt, blended
+    char *jeleg; //wiskey tipusa pl: single malt, blended
     unsigned int erleses; //wiskey erleses éve
 
 public:
@@ -184,15 +184,15 @@ public:
     //destruktor
     ~Wiskey();
 
-    //tipus visza adása
-    char *getTipus_wiskey() const;
+    //jeleg visza adása
+    char *getJeleg_wiskey() const;
 
     //erleses visza adása
     unsigned int getErleses() const;
 
-    //tipus beálitása
-    void setTipus_wiskey();
-    void setTipus_wiskey(char * kap);
+    //jeleg beálitása
+    void setJeleg_wiskey();
+    void setJeleg_wiskey(char * kap);
 
     //ereleses beálitása
     void setErleses();
@@ -221,7 +221,7 @@ public:
     gin_szin getSzin() const;
 
     //gin szine visza adása szöbegekben
-    const char* getSzinNev(gin_szin szin)const;
+    const char* getSzinNev()const;
 
     //gin szin beálitása
     void setSzin();
@@ -248,7 +248,7 @@ class Rum : public SzeszesItalok {
 
 public:
     //rum konstruktor
-    Rum(ital_tipus ital_tipus);
+    Rum(ital_tipus tipus);
     Rum();
     Rum(char * nev, ital_tipus tipus);
     //rum fajta visza adása
@@ -258,7 +258,7 @@ public:
     void setFajta(rum_fajta kap);
 
     //rum fajta nevének visza adása
-    const char* getFajtaNev(rum_fajta fajta) const;
+    const char* getFajtaNev() const;
 
     //rum adatainak kiirása
     void kiir() const;
@@ -286,7 +286,7 @@ public:
     void setFajta(tequli_fajta kap);
 
     //Tequila fajta nevének visza adása
-    const char* getFajtaNev(tequli_fajta fajta) const;
+    const char* getFajtaNev() const;
 
     //Tequila adatainak kiirása
     void kiir() const;
@@ -306,10 +306,10 @@ public:
     Sor(ital_tipus tipuss);
     Sor();
     Sor(char *nev, ital_tipus tipus);
-    //Sor tipus visza adása
+    //Sor jeleg visza adása
     char *getTipus_sor() const;
 
-    //Sor tipus beálitása
+    //Sor jeleg beálitása
     void setTipus_sor();
     void setTipus_sor(char *kap);
 
@@ -389,5 +389,6 @@ std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
 //bor éjrárat elenöriz;
 bool evjarat_teszt(unsigned int evjarat);
 ital_tipus tipus_bevitel();
+ital_tipus tipus_valszto();
 
 #endif //ITALOK_H

@@ -5,9 +5,43 @@
 #include "Ital.h"
 #include <iostream>
 #include <cstring>
-#include "string_kezez.h"
+#include "bevitel_kezel.h"
 #include <limits>
 #include <ctime>
+
+ital_tipus tipus_valszto() {
+    int tipus;
+    do{
+        std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
+        tipus=int_beolvas();
+        switch(tipus) {
+            case 1:
+                return  bor;
+            case 2:
+                return  whiskey;
+            case 3:
+                return  gin;
+            case 4:
+                return  rum;
+            case 5:
+                return  tequila;
+            case 6:
+                return  sor;
+            case 7:
+                return  gyumolcsle;
+            case 8:
+                return  alkohols;
+            case 9:
+                return  alkohol_mentes;
+            default:
+                std::cout << "Hibás típus valaztas!" << std::endl;
+                break;
+        }
+    } while(tipus<1 || tipus>9);
+
+}
+
+
 
 const char* get_tipus_nev_str(ital_tipus tipus){
 switch (tipus) {
@@ -25,22 +59,15 @@ switch (tipus) {
 }
 
 
-Ital::Ital(ital_tipus tipus) {
-    std::cout << "Adja meg az ital nevet: " << std::endl;
-    this->nev = hoszusor_olvas();
-    std::cout << "Adja meg az ital gyarojat: " << std::endl;
-    this->gyarto = hoszusor_olvas();
-    this->tipus = tipus;
+Ital::Ital(ital_tipus tipus):nev(nullptr),gyarto(nullptr),tipus(tipus){
+    setNev();
+    setGyarto();
 }
 
-Ital::Ital() {
-    nev=nullptr;
-    gyarto=nullptr;
-}
+Ital::Ital() :nev(nullptr),gyarto(nullptr){}
 
-Ital::Ital(char *nev, ital_tipus tipus): nev(nev), tipus(tipus){
-    std::cout << "Adja meg az ital gyarojat: " << std::endl;
-    this->gyarto = hoszusor_olvas();
+Ital::Ital(char *nev, ital_tipus tipus): nev(nev),gyarto(nullptr), tipus(tipus){
+    setGyarto();
 }
 
 Ital::~Ital() {
@@ -61,35 +88,12 @@ ital_tipus Ital::getTipus() const {
     return tipus;
 }
 
-const char*  Ital::getTipusNev(ital_tipus tipus) const {
-    switch (tipus) {
-        case alkohols: return "alkohols";
-        case alkohol_mentes: return "alkohol_mentes";
-        case bor: return "bor";
-        case whiskey: return "whiskey";
-        case gin: return "gin";
-        case rum: return "rum";
-        case tequila: return "tequila";
-        case sor: return "sor";
-        case gyumolcsle: return "gyumolcsle";
-        default: return "ismeretlen";
-    }
+const char*  Ital::getTipusNev(ital_tipus tipus_kap) const {
+    return  get_tipus_nev_str(tipus_kap);
 }
 
 const char*  Ital::getTipusNev() const {
-    ital_tipus tipus=this->tipus;
-    switch (tipus) {
-        case alkohols: return "alkohols";
-        case alkohol_mentes: return "alkohol_mentes";
-        case bor: return "bor";
-        case whiskey: return "whiskey";
-        case gin: return "gin";
-        case rum: return "rum";
-        case tequila: return "tequila";
-        case sor: return "sor";
-        case gyumolcsle: return "gyumolcsle";
-        default: return "ismeretlen";
-    }
+    return get_tipus_nev_str(tipus);
 }
 
 void Ital::setNev() {
@@ -117,45 +121,11 @@ void Ital::setGyarto(char* kap) {
 void Ital:: kiir()  const{
     std::cout << "Nev: " << nev;
     std::cout << " Gyarto: " << gyarto;
-    std::cout << " Fajtaja: " << getTipusNev(tipus);
+    std::cout << " Fajtaja: " << getTipusNev();
 }
 
 void Ital::setTipus() {
-    int tipus=0;
-    do{
-        std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
-        while(!(std::cin >> tipus)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
-
-        switch(tipus) {
-            case 1:
-                tipus=bor;
-                return;
-            case 2:
-                tipus=whiskey;
-                return;
-            case 3:
-               tipus=gin;
-                return;
-            case 4:
-                tipus=rum;
-            case 5:
-                tipus=tequila;
-            case 6:
-                tipus=sor;
-            case 7:
-                tipus=gyumolcsle;
-            case 8:
-                tipus=alkohols;
-            case 9:
-                tipus=alkohol_mentes;
-            default:
-                std::cout << "Hibás típus valaztas!" << std::endl;
-        }
-    } while(tipus<1 || tipus>9);
+    tipus=tipus_valszto();
 }
 
 void Ital::setTipus(ital_tipus kap) {
@@ -165,16 +135,12 @@ void Ital::setTipus(ital_tipus kap) {
 
 
 void Ital::Set() {
-    size_t valasz;
+    int valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus, 4-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg, 4-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=int_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -194,24 +160,14 @@ void Ital::Set() {
 //szeszes italok
 
 SzeszesItalok::SzeszesItalok(ital_tipus tipus) : Ital(tipus) {
-    std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
-    while(!(std::cin >> alkoholTartalom)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    setAlkoholTartalom();
 }
 
 SzeszesItalok::SzeszesItalok() : Ital(){
 }
 
 SzeszesItalok::SzeszesItalok(char *nev, ital_tipus tipus): Ital(nev,tipus) {
-    std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
-    while(!(std::cin >> alkoholTartalom)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    setAlkoholTartalom();
 }
 
 float SzeszesItalok::getAlkoholTartalom() const {
@@ -220,11 +176,7 @@ float SzeszesItalok::getAlkoholTartalom() const {
 
 void SzeszesItalok::setAlkoholTartalom() {
     std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
-    while(!(std::cin >> alkoholTartalom)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    alkoholTartalom=float_beolvas();
 }
 
 void SzeszesItalok::setAlkoholTartalom(float kap) {
@@ -237,16 +189,12 @@ void SzeszesItalok::kiir() const {
 }
 
 void SzeszesItalok::Set() {
-    size_t valasz;
+    int valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=int_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -278,95 +226,26 @@ bool evjarat_teszt(unsigned int evjarat) {
 }
 
 
-Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus) {
-    std::cout << "Adja meg az evjaratot: " << std::endl;
-    unsigned int bevitel;
-        while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-        }
-    evjarat=bevitel;
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "valasza kia bor szinet [1]voros,[2]rose,[3]feher" << std::endl;
-        std::cin.sync();
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->szin = voros;
-            break;
-            case 2:
-                this->szin = rose;
-            break;
-            case 3:
-                this->szin = feher;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
+Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus),fajta(nullptr),fajta_db(0) {
+    setEvjarat();
+    setSzin();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
-    while(!(std::cin >> fajta_db)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    this->fajta = new char *[fajta_db];
-    for (int i = 0; i < fajta_db; i++) {
-        std::cout << "Adja meg a fajtat: " << std::endl;
-        fajta[i] = hoszusor_olvas();
+    size_t fajtak=size_beolvas();
+    for (int i = 0; i < fajtak; i++) {
+        addFajta();
     }
 }
 
-Bor::Bor():SzeszesItalok() {
-    fajta=nullptr;
+Bor::Bor():SzeszesItalok(), fajta(nullptr),fajta_db(0) {
 }
 
-Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
-    std::cout << "Adja meg az evjaratot: " << std::endl;
-    unsigned int bevitel;
-    while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    evjarat=bevitel;
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "valasza kia bor szinet [1]voros,[2]rose,[3]feher" << std::endl;
-        std::cin.sync();
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->szin = voros;
-            break;
-            case 2:
-                this->szin = rose;
-            break;
-            case 3:
-                this->szin = feher;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
+Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus), fajta(nullptr),fajta_db(0) {
+    setEvjarat();
+    setEvjarat();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
-    while(!(std::cin >> fajta_db)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    this->fajta = new char *[fajta_db];
-    for (int i = 0; i < fajta_db; i++) {
-        std::cout << "Adja meg a fajtat: " << std::endl;
-        fajta[i] = hoszusor_olvas();
+    size_t fajtak=size_beolvas();
+    for (int i = 0; i < fajtak; i++) {
+        addFajta();
     }
 
 }
@@ -386,16 +265,8 @@ szinek_bor Bor::getSzin() const {
     return szin;
 }
 
-std::string getSzinNev(szinek_bor szin) {
-        switch (szin) {
-            case voros: return "voros";
-            case rose: return "rose";
-            case feher: return "feher";
-            default: return "ismeretlen";
-        }
-    }
 
-const char* Bor::getSzinNev(szinek_bor szin) const{
+const char* Bor::getSzinNev() const{
     switch (szin) {
         case voros: return "voros";
         case rose: return "rose";
@@ -406,39 +277,38 @@ const char* Bor::getSzinNev(szinek_bor szin) const{
 
 void Bor::setEvjarat() {
     std::cout << "Adja meg az evjaratot: " << std::endl;
-    while(!(std::cin >> evjarat)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
+    evjarat=unsigned_int_beolvas();
+    while(!evjarat_teszt(evjarat)) {
+        std::cout << "Hibas evjarat! Adjon meg egy helyes evjaratot!" << std::endl;
+        evjarat=unsigned_int_beolvas();
     }
 }
 
 void Bor::setEvjarat(unsigned int kap) {
+    if(evjarat_teszt(kap))
         evjarat=kap;
+    else
+        setEvjarat();
 }
 
 
 void Bor::setSzin() {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "valasza kia bor szinet [1]voros,[2]rose,[3]feher" << std::endl;
-        std::cin.sync();
-        std::cin >> szin;
-        switch (szin) {
+    int szin_be = 0;
+    while (szin_be != 1 && szin_be != 2 && szin_be != 3) {
+        szin_be=int_beolvas();
+        switch (szin_be) {
             case 1:
                 this->szin = voros;
-            break;
+                break;
             case 2:
                 this->szin = rose;
-            break;
+                break;
             case 3:
                 this->szin = feher;
-            break;
+                break;
             default:
                 std::cout << "nem megfelelo szamot adott meg" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
+                break;
         }
     }
 }
@@ -512,7 +382,7 @@ size_t Bor::getFajta_db() const {
 void Bor::kiir() const {
     SzeszesItalok::kiir();
     std::cout << " Evjarat: " << evjarat;
-    std::cout << " Szin: " << getSzinNev(szin);
+    std::cout << " Szin: " << getSzinNev();
     if (fajta_db > 1) {
         std::cout << " Fajtak:";
     } else {
@@ -527,13 +397,9 @@ void Bor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-evjart, 6-szin, 7-fajta hozzadas, 8-fajta torles 9-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-evjart, 6-szin, 7-fajta hozzadas, 8-fajta torles 9-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -561,69 +427,52 @@ void Bor::Set() {
                 break;
             case 9: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=9);
 }
 
 //whiskey
 
-Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    this->tipus = hoszusor_olvas();
-    std::cout << "Adja meg az erleses evet: " << std::endl;
-    while(!(std::cin >> erleses)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus), jeleg(nullptr) {
+    setJeleg_wiskey();
+    setErleses();
 }
 
-Wiskey::Wiskey():SzeszesItalok() {
-    tipus=nullptr;
-}
+Wiskey::Wiskey():SzeszesItalok(),jeleg(nullptr) {}
 
-Wiskey::Wiskey(char *nev,ital_tipus tipus):SzeszesItalok(nev,tipus) {
-    std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    this->tipus = hoszusor_olvas();
-    std::cout << "Adja meg az erleses evet: " << std::endl;
-    while(!(std::cin >> erleses)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+Wiskey::Wiskey(char *nev,ital_tipus tipus):SzeszesItalok(nev,tipus),jeleg(nullptr) {
+    setJeleg_wiskey();
+    setErleses();
 
 }
 
 Wiskey::~Wiskey() {
-    delete[] tipus;
+    delete[] jeleg;
 }
 
-char * Wiskey::getTipus_wiskey() const {
-    return tipus;
+char * Wiskey::getJeleg_wiskey() const {
+    return jeleg;
 }
 
 unsigned int Wiskey::getErleses() const {
     return erleses;
 }
 
-void Wiskey::setTipus_wiskey() {
-    delete[] this->tipus;
+void Wiskey::setJeleg_wiskey() {
+    delete[] this->jeleg;
     std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    this->tipus = hoszusor_olvas();
+    this->jeleg = hoszusor_olvas();
 }
 
-void Wiskey::setTipus_wiskey(char * kap) {
-    delete [] this->tipus;
-    tipus=kap;
+void Wiskey::setJeleg_wiskey(char * kap) {
+    delete [] this->jeleg;
+    jeleg=kap;
 }
 
 void Wiskey::setErleses() {
     std::cout << "Adja meg az erleses evet: " << std::endl;
-    while(!(std::cin >> erleses)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    erleses=unsigned_int_beolvas();
 }
 
 void Wiskey::setErleses(unsigned int kap) {
@@ -632,7 +481,7 @@ void Wiskey::setErleses(unsigned int kap) {
 
 void Wiskey::kiir() const {
     SzeszesItalok::kiir();
-    std::cout << " Tipus: " << tipus;
+    std::cout << " Tipus: " << jeleg;
     std::cout << " Erleses: " << erleses;
 }
 
@@ -640,13 +489,9 @@ void Wiskey::Set() {
         size_t valasz;
         do {
             this->kiir();
-            std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-wiskey tipud, 6-erleles, 7-viszalepes" << std::endl;
+            std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-wiskey tipud, 6-erleles, 7-viszalepes" << std::endl;
             std::cout<<"\nAdja meg az utasitas szamat: ";
-            while(!(std::cin >> valasz)){
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-            }
+            valasz=size_beolvas();
             switch (valasz) {
                 case 1:
                     this->setNev();
@@ -661,7 +506,7 @@ void Wiskey::Set() {
                     this->setAlkoholTartalom();
                 break;
                 case 5:
-                    this->setTipus_wiskey();
+                    this->setJeleg_wiskey();
                 case 6:
                     this->setErleses();
                     break;
@@ -673,80 +518,17 @@ void Wiskey::Set() {
 
 //gin
 
-Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    int szin = 0;
-    iz = nullptr;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza ki a gin szinet [1]szintelen, [2]pink, [3]egyeb" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->szin = szintelen;
-            break;
-            case 2:
-                this->szin = pink;
-            break;
-            case 3:
-                this->szin = egyeb;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
-    int iz = 0;
-    std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
-    while(!(std::cin >> iz)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    if (iz == 1) {
-        std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
-        this->iz = hoszusor_olvas();
-    }
+Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus),iz(nullptr) {
+    setSzin();
+    setIz();
 }
 
-Gin::Gin() :SzeszesItalok(){
-    iz=nullptr;
+Gin::Gin() :SzeszesItalok(), iz(nullptr){
 }
 
-Gin::Gin(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
-    int szin = 0;
-    iz = nullptr;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza ki a gin szinet [1]szintelen, [2]pink, [3]egyeb" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->szin = szintelen;
-            break;
-            case 2:
-                this->szin = pink;
-            break;
-            case 3:
-                this->szin = egyeb;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
-    int iz = 0;
-    std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
-    while(!(std::cin >> iz)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    if (iz == 1) {
-        std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
-        this->iz = hoszusor_olvas();
-    }
+Gin::Gin(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus), iz(nullptr) {
+    setIz();
+   setSzin();
 
 }
 
@@ -755,7 +537,7 @@ gin_szin Gin::getSzin() const {
     return szin;
 }
 
-const char* Gin::getSzinNev(gin_szin szin) const {
+const char* Gin::getSzinNev() const {
     switch (szin) {
         case szintelen: return "szintelen";
         case pink: return "pink";
@@ -765,25 +547,23 @@ const char* Gin::getSzinNev(gin_szin szin) const {
 }
 
 void Gin::setSzin() {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza ki a gin szinet [1]szintelen, [2]pink, [3]egyeb" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
+    std::cout<< "Adja meg a gin szinet: [1]szintelen, [2]pink, [3]egyeb" << std::endl;
+    int szin_olvas = 0;
+    while (szin_olvas != 1 && szin_olvas != 2 && szin_olvas != 3) {
+        szin_olvas=int_beolvas();
+        switch (szin_olvas) {
             case 1:
                 this->szin = szintelen;
-            break;
+                return;
             case 2:
                 this->szin = pink;
-            break;
+                return;
             case 3:
                 this->szin = egyeb;
-            break;
+                return;
             default:
                 std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
+                break;
         }
     }
 }
@@ -798,14 +578,10 @@ const char *Gin::getIz() const {
 
 void Gin::setIz() {
     delete[] this->iz;
-    int iz = 0;
+    int iz_bevit = 0;
     std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
-    while(!(std::cin >> iz)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
-    if (iz == 1) {
+    iz_bevit=int_beolvas();
+    if (iz_bevit == 1) {
         std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
         this->iz = hoszusor_olvas();
     } else {
@@ -820,7 +596,7 @@ void Gin::setIz(char* kap) {
 
 void Gin::kiir()  const{
     SzeszesItalok::kiir();
-    std::cout << " Szin: " << getSzinNev(szin);
+    std::cout << " Szin: " << getSzinNev();
     if (iz != nullptr) {
         std::cout << " Iz: " << iz;
     }
@@ -830,13 +606,9 @@ void Gin::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-Gin iz, 6-Szin, 7-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Gin iz, 6-Szin, 7-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -864,66 +636,15 @@ void Gin::Set() {
 
 //Rum
 
-Rum::Rum(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3 && szin != 4) {
-        std::cout << "válasza ki a rum tipist [1]fuszeres_rum, [2]fuszeres_rum, [3]arany_rum, [4]feher_rum" <<
-                std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->fajta = fuszeres_rum;
-            break;
-            case 2:
-                this->fajta = fuszeres_rum;
-            break;
-            case 3:
-                this->fajta = arany_rum;
-            break;
-            case 4:
-                this->fajta = feher_rum;
-            break;
-
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
+Rum::Rum(ital_tipus tipus) : SzeszesItalok(tipus) {
+    setFajta();
 }
 
 Rum::Rum():SzeszesItalok() {
 }
 
 Rum::Rum(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3 && szin != 4) {
-        std::cout << "válasza ki a rum tipist [1]fuszeres_rum, [2]fuszeres_rum, [3]arany_rum, [4]feher_rum" <<
-                std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->fajta = fuszeres_rum;
-            break;
-            case 2:
-                this->fajta = fuszeres_rum;
-            break;
-            case 3:
-                this->fajta = arany_rum;
-            break;
-            case 4:
-                this->fajta = feher_rum;
-            break;
-
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
-
+    setFajta();
 }
 
 
@@ -932,30 +653,25 @@ rum_fajta Rum::getFajta() const {
 }
 
 void Rum::setFajta() {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3 && szin != 4) {
-        std::cout << "válasza kia rum tipist [1]fuszeres_rum, [2]fekete_rum, [3]arany_rum, [4]feher_rum" <<
-                std::endl;
-        std::cin >> szin;
-        switch (szin) {
+    int szin_beolvas = 0;
+    while (szin_beolvas != 1 && szin_beolvas != 2 && szin_beolvas != 3 && szin_beolvas != 4) {
+        szin_beolvas=int_beolvas();
+        switch (szin_beolvas) {
             case 1:
                 this->fajta = fuszeres_rum;
-            break;
+                return;
             case 2:
                 this->fajta = fekete_rum;
-            break;
+                return;
             case 3:
                 this->fajta = arany_rum;
-            break;
+                return;
             case 4:
                 this->fajta = feher_rum;
-            break;
-
+                return;
             default:
                 std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
+                break;
         }
     }
 }
@@ -964,7 +680,7 @@ void Rum::setFajta(rum_fajta kap) {
     fajta=kap;
 }
 
-const char* Rum::getFajtaNev(rum_fajta fajta) const{
+const char* Rum::getFajtaNev() const{
     switch (fajta) {
         case fuszeres_rum: return "fuszeres_rum";
         case fekete_rum: return "fekete_rum";
@@ -976,20 +692,16 @@ const char* Rum::getFajtaNev(rum_fajta fajta) const{
 
 void Rum::kiir() const {
     SzeszesItalok::kiir();
-    std::cout << " Fajta: " << getFajtaNev(fajta) << std::endl;
+    std::cout << " Fajta: " << getFajtaNev() << std::endl;
 }
 
 void Rum::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-Rum fajtaja, 6-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Rum fajtaja, 6-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -1016,54 +728,13 @@ void Rum::Set() {
 //tequila
 
 Tequila::Tequila(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza ki a tequila tipist [1]silver, [2]gold, [3]aged" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->fajta = silver;
-            break;
-            case 2:
-                this->fajta = gold;
-            break;
-            case 3:
-                this->fajta = aged;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
+    setFajta();
 }
 
-Tequila::Tequila():SzeszesItalok() {
-}
+Tequila::Tequila():SzeszesItalok() {}
 
 Tequila::Tequila(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza ki a tequila tipist [1]silver, [2]gold, [3]aged" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
-            case 1:
-                this->fajta = silver;
-            break;
-            case 2:
-                this->fajta = gold;
-            break;
-            case 3:
-                this->fajta = aged;
-            break;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
-        }
-    }
+    setFajta();
 }
 
 
@@ -1072,34 +743,32 @@ tequli_fajta Tequila::getFajta() const {
 }
 
 void Tequila::setFajta() {
-    int szin = 0;
-    while (szin != 1 && szin != 2 && szin != 3) {
-        std::cout << "válasza kia tequila tipist [1]silver, [2]gold, [3]aged" << std::endl;
-        std::cin >> szin;
-        switch (szin) {
+    int olvas_fajta;
+    do{
+        std::cout << "válasza ki a tequila tipisat [1]silver, [2]gold, [3]aged" << std::endl;
+        olvas_fajta=int_beolvas();
+        switch (olvas_fajta) {
             case 1:
                 this->fajta = silver;
-            break;
+                return;
             case 2:
                 this->fajta = gold;
-            break;
+                return;
             case 3:
                 this->fajta = aged;
-            break;
+                return;
             default:
                 std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                 std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            break;
+                break;
         }
-    }
+    }while (olvas_fajta != 1 && olvas_fajta != 2 && olvas_fajta != 3);
 }
 
 void Tequila::setFajta(tequli_fajta kap) {
     fajta=kap;
 }
 
-const char* Tequila::getFajtaNev(tequli_fajta fajta) const {
+const char* Tequila::getFajtaNev() const {
     switch (fajta) {
         case silver: return "silver";
         case gold: return "gold";
@@ -1110,20 +779,16 @@ const char* Tequila::getFajtaNev(tequli_fajta fajta) const {
 
 void Tequila::kiir() const {
     SzeszesItalok::kiir();
-    std::cout << " Fajta: " << getFajtaNev(fajta);
+    std::cout << " Fajta: " << getFajtaNev();
 }
 
 void Tequila::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-Tequila fajtaja, 6-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Tequila fajtaja, 6-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -1147,18 +812,14 @@ void Tequila::Set() {
 }
 
 //sor
-Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss) {
-    std::cout << "Adja meg a sor tipusat: " << std::endl;
-    this->tipus_sor = hoszusor_olvas();
+Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss), tipus_sor(nullptr) {
+    setTipus_sor();
 }
 
-Sor::Sor():SzeszesItalok() {
-    tipus_sor=nullptr;
-}
+Sor::Sor():SzeszesItalok(),tipus_sor(nullptr) {}
 
-Sor::Sor(char *nev, ital_tipus tipus): SzeszesItalok(nev,tipus) {
-    std::cout << "Adja meg a sor tipusat: " << std::endl;
-    this->tipus_sor = hoszusor_olvas();
+Sor::Sor(char *nev, ital_tipus tipus): SzeszesItalok(nev,tipus),tipus_sor(nullptr) {
+    setTipus_sor();
 }
 
 
@@ -1191,13 +852,9 @@ void Sor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-alkohol, 5-Sor tipus, 6-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Sor jeleg, 6-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -1217,30 +874,19 @@ void Sor::Set() {
             case 6: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=7);
+    }while (valasz!=6);
 }
 
 //gyumolcslev
 
 Gyumolcsle::Gyumolcsle(ital_tipus ital_tipus) : Ital(ital_tipus) {
-    std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
-    while(!(std::cin >> gyumolcsszazalek)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+   setGyumolcsszazalek();
 }
 
-Gyumolcsle::Gyumolcsle():Ital() {
-}
+Gyumolcsle::Gyumolcsle():Ital() {}
 
 Gyumolcsle::Gyumolcsle(char *nev, ital_tipus tipus):Ital(nev,tipus) {
-    std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
-    while(!(std::cin >> gyumolcsszazalek)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    setGyumolcsszazalek();
 }
 
 
@@ -1251,11 +897,7 @@ unsigned int Gyumolcsle::getGyumolcsszazalek() const {
 
 void Gyumolcsle::setGyumolcsszazalek() {
     std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
-    while(!(std::cin >> gyumolcsszazalek)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-    }
+    gyumolcsszazalek=unsigned_int_beolvas();
 }
 
 void Gyumolcsle::setGyumolcsszazalek(unsigned int kap) {
@@ -1271,13 +913,9 @@ void Gyumolcsle::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-tipus,4-gyumolcsszazalek, 5-viszalepes" << std::endl;
+        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-gyumolcsszazalek, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valasz)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valasz=size_beolvas();
         switch (valasz) {
             case 1:
                 this->setNev();
@@ -1300,7 +938,7 @@ void Gyumolcsle::Set() {
 //>>italok
 /*
 std::ostream& operator<<(std::ostream& os, const Ital& ital) {
-    os <<"Nev: "<< ital.getNev()<<" Gyarto "<< ital.getGyarto() << " tipus:"<< ital.getTipusNev(ital.getTipus());
+    os <<"Nev: "<< ital.getNev()<<" Gyarto "<< ital.getGyarto() << " jeleg:"<< ital.getTipusNev(ital.getTipus());
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital) {
@@ -1315,7 +953,7 @@ std::ostream& operator<<(std::ostream& os, const Bor& ital) {
         return os;
     }
 std::ostream& operator<<(std::ostream& os, const Wiskey& ital) {
-    os<<(SzeszesItalok&)ital<<"\nTipus:" << ital.getTipus_wiskey() << " Erleles:" << ital.getErleses();
+    os<<(SzeszesItalok&)ital<<"\nTipus:" << ital.getJeleg_wiskey() << " Erleles:" << ital.getErleses();
     return os;
 }
 std::ostream& operator<<(std::ostream& os, const Gin& ital) {

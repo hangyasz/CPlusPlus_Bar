@@ -89,7 +89,7 @@ void Italok::addItal(char *nev, ital_tipus tipus) {
             this->addItal(new  Ital(nev,alkohol_mentes));
             break;
         default:
-            std::cout << "Hibás típus! Nem létezik ilyen tipus kerem vigye fel" << std::endl;
+            std::cout << "Hibás típus! Nem létezik ilyen jeleg kerem vigye fel" << std::endl;
             this->addItal();
             delete [] nev;
         break;

@@ -11,8 +11,11 @@ add_executable(hazzi_lion main.cpp
         italok_kezel.cpp
         memtrace.h
         memtrace.cpp
-        string_kezez.cpp
-        string_kezez.h
+        bevitel_kezel.cpp
+        "bevitel_kezel.h"
         faljkezel.cpp
         faljkezel.h
+        tesztek.cpp
+        tesztek.h
+        gtest_lite.h
 )

@@ -4,13 +4,10 @@
 #include "memtrace.h"
 #include "faljkezel.h"
 #include "koktle.h"
-
+#include "tesztek.h"
 
 int main() {
-    Italok italok2;
-    italok2.olvasF();
-    Koktlok koktlok;
-    koktlok.olvasF(italok2);
-    koktlok.kiir_index();
+    SzeszesItalok j(alkohol_mentes);
+    j.kiir();
     return 0;
 }

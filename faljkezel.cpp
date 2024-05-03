@@ -29,7 +29,7 @@ void Bor::kiirF(std::ofstream& os) const {
 }
 void Wiskey::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<tipus<<"><"<<erleses<<">";
+    os<<"<"<<jeleg<<"><"<<erleses<<">";
 }
 
 void Gin::kiirF(std::ofstream& os) const {
@@ -79,7 +79,7 @@ std::ofstream& operator<<(std::ofstream& os,const Bor &ital) {
     os<<"}";
    return os;}
 std::ofstream& operator<<(std::ofstream& os,const Wiskey &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<ital.getTipus_wiskey()<<"<"<<ital.getErleses()<<">";
+    os<<(SzeszesItalok&)ital<<"<"<<ital.getJeleg_wiskey()<<"<"<<ital.getErleses()<<">";
     return os;
 }
 
@@ -314,7 +314,7 @@ Wiskey *wiskey_olvas(std::ifstream &file) {
     olvas->setNev(szoveg_olvas(file));
     olvas->setGyarto(szoveg_olvas(file));
     olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setTipus_wiskey(szoveg_olvas(file));
+    olvas->setJeleg_wiskey(szoveg_olvas(file));
     olvas->setErleses(uszam_olvas(file));
     return olvas;
 }
@@ -474,7 +474,7 @@ void Koktlok::olvasF(Italok &italok ) {
                     break;
                 default:
                     char *nev_ital=szoveg_olvas(file);
-                    std::cout<<"Hibás típus ital nev: "<<nev_ital<<  " mi legyen az uj tipus: "<<std::endl;
+                    std::cout<<"Hibás típus ital nev: "<<nev_ital<<  " mi legyen az uj jeleg: "<<std::endl;
                     ital_tipus bevit=tipus_bevitel();
                     italok.addItal(nev_ital,bevit);
                     alapanyagok[i]=ital_letezik_e(italok,nev_ital,bevit);
@@ -495,7 +495,7 @@ Ital* ital_letezik_e(Italok &italok,  char *nev, ital_tipus tipus) {
             return akt;
         }
     }
-    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a tipus: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
+    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a jeleg: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
     italok.addItal(nev,tipus);
     return &italok.getItal(db);
 }
