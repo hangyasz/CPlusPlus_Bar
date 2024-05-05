@@ -19,7 +19,6 @@ void test_Ital(){
 //ital nevenek beallitasa
 void test_Ital_setnev() {
     Ital i;
-    i.setNev("Teszt");
     EXPECT_STREQ("Teszt", i.getNev())<<"a nev nem egyezeik a beallitottal";
 }
 //bor tulindexeles
@@ -46,7 +45,20 @@ void test_Italok_torles() {
     EXPECT_EQ(0, k.getdb())<<"Nem adja vissza a megfelelo erteket";
 }
 
+//koktel hozzaadasa
+void test_Koktel_hozzaadas() {
+}
 
+//koktel torlese
+void test_Koktel_torles() {
+}
 
+//koktel osszetevok hozzaadasa
+void test_Koktel_osszetevok_hozzaadasa() {
+}
+
+//koktel osszetevok torlese
+void test_Koktel_osszetevok_torlese() {
+}
 
 

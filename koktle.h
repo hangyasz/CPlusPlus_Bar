@@ -19,7 +19,7 @@ class Koktle {
 public:
     //konstruktor ami beállítja a koktel
     Koktle(Italok &italok);
-    // Koktle(Italok &italok,char const *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);// ezt használom a fajbol beolvasnal
+    // ezt használom a fajbol beolvasnal
     Koktle(Italok &italok,char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
     //kiirja a koktelokat
     void kiir() const;
