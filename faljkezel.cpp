@@ -475,7 +475,7 @@ void Koktlok::olvasF(Italok &italok ) {
                 default:
                     char *nev_ital=szoveg_olvas(file);
                     std::cout<<"Hibás típus ital nev: "<<nev_ital<<  " mi legyen az uj jeleg: "<<std::endl;
-                    ital_tipus bevit=tipus_bevitel();
+                    ital_tipus bevit=tipus_valszto();
                     italok.addItal(nev_ital,bevit);
                     alapanyagok[i]=ital_letezik_e(italok,nev_ital,bevit);
                     break;

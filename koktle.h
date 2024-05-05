@@ -23,11 +23,22 @@ public:
     Koktle(Italok &italok,char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
     //kiirja a koktelokat
     void kiir() const;
+    //alapanayg hozzá adása
+    void addAlapanyag(Italok &italok);
+    //alapanyag torlese
+    void removeAlapanyag();
     // koktel kiirasa fajlba
     void kiirF(std::ofstream& os) const;
-    //ittal tartalmazó koktel neve
-    bool tartalmaz_e(Ital* kap) const;
-    ~Koktle(); //destruktor ami felszabadítja a dinamikus memóriát
+    //koktel tartalmaz e adott italt
+    bool tartalmaz_e(const Ital* const kap) const;
+    //koktel tartalmaz e adott alapanyagot
+    bool tartalmaz_e(const ital_tipus tipus) const;
+    //koktel atnevezese
+    void setNev();
+    //koktel belaites mennü
+    void Set(Italok &italok);
+    //destruktor ami felszabadítja a dinamikus memóriát
+    ~Koktle();
 };
 
 //ez kezeli a koktelokat egy osztalyban
@@ -54,6 +65,13 @@ public:
     void kiirF() const;
     //koktelok beolvasása fájlból
     void olvasF(Italok &italok);
+    //koktelok beolvasása
+    void Set(Italok &italok);
+    //veletlen szerü köktel ajánlás
+    void veltel_ajanlas();
+    //adott alapanyagot tartalmazó koktelok kiirása
+    void lista_alapanyagok_szerint() const;
+    //destruktor ami felszabadítja a dinamikus memóriát
     ~Koktlok();
 };
 

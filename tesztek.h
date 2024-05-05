@@ -19,7 +19,7 @@ void test_Ital();
 void test_Ital_setnev();
 
 //bor tulindexeles
-void test_Bor_index();
+void test_Bor_index_hibba();
 
 //italok hozzaadasa
 void test_Italok_hozadas();

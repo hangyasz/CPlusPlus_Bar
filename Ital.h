@@ -371,7 +371,7 @@ public:
     size_t getdb() const; //italok számának kiirása
     Ital &getItal(size_t index) const; //ital vissza adása index alapján
     Ital *getItalCsilag(size_t index) const; //ital vissza adása index alapján
-    void setItalok(); //ital beálitása men
+    void setItalok(); //ital beálitása
 };
 //os stream operatorokkal kiiratás
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
@@ -388,7 +388,7 @@ std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
 
 //bor éjrárat elenöriz;
 bool evjarat_teszt(unsigned int evjarat);
-ital_tipus tipus_bevitel();
+//italok tipusának választása(bvitele)
 ital_tipus tipus_valszto();
 
 #endif //ITALOK_H

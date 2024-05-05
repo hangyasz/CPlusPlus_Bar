@@ -12,19 +12,18 @@
 
 //itall letrehozasa
 void test_Ital(){
-    Ital *i = new Ital();
-    EXPECT_STREQ(i->getNev(), nullptr)<<"a nev nem nullptr";
-    delete i;
+    Ital i;
+    EXPECT_EQ(i.getNev(),nullptr) << "a nev nem nullptr";
+    EXPECT_EQ(i.getGyarto(),nullptr) << "a gyarto nem nullptr";
 }
-
+//ital nevenek beallitasa
 void test_Ital_setnev() {
-    Ital *i = new Ital();
-    i->setNev("Teszt");
-    EXPECT_STREQ(i->getNev(), "Teszt")<<"a nev nem egyezeik a beallitottal";
-    delete i;
+    Ital i;
+    i.setNev("Teszt");
+    EXPECT_STREQ("Teszt", i.getNev())<<"a nev nem egyezeik a beallitottal";
 }
-
-void test_Bor_index() {
+//bor tulindexeles
+void test_Bor_index_hibba() {
     Bor *b = new Bor();
     b->setFajta_db(2);
     EXPECT_ANY_THROW(b->getFajtaindex(5))<<"Nem dob kivetelt";
@@ -32,12 +31,14 @@ void test_Bor_index() {
 
 }
 
+//italok uj ital hozzaadasa
 void test_Italok_hozadas() {
     Italok k;
     k.addItal();
-    EXPECT_EQ(k.getdb(), 1)<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_EQ(1,k.getdb())<<"Nem adja vissza a megfelelo erteket";
 }
 
+//italok ital torlese
 void test_Italok_torles() {
     Italok k;
     k.addItal();

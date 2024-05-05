@@ -44,7 +44,6 @@ void Italok::addItal() {
     delete [] ListaItalok;
     ListaItalok=uj;
     db++;
-    this->kiirF();
 }
 
 void Italok::addItal(Ital *kap) {
@@ -94,7 +93,6 @@ void Italok::addItal(char *nev, ital_tipus tipus) {
             delete [] nev;
         break;
     }
-    this->kiirF();
 }
 
 size_t Italok::getdb() const {
@@ -106,9 +104,9 @@ void Italok::kiir_index() {
         std::cout<<"Nincs ital a listaban!"<<std::endl;
         return;
     }
-    std::cout<<"["<<0<<"] "<<*ListaItalok[0];
+    std::cout<<"["<<1<<"] "<<*ListaItalok[0];
     for(size_t i=1;i<db;i++){
-        std::cout<<"\n["<<i<<"] "<<*ListaItalok[i];
+        std::cout<<"\n["<<1+i<<"] "<<*ListaItalok[i];
     }
     std::cout<<std::endl;
 }
@@ -118,24 +116,24 @@ void Italok::removeItal() {
     this->kiir_index();
     size_t index;
     std::cout<<"\nAdja meg a torolni kivant ital indexet: ";
-    while(!(std::cin >> index)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-    }
-    if(index>=db){
+    index=size_beolvas();
+    while (index>db){
         std::cout<<"Hibas index!"<<std::endl;
-        return;
+        this->kiir_index();
+        std::cout<<"\nAdja meg a torolni kivant ital indexet: ";
+        index=size_beolvas();
     }
+    if(index==0)
+        return;
     Ital **tmp=new Ital*[db-1];
-    for(size_t i=0;i<index;i++){
+    for(size_t i=0;i<index-1;i++){
         tmp[i]=ListaItalok[i];
     }
-    delete ListaItalok[index];
-    db--;
-    for(size_t i=index;i<db;i++){
+    for(size_t i=index-1;i<db;i++){
         tmp[i]=ListaItalok[i+1];
     }
+    delete ListaItalok[index-1];
+    db--;
     delete [] ListaItalok;
     ListaItalok=tmp;
 }
@@ -160,11 +158,7 @@ void Italok::setItalok() {
     do{
         std::cout<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - viszalepes"<<std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
-        while(!(std::cin >> valaszto)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
+        valaszto=size_beolvas();
         switch (valaszto) {
             case 1:
                 this->addItal();
@@ -172,23 +166,20 @@ void Italok::setItalok() {
             case 2:
                 this->removeItal();
                 break;
-            case 3: {
+            case 3:
                 this->kiir_index();
                 size_t index;
                 std::cout<<"\nAdja meg a modositani kivant ital indexet: ";
-                while(!(std::cin >> index)){
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-                }
-                if(index>=db){
+                index=size_beolvas();
+                if(index>db){
                     std::cout<<"Hibas index!"<<std::endl;
                     break;
                 }
-                Ital modosit=getItal(index);
+                if(index==0)
+                    break;
+                Ital modosit=getItal(index-1);
                 modosit.Set();
                 break;
-            }
             case 4:
                 break;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
@@ -196,11 +187,12 @@ void Italok::setItalok() {
         }
 
     }while (valaszto!=4);
+    kiirF();
 }
 
 
 Ital* Italok::italok_bevitel() {
-    ital_tipus tipus=tipus_bevitel();
+    ital_tipus tipus=tipus_valszto();
     switch(tipus) {
         case bor:
             return new Bor(bor);
@@ -224,42 +216,5 @@ Ital* Italok::italok_bevitel() {
             std::cout << "Hibás típus!" << std::endl;
         break;
     }
-}
-
-
-ital_tipus tipus_bevitel() {
-    int tipus=0;
-    do{
-        std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
-        while(!(std::cin >> tipus)){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
-        }
-
-        switch(tipus) {
-            case 1:
-                return bor;
-            case 2:
-                return whiskey;
-            case 3:
-                return gin;
-            case 4:
-                return rum;
-            case 5:
-                return tequila;
-            case 6:
-                return sor;
-            case 7:
-                return gyumolcsle;
-            case 8:
-                return alkohols;
-            case 9:
-                return alkohol_mentes;
-            default:
-                std::cout << "Hibás típus!" << std::endl;
-            break;
-        }
-    } while(tipus<1 || tipus>9);
 }
 
