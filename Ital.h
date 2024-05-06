@@ -10,6 +10,8 @@
 #include <cstring>
 #include "bevitel_kezel.h"
 
+//elöre deklarációk
+class Koktlok;
 
 //italok tipusai
 enum ital_tipus {
@@ -364,6 +366,7 @@ public:
     void addItal(); //ital hozzá adása
     void addItal(Ital* kap); //ital hozzá adása
     void addItal(char *nev, ital_tipus tipus); //ital hozzá adása
+    void removeItal(Koktlok &k); //ital törlése
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell
     void kiirF() const; //italok kiirása fájlba
@@ -371,20 +374,10 @@ public:
     size_t getdb() const; //italok számának kiirása
     Ital &getItal(size_t index) const; //ital vissza adása index alapján
     Ital *getItalCsilag(size_t index) const; //ital vissza adása index alapján
-    void setItalok(); //ital beálitása
+    void setItalok(Koktlok &kap); //ital beálitása
 };
 //os stream operatorokkal kiiratás
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
-/*
-std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital);
-std::ostream& operator<<(std::ostream& os, const Bor& ital);
-std::ostream& operator<<(std::ostream& os, const Wiskey& ital);
-std::ostream& operator<<(std::ostream& os, const Gin& ital);
-std::ostream& operator<<(std::ostream& os, const Rum& ital);
-std::ostream& operator<<(std::ostream& os, const Tequila& ital);
-std::ostream& operator<<(std::ostream& os, const Sor& ital);
-std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital);
-*/
 
 //bor éjrárat elenöriz;
 bool evjarat_teszt(unsigned int evjarat);

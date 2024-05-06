@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include "Ital.h"
+#include "koktle.h"
 
 Italok::Italok() :ListaItalok(nullptr), db(0) {}
 
@@ -112,7 +113,7 @@ void Italok::kiir_index() {
 }
 
 
-void Italok::removeItal() {
+/*void Italok::removeItal(Koktlok &koktlok) {
     this->kiir_index();
     size_t index;
     std::cout<<"\nAdja meg a torolni kivant ital indexet: ";
@@ -125,18 +126,83 @@ void Italok::removeItal() {
     }
     if(index==0)
         return;
+    --index;
+    for(size_t i=0; i<koktlok.getKoktelDb();++i) {
+        Koktle* koktle=koktlok.getKoktel_csilag(i);
+        if(koktle->tartalmaz_e(ListaItalok[index])) {
+            koktlok.removeAlapanyag_Italok(i,ListaItalok[index]);
+        }
+    }
     Ital **tmp=new Ital*[db-1];
-    for(size_t i=0;i<index-1;i++){
+    for(size_t i=0;i<index;i++){
         tmp[i]=ListaItalok[i];
     }
-    for(size_t i=index-1;i<db;i++){
+    for(size_t i=index;i<db;i++){
         tmp[i]=ListaItalok[i+1];
     }
-    delete ListaItalok[index-1];
+    delete ListaItalok[index];
     db--;
     delete [] ListaItalok;
     ListaItalok=tmp;
+}*/
+
+void Italok::removeItal() {
+    kiir_index();
+    size_t index;
+    std::cout << "\nAdja meg a torolni kivant ital indexet: ";
+    index = size_beolvas();
+    while (index > db) {
+        std::cout << "Hibas index!" << std::endl;
+        index = size_beolvas();
+    }
+    if (index == 0)
+        return;
+    --index;
+    Ital **tmp = new Ital*[db - 1];
+    for (size_t i = 0; i < index; i++) {
+        tmp[i] = ListaItalok[i];
+    }
+    for (size_t i = index; i < db - 1; i++) {
+        tmp[i] = ListaItalok[i + 1];
+    }
+    delete ListaItalok[index];
+    db--;
+    delete[] ListaItalok;
+    ListaItalok = tmp;
 }
+
+void Italok::removeItal(Koktlok &k) {
+    kiir_index();
+    size_t index;
+    std::cout << "\nAdja meg a torolni kivant ital indexet: ";
+    index = size_beolvas();
+    while (index > db) {
+        std::cout << "Hibas index!" << std::endl;
+        index = size_beolvas();
+    }
+    if (index == 0)
+        return;
+    --index;
+    for(size_t i=0; i<k.getKoktelDb();++i) {
+        Koktle* koktle=k.getKoktel_csilag(i);
+        if(koktle->tartalmaz_e(ListaItalok[index])) {
+            if(k.removeAlapanyag_Italok(i,ListaItalok[index]))
+                return;
+        }
+    }
+    Ital **tmp = new Ital*[db - 1];
+    for (size_t i = 0; i < index; i++) {
+        tmp[i] = ListaItalok[i];
+    }
+    for (size_t i = index; i < db - 1; i++) {
+        tmp[i] = ListaItalok[i + 1];
+    }
+    delete ListaItalok[index];
+    db--;
+    delete[] ListaItalok;
+    ListaItalok = tmp;
+}
+
 
 Ital &Italok::getItal(size_t index) const {
     if (index >= db) {
@@ -153,10 +219,12 @@ Ital *Italok::getItalCsilag(size_t index) const {
 }
 
 
-void Italok::setItalok() {
+void Italok::setItalok(Koktlok &kap) {
     size_t valaszto;
+    size_t index;
+    Ital *modosit;
     do{
-        std::cout<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - viszalepes"<<std::endl;
+        std::cout<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - Italok kiiras\n5 - viszalepes"<<std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valaszto=size_beolvas();
         switch (valaszto) {
@@ -168,7 +236,6 @@ void Italok::setItalok() {
                 break;
             case 3:
                 this->kiir_index();
-                size_t index;
                 std::cout<<"\nAdja meg a modositani kivant ital indexet: ";
                 index=size_beolvas();
                 if(index>db){
@@ -177,22 +244,27 @@ void Italok::setItalok() {
                 }
                 if(index==0)
                     break;
-                Ital modosit=getItal(index-1);
-                modosit.Set();
+                modosit=getItalCsilag(index-1);
+                modosit->Set();
                 break;
             case 4:
+                this->kiir_index();
+                break;
+            case 5:
                 break;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
                 break;
         }
 
-    }while (valaszto!=4);
+    }while (valaszto!=5);
     kiirF();
 }
 
 
 Ital* Italok::italok_bevitel() {
-    ital_tipus tipus=tipus_valszto();
+    ital_tipus tipus;
+    do {
+    tipus=tipus_valszto();
     switch(tipus) {
         case bor:
             return new Bor(bor);
@@ -216,5 +288,6 @@ Ital* Italok::italok_bevitel() {
             std::cout << "Hibás típus!" << std::endl;
         break;
     }
+}while (true);
 }
 

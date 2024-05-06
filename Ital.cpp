@@ -34,7 +34,7 @@ ital_tipus tipus_valszto() {
             case 9:
                 return  alkohol_mentes;
             default:
-                std::cout << "Hibás típus valaztas!" << std::endl;
+                std::cout << "Hibas tipus valaztas!" << std::endl;
                 break;
         }
     } while(tipus<1 || tipus>9);
@@ -138,7 +138,7 @@ void Ital::Set() {
     int valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg, 4-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=int_beolvas();
         switch (valasz) {
@@ -148,13 +148,10 @@ void Ital::Set() {
             case 2:
                 this->setGyarto();
             break;
-            case 3:
-                this->setTipus();
-            break;
-            case 4: return;
+            case 3: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=4);
+    }while (valasz!=3);
 }
 
 //szeszes italok
@@ -192,7 +189,7 @@ void SzeszesItalok::Set() {
     int valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=int_beolvas();
         switch (valasz) {
@@ -203,15 +200,12 @@ void SzeszesItalok::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5: return;
+            case 4: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=5);
+    }while (valasz!=4);
 }
 
 //bor
@@ -293,6 +287,7 @@ void Bor::setEvjarat(unsigned int kap) {
 
 
 void Bor::setSzin() {
+    std::cout<< "Adja meg a bor szinet: [1]voros, [2]rose, [3]feher" << std::endl;
     int szin_be = 0;
     while (szin_be != 1 && szin_be != 2 && szin_be != 3) {
         szin_be=int_beolvas();
@@ -370,6 +365,7 @@ void Bor::removeFajta() {
 
 char * Bor::getFajtaindex(size_t index) const {
     if (index >= fajta_db) {
+        std::cout << "Hibas index!" << std::endl;
         throw "Tull indexeles";
     }
     return fajta[index];
@@ -397,7 +393,7 @@ void Bor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-evjart, 6-szin, 7-fajta hozzadas, 8-fajta torles 9-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev2-Gyarto, 3-alkohol, 4-evjart, 5-szin, 6-fajta hozzadas, 7-fajta torles 8-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -408,28 +404,25 @@ void Bor::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5:
+            case 4:
                 this->setEvjarat();
             break;
-            case 6:
+            case 5:
                 this->setSzin();
                 break;
-            case 7:
+            case 6:
                 this->addFajta();
                 break;
-            case 8:
+            case 7:
                 this->removeFajta();
                 break;
-            case 9: return;
+            case 8: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
             break;
         }
-    }while (valasz!=9);
+    }while (valasz!=8);
 }
 
 //whiskey
@@ -489,7 +482,7 @@ void Wiskey::Set() {
         size_t valasz;
         do {
             this->kiir();
-            std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-wiskey tipud, 6-erleles, 7-viszalepes" << std::endl;
+            std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto,3-alkohol, 4-wiskey tipud, 5-erleles, 6-viszalepes" << std::endl;
             std::cout<<"\nAdja meg az utasitas szamat: ";
             valasz=size_beolvas();
             switch (valasz) {
@@ -500,20 +493,17 @@ void Wiskey::Set() {
                     this->setGyarto();
                 break;
                 case 3:
-                    this->setTipus();
-                break;
-                case 4:
                     this->setAlkoholTartalom();
                 break;
-                case 5:
+                case 4:
                     this->setJeleg_wiskey();
-                case 6:
+                case 5:
                     this->setErleses();
                     break;
-                case 7: return;
+                case 6: return;
                 default: std::cout<<"Hibas bemenet!"<<std::endl;
             }
-        }while (valasz!=7);
+        }while (valasz!=6);
     }
 
 //gin
@@ -606,7 +596,7 @@ void Gin::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Gin iz, 6-Szin, 7-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Gin iz, 5-Szin, 6-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -617,17 +607,14 @@ void Gin::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5:
+            case 4:
                 this->setIz();
-            case 6:
+            case 5:
                 this->setSzin();
             break;
-            case 7: return;
+            case 6: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
     }while (valasz!=7);
@@ -653,6 +640,7 @@ rum_fajta Rum::getFajta() const {
 }
 
 void Rum::setFajta() {
+    std::cout<< "Adja meg a rum fajtajt: [1]fuszeres_rum, [2]fekete_rum, [3]arany_rum, [4]feher_rum" << std::endl;
     int szin_beolvas = 0;
     while (szin_beolvas != 1 && szin_beolvas != 2 && szin_beolvas != 3 && szin_beolvas != 4) {
         szin_beolvas=int_beolvas();
@@ -692,14 +680,14 @@ const char* Rum::getFajtaNev() const{
 
 void Rum::kiir() const {
     SzeszesItalok::kiir();
-    std::cout << " Fajta: " << getFajtaNev() << std::endl;
+    std::cout << " Fajta: " << getFajtaNev();
 }
 
 void Rum::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Rum fajtaja, 6-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Rum fajtaja, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -710,18 +698,15 @@ void Rum::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5:
+            case 4:
                 this->setFajta();
             break;
-            case 6: return;
+            case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=6);
+    }while (valasz!=5);
 }
 
 
@@ -786,7 +771,7 @@ void Tequila::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Tequila fajtaja, 6-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Tequila fajtaja, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -797,18 +782,15 @@ void Tequila::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5:
+            case 4:
                 this->setFajta();
             break;
-            case 6: return;
+            case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=6);
+    }while (valasz!=5);
 }
 
 //sor
@@ -852,7 +834,7 @@ void Sor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-alkohol, 5-Sor jeleg, 6-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 5-Sor jeleg, 6-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -863,18 +845,15 @@ void Sor::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setAlkoholTartalom();
             break;
-            case 5:
+            case 4:
                 this->setTipus_sor();
             break;
-            case 6: return;
+            case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=6);
+    }while (valasz!=5);
 }
 
 //gyumolcslev
@@ -913,7 +892,7 @@ void Gyumolcsle::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "Mit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-jeleg,4-gyumolcsszazalek, 5-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-gyumolcsszazalek, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -924,64 +903,16 @@ void Gyumolcsle::Set() {
                 this->setGyarto();
             break;
             case 3:
-                this->setTipus();
-            break;
-            case 4:
                 this->setGyumolcsszazalek();
             break;
-            case 5: return;
+            case 4: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
-    }while (valasz!=5);
+    }while (valasz!=4);
 }
 
-//>>italok
-/*
-std::ostream& operator<<(std::ostream& os, const Ital& ital) {
-    os <<"Nev: "<< ital.getNev()<<" Gyarto "<< ital.getGyarto() << " jeleg:"<< ital.getTipusNev(ital.getTipus());
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const SzeszesItalok& ital) {
-    os << (Ital&)ital<<" alk: " << ital.getAlkoholTartalom()<<" %";
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const Bor& ital) {
-    os<< (SzeszesItalok&)ital<< "\nEvjarat: " << ital.getEvjarat() << "Szin: " << ital.getSzin() << " Fajta db: " << ital.getFajta_db();
-    for (int i = 0; i < ital.getFajta_db(); i++) {
-        os <<" Fajta:"<< ital.getFajtaindex(i);
-    }
-        return os;
-    }
-std::ostream& operator<<(std::ostream& os, const Wiskey& ital) {
-    os<<(SzeszesItalok&)ital<<"\nTipus:" << ital.getJeleg_wiskey() << " Erleles:" << ital.getErleses();
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const Gin& ital) {
-    os<<(SzeszesItalok&)ital << "\nSzin:" << ital.getSzinNev(ital.getSzin());
-    if (ital.getIz() != nullptr) {
-        os <<" Ize "<< ital.getIz();
-    }
-    return os;
-}
 
-std::ostream& operator<<(std::ostream& os, const Rum& ital) {
-    os<<(SzeszesItalok&)ital << "\nFajta: " << ital.getFajtaNev(ital.getFajta());
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const Tequila& ital) {
-    os<<(SzeszesItalok&)ital<< "\nFajta: " << ital.getFajtaNev(ital.getFajta());
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const Sor& ital) {
-    os<<(SzeszesItalok&)ital<< "\nTipus: " << ital.getTipus_sor();
-    return os;
-}
-std::ostream& operator<<(std::ostream& os, const Gyumolcsle& ital) {
-    os<<(Ital&)ital<< "\nGyümölcstartam: " << ital.getGyumolcsszazalek() << "%";
-    return os;
-}
-*/
-
+//os adatok kiíráas
 std::ostream& operator<<(std::ostream& os, const Ital& ital) {
     ital.kiir();
     return os;

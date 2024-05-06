@@ -331,7 +331,7 @@ Gin *gin_olvas(std::ifstream &file) {
 }
 
 Rum *rum_olvas(std::ifstream &file) {
-    Rum *olvas=new Rum(rum);
+    Rum *olvas=new Rum();
     olvas->setTipus(rum);
     olvas->setNev(szoveg_olvas(file));
     olvas->setGyarto(szoveg_olvas(file));
@@ -497,6 +497,7 @@ Ital* ital_letezik_e(Italok &italok,  char *nev, ital_tipus tipus) {
     }
     std::cout<<"\nNem talalhato az ital!: most hozaadjuk a jeleg: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
     italok.addItal(nev,tipus);
+    italok.kiirF();
     return &italok.getItal(db);
 }
 

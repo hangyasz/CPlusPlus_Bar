@@ -18,4 +18,6 @@ add_executable(hazzi_lion main.cpp
         tesztek.cpp
         tesztek.h
         gtest_lite.h
+        string5.h
+        string5.cpp
 )

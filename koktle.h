@@ -18,6 +18,7 @@ class Koktle {
     unsigned int *menyiseg; //alapanyagok mennyisége menyi kell belőle
 public:
     //konstruktor ami beállítja a koktel
+    Koktle();
     Koktle(Italok &italok);
     // ezt használom a fajbol beolvasnal
     Koktle(Italok &italok,char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
@@ -27,6 +28,7 @@ public:
     void addAlapanyag(Italok &italok);
     //alapanyag torlese
     void removeAlapanyag();
+    void removeAlapanyag(Ital *ital);
     // koktel kiirasa fajlba
     void kiirF(std::ofstream& os) const;
     //koktel tartalmaz e adott italt
@@ -51,7 +53,8 @@ public:
     //visszaadja a koktelok számát
     size_t getKoktelDb() const;
     //visszaadja a koktelokat
-    Koktle& getKoktel(size_t index) const;
+    Koktle* getKoktel_csilag(size_t index) const;
+    Koktle &getKoktel(size_t index) const;
     //kiirja a koktelokat
     void kiir() const;
     //koktel hozzá adása
@@ -59,6 +62,7 @@ public:
     void addKoktel(Italok &italok);
     //koktel törlése
     void removeKoktel();
+    void removeKoktel(size_t index);
     //koktelok kiirása index kell
     void kiir_index() const;
     //koktelok kiirása fájlba
@@ -73,6 +77,8 @@ public:
     void lista_alapanyagok_szerint() const;
     //destruktor ami felszabadítja a dinamikus memóriát
     ~Koktlok();
+    //alapanyagot törlünk az italokboll
+    bool removeAlapanyag_Italok(size_t index,Ital *alpanyg);
 };
 
 

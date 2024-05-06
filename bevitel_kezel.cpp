@@ -101,5 +101,13 @@ size_t size_beolvas() {
     return olvas;
 }
 
+void vait() {
+    std::cout << "Nyomjon meg az enetert a folytatashoz...";
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getchar();
+}
+
+
 
 
