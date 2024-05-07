@@ -21,7 +21,7 @@ public:
     Koktle();
     Koktle(Italok &italok);
     // ezt használom a fajbol beolvasnal
-    Koktle(Italok &italok,char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
+    Koktle(char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
     //kiirja a koktelokat
     void kiir() const;
     //alapanayg hozzá adása
@@ -32,7 +32,7 @@ public:
     // koktel kiirasa fajlba
     void kiirF(std::ofstream& os) const;
     //koktel tartalmaz e adott italt
-    bool tartalmaz_e(const Ital* const kap) const;
+    bool tartalmaz_e(Ital* kap) const;
     //koktel tartalmaz e adott alapanyagot
     bool tartalmaz_e(const ital_tipus tipus) const;
     //koktel atnevezese
@@ -58,7 +58,7 @@ public:
     //kiirja a koktelokat
     void kiir() const;
     //koktel hozzá adása
-    void addKoktel(Italok &italok, Koktle* kap);
+    void addKoktel(Koktle* kap);
     void addKoktel(Italok &italok);
     //koktel törlése
     void removeKoktel();

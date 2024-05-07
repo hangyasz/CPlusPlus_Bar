@@ -79,10 +79,16 @@ void Koktle::removeAlapanyag() {
         uj_alapanyagok[i] = this->alapanyagok[i];
         uj_mennyiseg[i] = this->menyiseg[i];
     }
-    for (size_t i=index-1; i<this->alapanyag_db-1; i++){
+    for (size_t i=index-1; i<this->alapanyag_db-1; i++) {
         uj_alapanyagok[i] = this->alapanyagok[i+1];
         uj_mennyiseg[i] = this->menyiseg[i+1];
     }
+    delete [] this->alapanyagok;
+    delete [] this->menyiseg;
+    this->alapanyagok = uj_alapanyagok;
+    this->menyiseg = uj_mennyiseg;
+    --alapanyag_db;
+
 }
 
 void Koktle::removeAlapanyag(Ital *ital) {
@@ -99,6 +105,11 @@ void Koktle::removeAlapanyag(Ital *ital) {
                 uj_alapanyagok[i] = this->alapanyagok[i+1];
                 uj_mennyiseg[i] = this->menyiseg[i+1];
             }
+            delete [] this->alapanyagok;
+            delete [] this->menyiseg;
+            this->alapanyagok = uj_alapanyagok;
+            this->menyiseg = uj_mennyiseg;
+            --alapanyag_db;
         }
         ++index;
     }
@@ -106,7 +117,7 @@ void Koktle::removeAlapanyag(Ital *ital) {
 
 
 
-bool Koktle::tartalmaz_e(const Ital* const kap) const {
+bool Koktle::tartalmaz_e(Ital* kap) const {
     for (size_t i=0; i<this->alapanyag_db; i++){
         if (kap == alapanyagok[i]){
             return true;
@@ -163,7 +174,7 @@ Koktle::~Koktle() {
     delete [] this->menyiseg;
 }
 
-Koktle::Koktle(Italok &italok, char *nev, size_t alapanyag_db, Ital **alapanyagok, unsigned int *menyiseg) {
+Koktle::Koktle(char *nev, size_t alapanyag_db, Ital **alapanyagok, unsigned int *menyiseg) {
     this->nev = nev;
     this->alapanyag_db = alapanyag_db;
     this->alapanyagok = alapanyagok;
@@ -200,7 +211,7 @@ void Koktlok::kiir() const {
     }
 }
 
-void Koktlok::addKoktel(Italok &italok, Koktle *kap) {
+void Koktlok::addKoktel(Koktle *kap) {
     Koktle** uj = new Koktle*[this->koktel_db+1];
     for (size_t i=0; i<this->koktel_db; i++){
         uj[i] = this->koktelok[i];
@@ -213,7 +224,7 @@ void Koktlok::addKoktel(Italok &italok, Koktle *kap) {
 
 void Koktlok::addKoktel(Italok &italok) {
     Koktle* uj = new Koktle(italok);
-    this->addKoktel(italok, uj);
+    this->addKoktel(uj);
 }
 
 void Koktlok::removeKoktel() {
@@ -329,9 +340,9 @@ void Koktlok::lista_alapanyagok_szerint() const {
 
 Koktlok::~Koktlok() {
     for (size_t i=0; i<this->koktel_db; i++){
-        delete this->koktelok[i];
+        delete koktelok[i];
     }
-    delete [] this->koktelok;
+    delete [] koktelok;
 }
 
 bool Koktlok::removeAlapanyag_Italok(size_t index, Ital *alpanyg) {
@@ -346,9 +357,11 @@ bool Koktlok::removeAlapanyag_Italok(size_t index, Ital *alpanyg) {
         switch (valaszto) {
             case 1:
                 removeKoktel(index);
+                kiirF();
                 return false;
             case 2:
                 koktelok[index]->removeAlapanyag(alpanyg);
+                kiirF();
                 return false;
             case 3:
                 return true;
@@ -356,5 +369,6 @@ bool Koktlok::removeAlapanyag_Italok(size_t index, Ital *alpanyg) {
             break;
         }
     }while (valaszto!=3);
+    return true;
 }
 

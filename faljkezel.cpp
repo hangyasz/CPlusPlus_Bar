@@ -9,44 +9,88 @@
 #include <limits>
 
 
+int Ital::getTipus_Szam() const {
+    switch (tipus) {
+        case bor: return 1;
+        case whiskey: return 2;
+        case gin: return 3;
+        case rum: return 4;
+        case tequila: return 5;
+        case sor: return 6;
+        case gyumolcsle: return 7;
+        case alkohols: return 8;
+        case alkohol_mentes: return 9;
+        default:
+            std::cerr<<"Hibás típus!"<<std::endl;
+        break;
+    }
+    return 0;
+}
+
+
 void Ital::kiirF(std::ofstream& os) const {
-    os<<getTipusszam(tipus)<<"<"<<nev<<"><"<<gyarto<<">";
+    os<<getTipus_Szam()<<"<"<<nev<<"><"<<gyarto<<">";
 }
 
 void SzeszesItalok::kiirF(std::ofstream& os) const {
     Ital::kiirF(os);
     os<<"<"<<alkoholTartalom<<">";
 }
-void Bor::kiirF(std::ofstream& os) const {
-    SzeszesItalok::kiirF(os);
-    os<<"<"<<evjarat<<"><"<<getBorSzin(szin)<<"><"<<fajta_db<<"><";
-    if(fajta_db>=1)
-        os<<fajta[0];
-    for(size_t i=1;i<fajta_db;i++){
-        os<<"><"<<fajta[i];
-    }
-    os<<">";
-}
+
 void Wiskey::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
     os<<"<"<<jeleg<<"><"<<erleses<<">";
 }
 
+int Gin::getGinSzin() const {
+    switch (szin) {
+        case szintelen: return 1;
+        case pink: return 2;
+        case egyeb: return 3;
+        default: std::cerr<< "Hibás szín!"<<std::endl;
+        break;
+    }
+    return 0;
+}
+
 void Gin::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<getGinSzin(szin)<<"><";
+    os<<"<"<<getGinSzin()<<"><";
     if(iz!=nullptr)
         os<<iz;
     os<<">";
 }
+int Rum::getFajta_Szam() const {
+    switch (fajta) {
+        case fuszeres_rum: return 1;
+        case fekete_rum: return 2;
+        case arany_rum: return 3;
+        case feher_rum: return 4;
+        default: std::cerr<<"Hibás fajta!"<<std::endl;
+    }
+    return 0;
+}
+
+
 void Rum::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<getRumtipus(fajta)<<">";
+    os<<"<"<<getFajta_Szam()<<">";
+}
+
+
+int Tequila::getFajta_Szam() const {
+    switch (fajta) {
+        case silver: return 1;
+        case gold: return 2;
+        case aged: return 3;
+        default: std::cerr<< "Hibás fajta!"<<std::endl;
+    }
+    return 0;
 }
 
 void Tequila::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);
-    os<<"<"<<getTequilaTipus(fajta)<<">";
+    os<<"<"<<getFajta_Szam()<<">";
 }
 
 void Sor::kiirF(std::ofstream& os) const {
@@ -64,137 +108,29 @@ std::ofstream& operator<<(std::ofstream& os,const Ital &ital) {
     ital.kiirF(os);
     return os;
 }
-/*
-std::ofstream& operator<<(std::ofstream& os,const SzeszesItalok &ital) {
-    os<<(Ital&)ital<<"<"<<ital.getAlkoholTartalom()<<">";
-    return os;
-}
-std::ofstream& operator<<(std::ofstream& os,const Bor &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<getBorSzin(ital.getSzin())<<"<"<<ital.getFajta_db()<<">{";
-    if(ital.getFajta_db()>=1)
-        os<<ital.getFajtaindex(0);
-    for(size_t i=1;i<ital.getFajta_db();i++){
-        os<<","<<ital.getFajtaindex(i);
-    }
-    os<<"}";
-   return os;}
-std::ofstream& operator<<(std::ofstream& os,const Wiskey &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<ital.getJeleg_wiskey()<<"<"<<ital.getErleses()<<">";
-    return os;
-}
 
-std::ofstream& operator<<(std::ofstream& os,const Gin &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<getGinSzin(ital.getSzin())<<"<"<<ital.getIz()<<">";
-    return os;
-}
 
-std::ofstream& operator<<(std::ofstream& os,const Rum &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<getRumtipus(ital.getFajta())<<">";
-    return os;
-}
-std::ofstream& operator<<(std::ofstream& os,const Tequila &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<getTequilaTipus(ital.getFajta())<<">";
-    return os;
-}
-std::ofstream& operator<<(std::ofstream& os,const Sor &ital) {
-    os<<(SzeszesItalok&)ital<<"<"<<ital.getTipus_sor()<<">";
-    return os;
-}
 
-std::ofstream& operator<<(std::ofstream& os,const Gyumolcsle &ital) {
-    os<<(Ital&)ital<<"<"<<ital.getGyumolcsszazalek()<<">";
-    return os;
-}
-*/
-int getTipusszam(ital_tipus tipus) {
-    switch (tipus) {
-        case bor: return 1;
-        case whiskey: return 2;
-        case gin: return 3;
-        case rum: return 4;
-        case tequila: return 5;
-        case sor: return 6;
-        case gyumolcsle: return 7;
-        case alkohols: return 8;
-        case alkohol_mentes: return 9;
-        default:
-            throw "Hibás típus!";
-    }
-}
-
-int getBorSzin(szinek_bor szin) {
+int Bor::getSzin_Szam() const {
     switch (szin) {
         case voros: return 1;
         case rose: return 2;
         case feher: return 3;
-        default: throw "Hibás szín!";
+        default: std::cerr<<"Hibás szín!"<<std::endl;
+        break;
     }
+    return 0;
 }
 
-szinek_bor getSzinBor(int szin) {
-    switch (szin) {
-        case 1: return voros;
-        case 2: return rose;
-        case 3: return feher;
-        default: throw "Hibás szín!";
+void Bor::kiirF(std::ofstream& os) const {
+    SzeszesItalok::kiirF(os);
+    os<<"<"<<evjarat<<"><"<<getSzin_Szam()<<"><"<<fajta_db<<"><";
+    if(fajta_db>=1)
+        os<<fajta[0];
+    for(size_t i=1;i<fajta_db;i++){
+        os<<"><"<<fajta[i];
     }
-}
-
-int getGinSzin(gin_szin szin) {
-    switch (szin) {
-        case szintelen: return 1;
-        case pink: return 2;
-        case egyeb: return 3;
-        default: throw "Hibás szín!";
-    }
-}
-
-gin_szin getSzinGin(int szin) {
-    switch (szin) {
-        case 1: return szintelen;
-        case 2: return pink;
-        case 3: return egyeb;
-        default: throw "Hibás szín!";
-    }
-}
-
-int getTequilaTipus(tequli_fajta fajta) {
-    switch (fajta) {
-        case silver: return 1;
-        case gold: return 2;
-        case aged: return 3;
-        default: throw "Hibás fajta!";
-    }
-}
-
-tequli_fajta getFajtaTequila(int fajta) {
-    switch (fajta) {
-        case 1: return silver;
-        case 2: return gold;
-        case 3: return aged;
-        default: throw "Hibás fajta!";
-    }
-}
-
-
-int getRumtipus(rum_fajta fajta) {
-    switch (fajta) {
-        case fuszeres_rum: return 1;
-        case fekete_rum: return 2;
-        case arany_rum: return 3;
-        case feher_rum: return 4;
-        default: throw"Hibás fajta!";
-    }
-}
-
-rum_fajta getFajtaRum(int fajta) {
-    switch (fajta) {
-        case 1: return fuszeres_rum;
-        case 2: return fekete_rum;
-        case 3: return arany_rum;
-        case 4: return feher_rum;
-        default: throw"Hibás fajta!";
-    }
+    os<<">";
 }
 
  void Italok::kiirF() const{
@@ -261,112 +197,132 @@ float float_olvas(std::ifstream &file) {
     return szam;
 }
 
-Ital* ital_olvas(std::ifstream &file) {
-    Ital *olvas=new Ital();
-    olvas->setTipus(alkohol_mentes);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    return  olvas;
-}
-
-SzeszesItalok * szeszes_olvas(std::ifstream &file) {
-    SzeszesItalok *olvas=new SzeszesItalok();
-    olvas->setTipus(alkohols);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    return olvas;
+Ital::Ital(std::ifstream &file):nev(nullptr),gyarto(nullptr) {
+    setTipus(alkohol_mentes);
+    setNev(szoveg_olvas(file));
+    setGyarto(szoveg_olvas(file));
 }
 
 
+SzeszesItalok::SzeszesItalok(std::ifstream &file):Ital(file) {
+    setTipus(alkohols);
+    setAlkoholTartalom(float_olvas(file));
+}
 
-Bor *bor_olvas(std::ifstream &file) {
-    Bor *olvas=new Bor();
-    olvas->setTipus(bor);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setEvjarat(uszam_olvas(file));
-    if(!evjarat_teszt(olvas->getEvjarat())) {
-        std::cout<<"Hibas evjarat!"<<std::endl;
-        std::cout << "Adja meg az evjaratot: " << std::endl;
-        unsigned int bevitel;
-        while(!(std::cin >> bevitel) or !evjarat_teszt(bevitel)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Hibas bemenet. Kerlek, adj meg egy szam erteket!" << std::endl;
-        }
-        olvas->setEvjarat(bevitel);
+void Bor::setSzin(int kap) {
+    switch (kap) {
+        case 1: szin= voros;
+        break;
+        case 2: szin= rose;
+        break;
+        case 3: szin= feher;
+        break;
+        default: std::cerr<< "Hibás szín!"<<std::endl;
+        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
+        setSzin();
+        break;
     }
-    olvas->setSzin(getSzinBor(szam_olvas(file)));
-    olvas->setFajta_db(size_olvas(file));
-    char **fajatk=new char*[olvas->getFajta_db()];
-    for(size_t i=0;i<olvas->getFajta_db();i++){
+}
+
+
+Bor::Bor(std::ifstream &file):SzeszesItalok(file),fajta(nullptr) {
+    this->setTipus(bor);
+    this->setEvjarat(szam_olvas(file));
+    if(!evjarat_teszt(this->getEvjarat())) {
+        std::cout<<"Hibás évjárat: "<<std::endl;
+        this->setEvjarat();
+    }
+    this->setSzin(szam_olvas(file));
+    this->setFajta_db(size_olvas(file));
+    char **fajatk=new char*[this->getFajta_db()];
+    for(size_t i=0;i<this->getFajta_db();i++){
         fajatk[i]=szoveg_olvas(file);
     }
-    olvas->setFajta_string(fajatk);
-    return olvas;
+    this->setFajta_string(fajatk);
 }
 
-Wiskey *wiskey_olvas(std::ifstream &file) {
-    Wiskey *olvas=new Wiskey();
-    olvas->setTipus(whiskey);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setJeleg_wiskey(szoveg_olvas(file));
-    olvas->setErleses(uszam_olvas(file));
-    return olvas;
+Wiskey::Wiskey(std::ifstream &file):SzeszesItalok(file), jeleg(nullptr) {
+    this->setTipus(whiskey);
+    this->setJeleg_wiskey(szoveg_olvas(file));
+    this->setErleses(uszam_olvas(file));
 }
 
-Gin *gin_olvas(std::ifstream &file) {
-    Gin *olvas=new Gin();
-    olvas->setTipus(gin);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setSzin(getSzinGin(szam_olvas(file)));
-    olvas->setIz(szoveg_olvas(file));
-    return olvas;
+
+void Gin::setSzin(int kap) {
+    switch (kap) {
+        case 1: szin= szintelen;
+        break;
+        case 2: szin= pink;
+        break;
+        case 3: szin= egyeb;
+        break;
+        default: std::cerr<< "Hibás szín!"<<std::endl;
+        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
+        setSzin();
+        break;
+    }
 }
 
-Rum *rum_olvas(std::ifstream &file) {
-    Rum *olvas=new Rum();
-    olvas->setTipus(rum);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setFajta(getFajtaRum(szam_olvas(file)));
-    return olvas;
+Gin::Gin(std::ifstream &file):SzeszesItalok(file),iz(nullptr) {
+    setTipus(gin);
+    setSzin(szam_olvas(file));
+    setIz(szoveg_olvas(file));
 }
 
-Tequila* tequila_olvas(std::ifstream &file) {
-    Tequila *olvas=new Tequila();
-    olvas->setTipus(tequila);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setFajta(getFajtaTequila(szam_olvas(file)));
-    return olvas;
+
+void Rum::setFajta(int kap) {
+    switch (kap) {
+        case 1: fajta= fuszeres_rum;
+        break;
+        case 2: fajta= fekete_rum;
+        break;
+        case 3: fajta= arany_rum;
+        break;
+        case 4: fajta= feher_rum;
+        break;
+        default: std::cerr<< "Hibás fajta!"<<std::endl;
+        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
+        setFajta();
+        break;
+    }
 }
 
-Sor *sor_olvas(std::ifstream &file) {
-    Sor *olvas=new Sor();
-    olvas->setTipus(sor);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setAlkoholTartalom(float_olvas(file));
-    olvas->setTipus_sor(szoveg_olvas(file));
-    return olvas;
+Rum::Rum(std::ifstream &file):SzeszesItalok(file) {
+    setTipus(rum);
+    setFajta(szam_olvas(file));
 }
 
-Gyumolcsle* gyumolcsle_olvas(std::ifstream &file) {
-    Gyumolcsle *olvas=new Gyumolcsle();
-    olvas->setTipus(gyumolcsle);
-    olvas->setNev(szoveg_olvas(file));
-    olvas->setGyarto(szoveg_olvas(file));
-    olvas->setGyumolcsszazalek(float_olvas(file));
-    return olvas;
+
+
+void Tequila::setFajta(int kap){
+    switch (kap) {
+        case 1: fajta= silver;
+        break;
+        case 2: fajta= gold;
+        break;
+        case 3: fajta= aged;
+        break;
+        default: std::cerr<<"Hibás fajta!"<<std::endl;
+        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
+        setFajta();
+    }
+}
+
+Tequila::Tequila(std::ifstream &file):SzeszesItalok(file) {
+    setTipus(tequila);
+    setFajta(szam_olvas(file));
+}
+
+
+Sor::Sor(std::ifstream &file):SzeszesItalok(file),tipus_sor(nullptr) {
+    setTipus(sor);
+    setTipus_sor(szoveg_olvas(file));
+}
+
+
+Gyumolcsle::Gyumolcsle(std::ifstream &file):Ital(file),gyumolcsszazalek(0) {
+    setTipus(gyumolcsle);
+    setGyumolcsszazalek(uszam_olvas(file));
 }
 
 
@@ -379,34 +335,36 @@ void Italok::olvasF() {
     while ((file>>tipus)){
         switch (tipus) {
             case 1:
-                this->addItal(bor_olvas(file));
+                this->addItal(new Bor(file));
                 break;
             case 2:
-                this->addItal(wiskey_olvas(file));
+                this->addItal(new Wiskey(file));
                 break;
             case 3:
-                this->addItal(gin_olvas(file));
+                this->addItal(new Gin(file));
                 break;
             case 4:
-               this->addItal(rum_olvas(file));
+               this->addItal(new Rum(file));
                 break;
             case 5:
-               this->addItal(tequila_olvas(file));
+               this->addItal(new Tequila(file));
                 break;
             case 6:
-                this->addItal(sor_olvas(file));
+                this->addItal(new Sor(file));
                 break;
             case 7:
-               this->addItal(gyumolcsle_olvas(file));
+               this->addItal(new Gyumolcsle(file));
                 break;
             case 8:
-                this->addItal(szeszes_olvas(file));
+                this->addItal(new SzeszesItalok(file));
             break;
             case 9:
-               this->addItal(ital_olvas(file));
+               this->addItal(new Ital(file));
                 break;
-            default: std::cout<<"Hibás típus"<<std::endl;
-            break;
+            default:
+                std::cerr<<"Hibas tipus kreme vigye fell majd kezzel"<<std::endl;
+                file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                break;
         }
     }
 }
@@ -416,7 +374,7 @@ void Koktle::kiirF(std::ofstream &os) const {
     os<<this->alapanyag_db;
     os<<"<"<<this->nev<<">";
     for (size_t i=0; i<this->alapanyag_db; i++){
-        os<<"<"<<getTipusszam( this->alapanyagok[i]->getTipus())<<"><"<<this->alapanyagok[i]->getNev()<<"><";
+        os<<"<"<<this->alapanyagok[i]->getTipus_Szam()<<"><"<<this->alapanyagok[i]->getNev()<<"><";
         os<<this->menyiseg[i]<<">";
     }
 }
@@ -482,7 +440,7 @@ void Koktlok::olvasF(Italok &italok ) {
             }
             menyiseg[i]=uszam_olvas(file);
         }
-        this->addKoktel(italok,new Koktle(italok,nev,alapanyag_db,alapanyagok,menyiseg));
+        this->addKoktel(new Koktle(nev,alapanyag_db,alapanyagok,menyiseg));
     }
 }
 
@@ -490,15 +448,15 @@ void Koktlok::olvasF(Italok &italok ) {
 Ital* ital_letezik_e(Italok &italok,  char *nev, ital_tipus tipus) {
     size_t db=italok.getdb();
     for(size_t i=0; i<db; i++){
-        Ital *akt=&italok.getItal(i);
+        Ital *akt=italok.getItalCsilag(i);
         if(akt->getTipus()==tipus and strcmp(akt->getNev(),nev)==0){
             return akt;
         }
     }
-    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a jeleg: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
+    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a tipus: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
     italok.addItal(nev,tipus);
     italok.kiirF();
-    return &italok.getItal(db);
+    return italok.getItalCsilag(db);
 }
 
 

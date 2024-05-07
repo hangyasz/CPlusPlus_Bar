@@ -232,7 +232,7 @@ void Italok::setItalok(Koktlok &kap) {
                 this->addItal();
                 break;
             case 2:
-                this->removeItal();
+                this->removeItal(kap);
                 break;
             case 3:
                 this->kiir_index();

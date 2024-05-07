@@ -38,6 +38,7 @@ ital_tipus tipus_valszto() {
                 break;
         }
     } while(tipus<1 || tipus>9);
+    return alkohol_mentes;
 
 }
 
@@ -210,7 +211,7 @@ void SzeszesItalok::Set() {
 
 //bor
 
-bool evjarat_teszt(unsigned int evjarat) {
+bool evjarat_teszt(int evjarat) {
     time_t now = time(0);
     tm *ltm = localtime(&now);
     if (evjarat > 1900 + ltm->tm_year) {
@@ -225,7 +226,7 @@ Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus),fajta(nullptr),fajta_db(0) {
     setSzin();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
     size_t fajtak=size_beolvas();
-    for (int i = 0; i < fajtak; i++) {
+    for (size_t i = 0; i < fajtak; i++) {
         addFajta();
     }
 }
@@ -238,20 +239,20 @@ Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus), fajta(nullptr),f
     setEvjarat();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
     size_t fajtak=size_beolvas();
-    for (int i = 0; i < fajtak; i++) {
+    for (size_t i = 0; i < fajtak; i++) {
         addFajta();
     }
 
 }
 
 Bor::~Bor() {
-    for (int i = 0; i < fajta_db; i++) {
+    for (size_t i = 0; i < fajta_db; i++) {
         delete[] fajta[i];
     }
     delete[] fajta;
 }
 
-unsigned int Bor::getEvjarat() const {
+int Bor::getEvjarat() const {
     return evjarat;
 }
 
@@ -271,14 +272,14 @@ const char* Bor::getSzinNev() const{
 
 void Bor::setEvjarat() {
     std::cout << "Adja meg az evjaratot: " << std::endl;
-    evjarat=unsigned_int_beolvas();
+    evjarat=int_beolvas();
     while(!evjarat_teszt(evjarat)) {
         std::cout << "Hibas evjarat! Adjon meg egy helyes evjaratot!" << std::endl;
-        evjarat=unsigned_int_beolvas();
+        evjarat=int_beolvas();
     }
 }
 
-void Bor::setEvjarat(unsigned int kap) {
+void Bor::setEvjarat(int kap) {
     if(evjarat_teszt(kap))
         evjarat=kap;
     else
@@ -322,7 +323,7 @@ void Bor::setFajta_string(char **kap) {
 
 void Bor::addFajta() {
     char **temp = new char *[fajta_db + 1];
-    for (int i = 0; i < fajta_db; i++) {
+    for (size_t i = 0; i < fajta_db; i++) {
         temp[i] = fajta[i];
     }
     std::cout << "Adja meg a fajtat: " << std::endl;
@@ -335,7 +336,7 @@ void Bor::addFajta() {
 
 void Bor::fajtakiir() const
 {
-    for (int i = 0; i < fajta_db; i++) {
+    for (size_t i = 0; i < fajta_db; i++) {
         std::cout << fajta[i] << "\n";
     }
 }
@@ -344,13 +345,13 @@ void Bor::removeFajta() {
     this->fajtakiir();
     std::cout << "Melyik fajtat szeretne torolni?" << std::endl;
     char *fajta = hoszusor_olvas();
-    for (int i = 0; i < this->fajta_db; i++) {
+    for (size_t i = 0; i < fajta_db; i++) {
         if (strcmp(this->fajta[i], fajta) == 0) {
-            char **temp = new char *[this->fajta_db];
-            for (int j = 0; j < i; j++) {
+            char **temp = new char *[fajta_db-1];
+            for (size_t j = 0; j < i; j++) {
                 temp[j] = this->fajta[j];
             }
-            for (int j = i; j < this->fajta_db; j++) {
+            for (size_t j = i; j < this->fajta_db; j++) {
                 temp[j] = this->fajta[j + 1];
             }
             delete[] this->fajta;
@@ -384,7 +385,7 @@ void Bor::kiir() const {
     } else {
         std::cout << " Fajta:";
     }
-    for (int i = 0; i < fajta_db; i++) {
+    for (size_t i = 0; i < fajta_db; i++) {
         std::cout <<" "<< fajta[i];
     }
 }
@@ -488,15 +489,16 @@ void Wiskey::Set() {
             switch (valasz) {
                 case 1:
                     this->setNev();
-                break;
+                    break;
                 case 2:
                     this->setGyarto();
-                break;
+                    break;
                 case 3:
                     this->setAlkoholTartalom();
-                break;
+                    break;
                 case 4:
                     this->setJeleg_wiskey();
+                    break;
                 case 5:
                     this->setErleses();
                     break;
@@ -611,6 +613,7 @@ void Gin::Set() {
             break;
             case 4:
                 this->setIz();
+                break;
             case 5:
                 this->setSzin();
             break;

@@ -52,7 +52,8 @@ public:
     Ital(ital_tipus tipus);
     Ital();
     Ital(char *nev, ital_tipus tipus);
-
+    //konstruktor fájlból beolvasáshoz
+    Ital(std::ifstream &file);
     //desturktor ami felszabadítja a dinamikus memóriát
     virtual ~Ital();
 
@@ -64,6 +65,8 @@ public:
 
     //visszaadja az ital tipusát
     ital_tipus getTipus() const ;
+    //az ital tipusát számá alakitja
+    int getTipus_Szam() const;
 
     //visszaadja az ital tipusát szövegesen
     const char*  getTipusNev() const;
@@ -98,6 +101,8 @@ public:
     SzeszesItalok(ital_tipus tipus);
     SzeszesItalok();
     SzeszesItalok(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    SzeszesItalok(std::ifstream &file);
 
     //viszaadja az alkohol tartalmat
     float getAlkoholTartalom() const;
@@ -118,7 +123,7 @@ public:
 class Bor : public SzeszesItalok {
     char **fajta; //bor fajtái tartalmatát
     size_t fajta_db;  //bor fajtáinak száma
-    unsigned int evjarat;  //bor éjrára
+    int evjarat;  //bor éjrára
     szinek_bor szin; //bor szine
 
 public:
@@ -126,25 +131,31 @@ public:
     Bor(ital_tipus tipus);
     Bor();
     Bor(char* nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Bor(std::ifstream &file);
 
     //bor destruktor
     ~Bor();
 
     //visza adja az éjráratot
-    unsigned int getEvjarat() const;
+    int getEvjarat() const;
 
     //bor szine visza adása
     szinek_bor getSzin() const;
+    //a bor szinét számá alakitja
+    int getSzin_Szam() const;
 
     //bor szine nevének visza adása
     const char* getSzinNev()const;
 
     //éjrárat beálitása
     void setEvjarat();
-    void setEvjarat(unsigned int kap);
+    void setEvjarat(int kap);
     //bor szine átalitása
     void setSzin();
     void setSzin(szinek_bor kap);
+    //a kapot számát sziné alakitja
+    void setSzin(int kap);
     //fajta db beálitása
     void setFajta_db(size_t kap);
 
@@ -183,6 +194,8 @@ public:
     Wiskey(ital_tipus ital_tipus);
     Wiskey();
     Wiskey(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Wiskey(std::ifstream &file);
     //destruktor
     ~Wiskey();
 
@@ -219,15 +232,19 @@ public:
     Gin(ital_tipus ital_tipus);
     Gin();
     Gin(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Gin(std::ifstream &file);
     //gin szin visza adása
     gin_szin getSzin() const;
-
+    //a Gin szinét számá alakitja
+    int getGinSzin() const;
     //gin szine visza adása szöbegekben
     const char* getSzinNev()const;
-
     //gin szin beálitása
     void setSzin();
     void setSzin(gin_szin kap);
+    //a kapot számát sziné alakitja
+    void setSzin(int kap);
 
     //gin iz visza adása
     const char *getIz() const;
@@ -253,21 +270,23 @@ public:
     Rum(ital_tipus tipus);
     Rum();
     Rum(char * nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Rum(std::ifstream &file);
     //rum fajta visza adása
     rum_fajta getFajta() const;
+    //a rum tipusát számá alakitja
+    int getFajta_Szam() const;
+    //rum fajta nevének visza adása
+    const char* getFajtaNev() const;
     //rum fajta beálitása
     void setFajta();
     void setFajta(rum_fajta kap);
-
-    //rum fajta nevének visza adása
-    const char* getFajtaNev() const;
-
+    //a kapot számát fajta alakitja
+    void setFajta(int kap);
     //rum adatainak kiirása
     void kiir() const;
-
     //kiirja az ital adatait fájlba
     void kiirF(std::ofstream& os) const;
-
     //valtoztatas menü
     void Set();
 };
@@ -280,16 +299,19 @@ public:
     Tequila(ital_tipus ital_tipus);
     Tequila();
     Tequila(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Tequila(std::ifstream &file);
     //Tequila fajta visza adása
     tequli_fajta getFajta() const;
-
+    //a tequila tipusát számá alakitja
+    int getFajta_Szam() const;
+    //Tequila fajta nevének visza adása
+    const char* getFajtaNev() const;
     //Tequila fajta beálitása
     void setFajta();
     void setFajta(tequli_fajta kap);
-
-    //Tequila fajta nevének visza adása
-    const char* getFajtaNev() const;
-
+    //a kapot számát fajta alakitja
+    void setFajta(int kap);
     //Tequila adatainak kiirása
     void kiir() const;
 
@@ -308,6 +330,8 @@ public:
     Sor(ital_tipus tipuss);
     Sor();
     Sor(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Sor(std::ifstream &file);
     //Sor jeleg visza adása
     char *getTipus_sor() const;
 
@@ -336,6 +360,8 @@ public:
     Gyumolcsle(ital_tipus ital_tipus);
     Gyumolcsle();
     Gyumolcsle(char *nev, ital_tipus tipus);
+    //konstruktor fájlból beolvasáshoz
+    Gyumolcsle(std::ifstream &file);
     //visza adja a gyumolcsszazalekot
     unsigned int getGyumolcsszazalek() const;
 
@@ -380,7 +406,7 @@ public:
 std::ostream& operator<<(std::ostream& os, const Ital& ital);
 
 //bor éjrárat elenöriz;
-bool evjarat_teszt(unsigned int evjarat);
+bool evjarat_teszt(int evjarat);
 //italok tipusának választása(bvitele)
 ital_tipus tipus_valszto();
 

@@ -7,10 +7,10 @@
 #include "tesztek.h"
 
 int main() {
-    size_t valasz;
+    /*size_t valasz;
     Italok i;
-    Koktlok k;
     i.olvasF();
+    Koktlok k;
     k.olvasF(i);
     do {
         std::cout<<"1 - Italok kezelese\n2 - Koktelok kezeles\n3 - veleteln koktel\n 4 - koktel alapanyag szerint\n 0 - Kilepes"<<std::endl;
@@ -33,5 +33,10 @@ int main() {
                 break;
         }
     }while (valasz!=0);
+*/
+    Italok i;
+    i.olvasF();
+    i.kiir_index();
+    //test_Italok_hozadas();
     return 0;
 }

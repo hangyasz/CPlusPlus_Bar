@@ -8,7 +8,6 @@
 #include "Ital.h"
 #include "koktle.h"
 #include "memtrace.h"
-#include "gtest_lite.h"
 #include <iostream>
 
 
