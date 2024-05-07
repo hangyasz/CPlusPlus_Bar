@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(hazzi_lion)
-
+add_compile_options(-Wall -Wextra -pedantic)
+add_compile_definitions(MEMTRACE)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(hazzi_lion main.cpp

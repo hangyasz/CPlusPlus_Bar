@@ -1,13 +1,14 @@
 #include <iostream>
 
 #include "Ital.h"
-#include "memtrace.h"
 #include "faljkezel.h"
 #include "koktle.h"
 #include "tesztek.h"
+#include "memtrace.h"
 
 int main() {
-    /*size_t valasz;
+    /*
+    size_t valasz;
     Italok i;
     i.olvasF();
     Koktlok k;
@@ -33,10 +34,7 @@ int main() {
                 break;
         }
     }while (valasz!=0);
-*/
-    Italok i;
-    i.olvasF();
-    i.kiir_index();
-    //test_Italok_hozadas();
+    */
+    oszes_teszt();
     return 0;
 }

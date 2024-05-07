@@ -8,6 +8,7 @@
 #include <ctime>
 #include "koktle.h"
 #include "Ital.h"
+#include "memtrace.h"
 
 //konstruktor ami beállítja a koktel
 Koktle::Koktle():nev(nullptr), alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
@@ -141,6 +142,10 @@ void Koktle::setNev() {
     nev = hoszusor_olvas();
 }
 
+char *Koktle::getNev() const {
+    return this->nev;
+}
+
 void Koktle::Set(Italok &italok) {
     size_t valaszto;
     do{
@@ -192,6 +197,8 @@ size_t Koktlok::getKoktelDb() const {
 
 Koktle *Koktlok::getKoktel_csilag(size_t index) const {
     if(index>=this->koktel_db){
+        if(koktel_db==0)
+            throw "urse a tomb";
         throw "tulindexeles";
     }
     return this->koktelok[index];
@@ -200,6 +207,8 @@ Koktle *Koktlok::getKoktel_csilag(size_t index) const {
 
 Koktle& Koktlok::getKoktel(size_t index) const {
     if(index>=this->koktel_db){
+        if(koktel_db==0)
+            throw "urse a tomb";
         throw "tulindexeles";
     }
     return *this->koktelok[index];
@@ -250,6 +259,7 @@ void Koktlok::removeKoktel() {
     this->koktelok = uj;
     this->koktel_db--;
     if(koktel_db==0)
+        delete [] this->koktelok;
         koktelok=nullptr;
 }
 

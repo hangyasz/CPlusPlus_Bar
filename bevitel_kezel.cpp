@@ -6,8 +6,13 @@
 #include <iostream>
 #include <cstring>
 #include <limits>
+#include "memtrace.h"
 
 
+void bufer_torles() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 char* hoszusor_olvas() {
     size_t capacity = 25;  // Kezdeti kapacitás
@@ -29,6 +34,10 @@ char* hoszusor_olvas() {
         }
         s[length++] = c;
     }
+    if(length==0){
+        delete[] s;
+        return nullptr;
+    }
     s[length] = '\0';  // Lezárjuk a stringet
     return s;
 }
@@ -37,8 +46,7 @@ char* hoszusor_olvas() {
 int int_beolvas() {
     int olvas;
     while(!(std::cin >> olvas)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        bufer_torles();
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
     }
     return olvas;
@@ -47,9 +55,8 @@ int int_beolvas() {
 float float_beolvas() {
     float olvas;
     while(!(std::cin >> olvas)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+        bufer_torles();
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy tizedes szamot!" << std::endl;
     }
     return olvas;
 }
@@ -57,9 +64,8 @@ float float_beolvas() {
 unsigned int unsigned_int_beolvas() {
     unsigned int olvas;
     while(!(std::cin >> olvas)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
+        bufer_torles();
+        std::cout << "Hibas bemenet. Kerlek, adj meg egy elojel szamot!" << std::endl;
     }
     return olvas;
 }
@@ -67,8 +73,7 @@ unsigned int unsigned_int_beolvas() {
 size_t size_beolvas() {
     size_t olvas;
     while(!(std::cin >> olvas)){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        bufer_torles();
         std::cout << "Hibas bemenet. Kerlek, adj meg egy szamot!" << std::endl;
     }
     return olvas;
@@ -76,8 +81,7 @@ size_t size_beolvas() {
 
 void vait() {
     std::cout << "Nyomjon meg az enetert a folytatashoz...";
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    bufer_torles();
     std::getchar();
 }
 

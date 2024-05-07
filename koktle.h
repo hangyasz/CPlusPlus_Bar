@@ -37,6 +37,8 @@ public:
     bool tartalmaz_e(const ital_tipus tipus) const;
     //koktel atnevezese
     void setNev();
+    //visszaadja a koktel nevét
+    char *getNev() const;
     //koktel belaites mennü
     void Set(Italok &italok);
     //destruktor ami felszabadítja a dinamikus memóriát
@@ -69,6 +71,8 @@ public:
     void kiirF() const;
     //koktelok beolvasása fájlból
     void olvasF(Italok &italok);
+    //viszaadja az ittalt ha létezik külöben felveszük
+    Ital* ital_letezik_e(Italok &italok, char *nev, ital_tipus tipus);
     //koktelok beolvasása
     void Set(Italok &italok);
     //veletlen szerü köktel ajánlás

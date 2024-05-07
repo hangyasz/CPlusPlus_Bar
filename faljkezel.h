@@ -22,8 +22,6 @@ unsigned int uszam_olvas(std::ifstream &file);
 size_t size_olvas(std::ifstream &file);
 //egy float számot olvas be
 float float_olvas(std::ifstream &file);
-//viszaadja az ittalt ha létezik külöben felveszük
-Ital* ital_letezik_e(Italok &italok, char *nev, ital_tipus tipus);
 
 
 

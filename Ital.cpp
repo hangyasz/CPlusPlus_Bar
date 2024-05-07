@@ -8,6 +8,7 @@
 #include "bevitel_kezel.h"
 #include <limits>
 #include <ctime>
+#include "memtrace.h"
 
 ital_tipus tipus_valszto() {
     int tipus;
@@ -366,7 +367,6 @@ void Bor::removeFajta() {
 
 char * Bor::getFajtaindex(size_t index) const {
     if (index >= fajta_db) {
-        std::cout << "Hibas index!" << std::endl;
         throw "Tull indexeles";
     }
     return fajta[index];

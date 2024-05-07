@@ -10,6 +10,8 @@
 #include "memtrace.h"
 #include <iostream>
 
+//meghivja a tesz fügvényeket
+void oszes_teszt();
 
 //itall letrehozasa
 void test_Ital();

@@ -7,7 +7,7 @@
 #include <fstream>
 #include "Ital.h"
 #include <limits>
-
+#include "memtrace.h"
 
 int Ital::getTipus_Szam() const {
     switch (tipus) {
@@ -445,7 +445,7 @@ void Koktlok::olvasF(Italok &italok ) {
 }
 
 
-Ital* ital_letezik_e(Italok &italok,  char *nev, ital_tipus tipus) {
+Ital* Koktlok::ital_letezik_e(Italok &italok, char *nev, ital_tipus tipus){
     size_t db=italok.getdb();
     for(size_t i=0; i<db; i++){
         Ital *akt=italok.getItalCsilag(i);

@@ -50,56 +50,65 @@ cmake_ninja_workdir = C$:/Users/Zoli/Desktop/hazzi_lion/cmake-build-debug/
 build cmake_object_order_depends_target_hazzi_lion: phony || CMakeFiles/hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/main.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/main.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/Ital.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/Ital.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\Ital.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/koktle.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/koktle.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\koktle.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/italok_kezel.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/italok_kezel.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\italok_kezel.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/memtrace.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/memtrace.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\memtrace.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/bevitel_kezel.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/bevitel_kezel.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\bevitel_kezel.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/faljkezel.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/faljkezel.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\faljkezel.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/tesztek.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/tesztek.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\tesztek.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 
 build CMakeFiles/hazzi_lion.dir/string5.cpp.obj: CXX_COMPILER__hazzi_lion_unscanned_Debug C$:/Users/Zoli/Desktop/hazzi_lion/string5.cpp || cmake_object_order_depends_target_hazzi_lion
+  DEFINES = -DMEMTRACE
   DEP_FILE = CMakeFiles\hazzi_lion.dir\string5.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always -Wall -Wextra -pedantic
   OBJECT_DIR = CMakeFiles\hazzi_lion.dir
   OBJECT_FILE_DIR = CMakeFiles\hazzi_lion.dir
 

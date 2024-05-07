@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+void bufer_torles(); //bemeneti puffer torlese
 char *hoszusor_olvas(); //hoszusoros beolvasása sztendert bementröl
 int int_beolvas(); //egész szám beolvasása standard bemenetről
 float float_beolvas(); //lebegőpontos szám beolvasása standard bemenetről
