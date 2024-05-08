@@ -72,8 +72,10 @@ void Koktle::removeAlapanyag() {
         std::cout<<"torolni kivant Alapanyag index: ";
         index=size_beolvas();
     }
-    if(index==0)
+    if(index==0) {
+        std::cout<<"a koktelnak nincsen alapnyagai!"<<std::endl;
         return;
+    }
     Ital **uj_alapanyagok = new Ital*[this->alapanyag_db-1];
     unsigned int *uj_mennyiseg = new unsigned int[this->alapanyag_db-1];
     for (size_t i=0; i<index-1; i++){
@@ -89,6 +91,12 @@ void Koktle::removeAlapanyag() {
     this->alapanyagok = uj_alapanyagok;
     this->menyiseg = uj_mennyiseg;
     --alapanyag_db;
+    if(alapanyag_db) {
+        delete [] this->alapanyagok;
+        delete [] this->menyiseg;
+        alapanyagok=nullptr;
+        menyiseg=nullptr;
+    }
 
 }
 
@@ -111,6 +119,13 @@ void Koktle::removeAlapanyag(Ital *ital) {
             this->alapanyagok = uj_alapanyagok;
             this->menyiseg = uj_mennyiseg;
             --alapanyag_db;
+            if(alapanyag_db==0) {
+                delete [] this->alapanyagok;
+                delete [] this->menyiseg;
+                menyiseg=nullptr;
+                alapanyagok=nullptr;
+                return;
+            }
         }
         ++index;
     }
@@ -247,6 +262,10 @@ void Koktlok::removeKoktel() {
         index = size_beolvas();
     }
     --index;
+    if(koktel_db==0) {
+        std::cout<<"urse nem tartalz koktelokat"<<std::endl;
+        return;
+    }
     Koktle** uj = new Koktle*[this->koktel_db-1];
     for (size_t i=0; i<index; i++){
         uj[i] = this->koktelok[i];
@@ -264,6 +283,14 @@ void Koktlok::removeKoktel() {
 }
 
 void Koktlok::removeKoktel(size_t index) {
+    if(index>=this->koktel_db){
+        if(koktel_db==0) {
+            std::cout <<"urse a tomb"<<std::endl;
+            return;
+        }
+        std::cout<<"tulindexeles"<<std::endl;
+        return;
+    }
     Koktle** uj = new Koktle*[this->koktel_db-1];
     for (size_t i=0; i<index; i++){
         uj[i] = this->koktelok[i];
@@ -275,8 +302,10 @@ void Koktlok::removeKoktel(size_t index) {
     delete [] this->koktelok;
     this->koktelok = uj;
     this->koktel_db--;
-    if(koktel_db==0)
+    if(koktel_db==0) {
+        delete [] koktelok;
         koktelok=nullptr;
+    }
 }
 
 

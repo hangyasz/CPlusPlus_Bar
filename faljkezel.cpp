@@ -145,29 +145,30 @@ void Bor::kiirF(std::ofstream& os) const {
 }
 
 char *szoveg_olvas(std::ifstream &file) {
-    char *szoveg=nullptr;
-    char c;
-    size_t db=0;
-    while(file.get(c) && c!='>'){
-        if(szoveg==nullptr) {
-            szoveg = new char[db + 1];
-            szoveg[db] = '\0';
+    char *szoveg = nullptr;
+    size_t meret = 0;
+    char karakter;
+    while (file.get(karakter) and karakter!='>') {
+        if (szoveg == nullptr) {
+            szoveg = new char[1];
+            strcpy(szoveg, "");
         }
-        else{
-            char *uj=new char[db+1];
-            strcpy(uj,szoveg);
-            uj[db]=c;
-            uj[1+db++]='\0';
-            delete[] szoveg;
-            szoveg=uj;
+        else {
+            char *temp = new char[meret + 2];
+            strcpy(temp, szoveg);
+            delete []szoveg;
+            temp[meret++] = karakter;
+            temp[meret] = '\0';
+            szoveg = temp;
         }
     }
-    if(strcmp(szoveg,"")==0){
-        delete[] szoveg;
+    if (strcmp(szoveg,"")==0) {
+        delete []szoveg;
         szoveg=nullptr;
     }
     return szoveg;
 }
+
 
 int szam_olvas(std::ifstream &file) {
     char kacsacsor;

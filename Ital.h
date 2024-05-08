@@ -260,6 +260,8 @@ public:
     void kiirF(std::ofstream& os) const;
     //valtoztatas menü
     void Set();
+    //gin destruktor
+    ~Gin();
 };
 //Rum osztály
 class Rum : public SzeszesItalok {

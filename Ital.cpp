@@ -345,9 +345,9 @@ void Bor::fajtakiir() const
 void Bor::removeFajta() {
     this->fajtakiir();
     std::cout << "Melyik fajtat szeretne torolni?" << std::endl;
-    char *fajta = hoszusor_olvas();
+    char *fajta_beolvas = hoszusor_olvas();
     for (size_t i = 0; i < fajta_db; i++) {
-        if (strcmp(this->fajta[i], fajta) == 0) {
+        if (strcmp(this->fajta[i], fajta_beolvas) == 0) {
             char **temp = new char *[fajta_db-1];
             for (size_t j = 0; j < i; j++) {
                 temp[j] = this->fajta[j];
@@ -355,13 +355,21 @@ void Bor::removeFajta() {
             for (size_t j = i; j < this->fajta_db; j++) {
                 temp[j] = this->fajta[j + 1];
             }
+            delete[] this->fajta[i];
+            delete[] fajta_beolvas;
             delete[] this->fajta;
             this->fajta = temp;
+            --fajta_db;
             std::cout << "Sikeres torls!" << std::endl;
+            if(fajta_db==0) {
+                delete [] fajta_beolvas;
+                fajta_beolvas=nullptr;
+            }
             return;
         }
     }
     std::cout << "Nincs ilyen fajta!" << std::endl;
+    delete[] fajta_beolvas;
 }
 
 
@@ -394,7 +402,7 @@ void Bor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev2-Gyarto, 3-alkohol, 4-evjart, 5-szin, 6-fajta hozzadas, 7-fajta torles 8-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-evjart, 5-szin, 6-fajta hozzadas, 7-fajta torles 8-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -621,6 +629,10 @@ void Gin::Set() {
             default: std::cout<<"Hibas bemenet!"<<std::endl;
         }
     }while (valasz!=7);
+}
+
+Gin::~Gin() {
+    delete[] iz;
 }
 
 

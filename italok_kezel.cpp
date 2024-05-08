@@ -113,38 +113,6 @@ void Italok::kiir_index() {
 }
 
 
-/*void Italok::removeItal(Koktlok &koktlok) {
-    this->kiir_index();
-    size_t index;
-    std::cout<<"\nAdja meg a torolni kivant ital indexet: ";
-    index=size_beolvas();
-    while (index>db){
-        std::cout<<"Hibas index!"<<std::endl;
-        this->kiir_index();
-        std::cout<<"\nAdja meg a torolni kivant ital indexet: ";
-        index=size_beolvas();
-    }
-    if(index==0)
-        return;
-    --index;
-    for(size_t i=0; i<koktlok.getKoktelDb();++i) {
-        Koktle* koktle=koktlok.getKoktel_csilag(i);
-        if(koktle->tartalmaz_e(ListaItalok[index])) {
-            koktlok.removeAlapanyag_Italok(i,ListaItalok[index]);
-        }
-    }
-    Ital **tmp=new Ital*[db-1];
-    for(size_t i=0;i<index;i++){
-        tmp[i]=ListaItalok[i];
-    }
-    for(size_t i=index;i<db;i++){
-        tmp[i]=ListaItalok[i+1];
-    }
-    delete ListaItalok[index];
-    db--;
-    delete [] ListaItalok;
-    ListaItalok=tmp;
-}*/
 
 void Italok::removeItal() {
     kiir_index();
@@ -169,6 +137,10 @@ void Italok::removeItal() {
     db--;
     delete[] ListaItalok;
     ListaItalok = tmp;
+    if(db==0) {
+        delete [] ListaItalok;
+        ListaItalok=nullptr;
+    }
 }
 
 void Italok::removeItal(Koktlok &k) {
@@ -201,6 +173,10 @@ void Italok::removeItal(Koktlok &k) {
     db--;
     delete[] ListaItalok;
     ListaItalok = tmp;
+    if(db==0) {
+        delete [] ListaItalok;
+        ListaItalok=nullptr;
+    }
 }
 
 
