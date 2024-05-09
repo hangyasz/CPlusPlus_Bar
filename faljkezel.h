@@ -13,7 +13,7 @@
 //ki írja az italt a fájba
 std::ofstream& operator<<(std::ofstream& os,const Ital &ital);
 //egy szoveg részt olvas be
-char *szoveg_olvas(std::ifstream &file);
+char *szoveg_olvsa(std::ifstream &file);
 //egy számot olvas be
 int szam_olvas(std::ifstream &file);
 //egy unsigned számot olvas be

@@ -164,7 +164,7 @@ char *Koktle::getNev() const {
 void Koktle::Set(Italok &italok) {
     size_t valaszto;
     do{
-        std::cout<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - nev modositasa\n4 - viszalepes"<<std::endl;
+        std::cout<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - szoveg_olvsa modositasa\n4 - viszalepes"<<std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valaszto=size_beolvas();
         switch (valaszto) {

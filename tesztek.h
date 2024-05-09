@@ -39,4 +39,10 @@ void test_Koktel_osszetevok_hozzaadasa();
 //koktel osszetevok torlese
 void test_Koktel_osszetevok_torlese();
 
+//Italok bolvassasa fáljbol
+Italok* test_Italok_beolvasas();
+
+//Koktelok beolvasasa fáljbol
+Koktlok* test_Koktelok_beolvasas(Italok* i);
+
 #endif //TESZTEK_H

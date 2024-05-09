@@ -19,7 +19,10 @@ void oszes_teszt() {
     test_Koktel_hozzaadas();
     test_Koktel_torles();
     test_Koktel_osszetevok_hozzaadasa();
-    test_Koktel_osszetevok_torlese();
+    Italok* i= test_Italok_beolvasas();
+    Koktlok *k=test_Koktelok_beolvasas(i);
+    delete k;
+    delete i;
 }
 
 
@@ -67,7 +70,7 @@ void test_Koktel_hozzaadas() {
     Koktlok koktlok;
     koktlok.addKoktel(i);
     EXPECT_EQ(1, koktlok.getKoktelDb())<<"Nem adja vissza a megfelelo alapanyag szamot";
-    EXPECT_STREQ("proba",koktlok.getKoktel(0).getNev())<<"Nem adja vissza a megfeleloen a nevet";
+    EXPECT_STREQ("RumB",koktlok.getKoktel(0).getNev())<<"Nem adja vissza a megfeleloen a nevet";
 }
 
 //koktel torlese
@@ -104,5 +107,37 @@ void test_Koktel_osszetevok_torlese() {
     koktle->removeAlapanyag();
     EXPECT_EQ(false, koktle->tartalmaz_e(i.getItalCsilag(1)))<<"nem sikerult a torles";
 }
+
+
+//Italok beolvasasa_filebol
+Italok* test_Italok_beolvasas() {
+    Italok *i=new  Italok();
+    i->olvasF();
+    EXPECT_EQ(4,i->getdb())<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_EQ(2,i->getItal(0).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
+    EXPECT_STREQ("Nev",i->getItal(0).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Gyarto",i->getItal(0).getGyarto())<<"Nem adja vissza a megfelelo gyartot";
+    EXPECT_EQ(1,i->getItal(3).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
+    EXPECT_STREQ("Bor_zolk",i->getItal(3).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("en",i->getItal(3).getGyarto())<<"Nem adja vissza a megfelelo gyartot";
+    return  i;
+}
+
+Koktlok *test_Koktelok_beolvasas(Italok *i) {
+    Koktlok *k=new Koktlok();
+    k->olvasF(*i);
+    EXPECT_EQ(3,k->getKoktelDb())<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_STREQ("Kedvenc",k->getKoktel(0).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Test_1",k->getKoktel(1).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Test_2",k->getKoktel(2).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_EQ(2,i->getItal(4).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
+    Italok i2;
+    i2.olvasF();
+    EXPECT_EQ(5,i->getdb())<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_STREQ("hibaa",i->getItal(4).getNev())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Iker",i->getItal(4).getGyarto())<<"Nem adja vissza a megfelelo gyartot";
+    return k;
+}
+
 
 

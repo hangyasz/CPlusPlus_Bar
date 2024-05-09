@@ -144,7 +144,7 @@ void Bor::kiirF(std::ofstream& os) const {
     file.close();
 }
 
-char *szoveg_olvas(std::ifstream &file) {
+char *szoveg_olvsa(std::ifstream &file) {
     char *szoveg = nullptr;
     size_t meret = 0;
     char karakter;
@@ -200,8 +200,8 @@ float float_olvas(std::ifstream &file) {
 
 Ital::Ital(std::ifstream &file):nev(nullptr),gyarto(nullptr) {
     setTipus(alkohol_mentes);
-    setNev(szoveg_olvas(file));
-    setGyarto(szoveg_olvas(file));
+    setNev(szoveg_olvsa(file));
+    setGyarto(szoveg_olvsa(file));
 }
 
 
@@ -237,14 +237,14 @@ Bor::Bor(std::ifstream &file):SzeszesItalok(file),fajta(nullptr) {
     this->setFajta_db(size_olvas(file));
     char **fajatk=new char*[this->getFajta_db()];
     for(size_t i=0;i<this->getFajta_db();i++){
-        fajatk[i]=szoveg_olvas(file);
+        fajatk[i]=szoveg_olvsa(file);
     }
     this->setFajta_string(fajatk);
 }
 
 Wiskey::Wiskey(std::ifstream &file):SzeszesItalok(file), jeleg(nullptr) {
     this->setTipus(whiskey);
-    this->setJeleg_wiskey(szoveg_olvas(file));
+    this->setJeleg_wiskey(szoveg_olvsa(file));
     this->setErleses(uszam_olvas(file));
 }
 
@@ -267,7 +267,7 @@ void Gin::setSzin(int kap) {
 Gin::Gin(std::ifstream &file):SzeszesItalok(file),iz(nullptr) {
     setTipus(gin);
     setSzin(szam_olvas(file));
-    setIz(szoveg_olvas(file));
+    setIz(szoveg_olvsa(file));
 }
 
 
@@ -317,7 +317,7 @@ Tequila::Tequila(std::ifstream &file):SzeszesItalok(file) {
 
 Sor::Sor(std::ifstream &file):SzeszesItalok(file),tipus_sor(nullptr) {
     setTipus(sor);
-    setTipus_sor(szoveg_olvas(file));
+    setTipus_sor(szoveg_olvsa(file));
 }
 
 
@@ -398,41 +398,41 @@ void Koktlok::olvasF(Italok &italok ) {
         throw"nem nyilt meg a koktelok.txt";
     size_t alapanyag_db;
     while (file>>alapanyag_db){
-        char *nev=szoveg_olvas(file);
+        char *nev=szoveg_olvsa(file);
         Ital **alapanyagok=new Ital*[alapanyag_db];
         unsigned int *menyiseg=new unsigned int[alapanyag_db];
         for (size_t i=0; i<alapanyag_db; i++){
             int tipus=szam_olvas(file);
+            char *nev_ital=szoveg_olvsa(file);
             switch (tipus) {
                 case 1:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),bor);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,bor);
                     break;
                 case 2:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),whiskey);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,whiskey);
                     break;
                 case 3:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),gin);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,gin);
                     break;
                 case 4:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),rum);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,rum);
                     break;
                 case 5:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),tequila);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,tequila);
                     break;
                 case 6:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),sor);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,sor);
                     break;
                 case 7:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),gyumolcsle);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,gyumolcsle);
                     break;
                 case 8:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),alkohols);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,alkohols);
                     break;
                 case 9:
-                    alapanyagok[i]=ital_letezik_e(italok,szoveg_olvas(file),alkohol_mentes);
+                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,alkohol_mentes);
                     break;
                 default:
-                    char *nev_ital=szoveg_olvas(file);
                     std::cout<<"Hibás típus ital nev: "<<nev_ital<<  " mi legyen az uj jeleg: "<<std::endl;
                     ital_tipus bevit=tipus_valszto();
                     italok.addItal(nev_ital,bevit);
@@ -440,6 +440,7 @@ void Koktlok::olvasF(Italok &italok ) {
                     break;
             }
             menyiseg[i]=uszam_olvas(file);
+            delete []nev_ital;
         }
         this->addKoktel(new Koktle(nev,alapanyag_db,alapanyagok,menyiseg));
     }

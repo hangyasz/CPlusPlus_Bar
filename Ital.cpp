@@ -68,7 +68,9 @@ Ital::Ital(ital_tipus tipus):nev(nullptr),gyarto(nullptr),tipus(tipus){
 
 Ital::Ital() :nev(nullptr),gyarto(nullptr){}
 
-Ital::Ital(char *nev, ital_tipus tipus): nev(nev),gyarto(nullptr), tipus(tipus){
+Ital::Ital(char *nev, ital_tipus tipus):nev(nullptr), gyarto(nullptr), tipus(tipus){
+    this->nev=new char[strlen(nev)+1];
+    strcpy(this->nev,nev);
     setGyarto();
 }
 
@@ -745,7 +747,7 @@ tequli_fajta Tequila::getFajta() const {
 void Tequila::setFajta() {
     int olvas_fajta;
     do{
-        std::cout << "válasza ki a tequila tipisat [1]silver, [2]gold, [3]aged" << std::endl;
+        std::cout << "valasza ki a tequila tipisat [1]silver, [2]gold, [3]aged" << std::endl;
         olvas_fajta=int_beolvas();
         switch (olvas_fajta) {
             case 1:
@@ -892,10 +894,18 @@ unsigned int Gyumolcsle::getGyumolcsszazalek() const {
 void Gyumolcsle::setGyumolcsszazalek() {
     std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
     gyumolcsszazalek=unsigned_int_beolvas();
+    while (gyumolcsszazalek>100) {
+        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
+        gyumolcsszazalek=unsigned_int_beolvas();
+    }
 }
 
 void Gyumolcsle::setGyumolcsszazalek(unsigned int kap) {
     gyumolcsszazalek=kap;
+    while (gyumolcsszazalek>100) {
+        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
+        gyumolcsszazalek=unsigned_int_beolvas();
+    }
 }
 
 void Gyumolcsle::kiir() const {
