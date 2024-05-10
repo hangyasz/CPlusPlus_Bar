@@ -59,7 +59,7 @@ void Italok::addItal(Ital *kap) {
 }
 
 
-void Italok::addItal(char *nev, ital_tipus tipus) {
+void Italok::addItal(String nev, ital_tipus tipus) {
     switch(tipus) {
         case bor:
             this->addItal(new Bor(nev,bor));
@@ -91,7 +91,6 @@ void Italok::addItal(char *nev, ital_tipus tipus) {
         default:
             std::cout << "Hibás típus! Nem létezik ilyen jeleg kerem vigye fel" << std::endl;
             this->addItal();
-            delete [] nev;
         break;
     }
 }
@@ -126,6 +125,11 @@ void Italok::removeItal() {
     if (index == 0)
         return;
     --index;
+    if(db-1==0) {
+        delete [] ListaItalok;
+        ListaItalok=nullptr;
+        return;
+    }
     Ital **tmp = new Ital*[db - 1];
     for (size_t i = 0; i < index; i++) {
         tmp[i] = ListaItalok[i];
@@ -137,10 +141,6 @@ void Italok::removeItal() {
     db--;
     delete[] ListaItalok;
     ListaItalok = tmp;
-    if(db==0) {
-        delete [] ListaItalok;
-        ListaItalok=nullptr;
-    }
 }
 
 void Italok::removeItal(Koktlok &k) {
@@ -162,6 +162,10 @@ void Italok::removeItal(Koktlok &k) {
                 return;
         }
     }
+    if(db-1==0) {
+        delete [] ListaItalok;
+        ListaItalok=nullptr;
+    }
     Ital **tmp = new Ital*[db - 1];
     for (size_t i = 0; i < index; i++) {
         tmp[i] = ListaItalok[i];
@@ -173,10 +177,6 @@ void Italok::removeItal(Koktlok &k) {
     db--;
     delete[] ListaItalok;
     ListaItalok = tmp;
-    if(db==0) {
-        delete [] ListaItalok;
-        ListaItalok=nullptr;
-    }
 }
 
 

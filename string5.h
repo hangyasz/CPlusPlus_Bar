@@ -106,4 +106,7 @@ inline String operator+(char ch, const String& str) { return String(ch) + str; }
 //két sztringet hasonlit oszze hogy megegyeznek e
 bool operator==(const String& lhs, const String& rhs);
 
+// Beolvas egy szoveget egy fajlbol
+std::ifstream& operator>>(std::ifstream& is, String& s0);
+
 #endif

@@ -100,7 +100,6 @@ const char*  Ital::getTipusNev() const {
 
 void Ital::setNev() {
     std::cout << "Adja meg az ital nevet: " << std::endl;
-    nev;
     std::cin >> nev;
 }
 
@@ -110,7 +109,6 @@ void Ital::setNev(String kap ) {
 
 void Ital::setGyarto() {
     std::cout << "Adja meg az ital gyarojat: " << std::endl;
-    gyarto;
     std::cin >> gyarto;
 }
 
@@ -344,6 +342,13 @@ void Bor::removeFajta() {
     std::cin>> fajta_beolvas;
     for (size_t i = 0; i < fajta_db; i++) {
         if (fajta[i] == fajta_beolvas) {
+            if(fajta_db-1==0) {
+                delete [] fajta;
+                fajta=nullptr;
+                fajta_db=0;
+                std::cout << "Sikeres torles!" << std::endl;
+                return;
+            }
             String *temp = new String [fajta_db-1];
             for (size_t j = 0; j < i; j++) {
                 temp[j] = this->fajta[j];
@@ -384,7 +389,7 @@ void Bor::kiir() const {
         std::cout << " Fajta:";
     }
     for (size_t i = 0; i < fajta_db; i++) {
-        std::cout <<" "<< fajta[i];
+        std::cout <<" ["<<i<<"] "<< fajta[i];
     }
 }
 
@@ -452,7 +457,6 @@ unsigned int Wiskey::getErleses() const {
 
 void Wiskey::setJeleg_wiskey() {
     std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    jeleg;
     std::cin >> jeleg;
 }
 
@@ -566,11 +570,10 @@ String Gin::getIz() const {
 
 void Gin::setIz() {
     int iz_bevit = 0;
-    std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
+    std::cout << "A ginek van jelgzetes ize pl(levendulas)  1(igen), 0(nem)" << std::endl;
     iz_bevit=int_beolvas();
     if (iz_bevit == 1) {
         std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
-        iz;
         std::cin >> iz;
     } else {
         iz;
@@ -584,7 +587,7 @@ void Gin::setIz(String kap) {
 void Gin::kiir()  const{
     SzeszesItalok::kiir();
     std::cout << " Szin: " << getSzinNev();
-    if (iz != nullptr) {
+    if (iz.size() !=0 ) {
         std::cout << " Iz: " << iz;
     }
 }
@@ -619,7 +622,7 @@ void Gin::Set() {
 }
 
 Gin::~Gin() {
-    delete[] iz;
+
 }
 
 
@@ -720,7 +723,7 @@ Tequila::Tequila(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
 
 Tequila::Tequila():SzeszesItalok() {}
 
-Tequila::Tequila(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+Tequila::Tequila(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
     setFajta();
 }
 
@@ -866,7 +869,7 @@ Gyumolcsle::Gyumolcsle(ital_tipus ital_tipus) : Ital(ital_tipus) {
 
 Gyumolcsle::Gyumolcsle():Ital() {}
 
-Gyumolcsle::Gyumolcsle(char *nev, ital_tipus tipus):Ital(nev,tipus) {
+Gyumolcsle::Gyumolcsle(String nev_kap, ital_tipus tipus):Ital(nev_kap,tipus) {
     setGyumolcsszazalek();
 }
 

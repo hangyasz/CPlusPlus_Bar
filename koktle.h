@@ -12,7 +12,7 @@
 
 //koktelok osztalya
 class Koktle {
-    char *nev; //koktel neve
+    String nev; //koktel neve
 	size_t alapanyag_db; //alapanyagok száma
     Ital** alapanyagok; //alapanyagok tömbje
     unsigned int *menyiseg; //alapanyagok mennyisége menyi kell belőle
@@ -21,7 +21,7 @@ public:
     Koktle();
     Koktle(Italok &italok);
     // ezt használom a fajbol beolvasnal
-    Koktle(char *nev, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
+    Koktle(String nev_kap, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
     //kiirja a koktelokat
     void kiir() const;
     //alapanayg hozzá adása
@@ -38,7 +38,7 @@ public:
     //koktel atnevezese
     void setNev();
     //visszaadja a koktel nevét
-    char *getNev() const;
+    String getNev() const;
     //koktel belaites mennü
     void Set(Italok &italok);
     //destruktor ami felszabadítja a dinamikus memóriát
@@ -72,7 +72,7 @@ public:
     //koktelok beolvasása fájlból
     void olvasF(Italok &italok);
     //viszaadja az ittalt ha létezik külöben felveszük
-    Ital* ital_letezik_e(Italok &italok, char *nev, ital_tipus tipus);
+    Ital* ital_letezik_e(Italok &italok, String nev, ital_tipus tipus);
     //koktelok beolvasása
     void Set(Italok &italok);
     //veletlen szerü köktel ajánlás

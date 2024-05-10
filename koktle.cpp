@@ -11,11 +11,11 @@
 #include "memtrace.h"
 
 //konstruktor ami beállítja a koktel
-Koktle::Koktle():nev(nullptr), alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
+Koktle::Koktle():alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
 }
 
 
-Koktle::Koktle(Italok &italok):nev(nullptr), alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
+Koktle::Koktle(Italok &italok): alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
     setNev();
     std::cout<<"Alapanyagok szama: ";
     size_t alapanyag_szam = size_beolvas();
@@ -47,6 +47,7 @@ void Koktle::addAlapanyag(Italok &italok) {
         std::cout<<"\nAlapanyag index: ";
         index=size_beolvas();
     }
+    //ha a 0 indexet valasztja akkor uj italt adhat hozza
     if(index==0){
         italok.addItal();
         index=italok.getdb();
@@ -76,6 +77,12 @@ void Koktle::removeAlapanyag() {
         std::cout<<"a koktelnak nincsen alapnyagai!"<<std::endl;
         return;
     }
+    if(alapanyag_db-1==0) {
+        delete [] this->alapanyagok;
+        delete [] this->menyiseg;
+        alapanyagok=nullptr;
+        menyiseg=nullptr;
+    }
     Ital **uj_alapanyagok = new Ital*[this->alapanyag_db-1];
     unsigned int *uj_mennyiseg = new unsigned int[this->alapanyag_db-1];
     for (size_t i=0; i<index-1; i++){
@@ -91,12 +98,6 @@ void Koktle::removeAlapanyag() {
     this->alapanyagok = uj_alapanyagok;
     this->menyiseg = uj_mennyiseg;
     --alapanyag_db;
-    if(alapanyag_db) {
-        delete [] this->alapanyagok;
-        delete [] this->menyiseg;
-        alapanyagok=nullptr;
-        menyiseg=nullptr;
-    }
 
 }
 
@@ -104,6 +105,13 @@ void Koktle::removeAlapanyag(Ital *ital) {
     size_t index=0;
     while (tartalmaz_e(ital)) {
         if(ital==alapanyagok[index]){
+            if(alapanyag_db-1==0) {
+                delete [] this->alapanyagok;
+                delete [] this->menyiseg;
+                menyiseg=nullptr;
+                alapanyagok=nullptr;
+                return;
+            }
             Ital **uj_alapanyagok = new Ital*[this->alapanyag_db-1];
             unsigned int *uj_mennyiseg = new unsigned int[this->alapanyag_db-1];
             for (size_t i=0; i<index; i++){
@@ -119,13 +127,6 @@ void Koktle::removeAlapanyag(Ital *ital) {
             this->alapanyagok = uj_alapanyagok;
             this->menyiseg = uj_mennyiseg;
             --alapanyag_db;
-            if(alapanyag_db==0) {
-                delete [] this->alapanyagok;
-                delete [] this->menyiseg;
-                menyiseg=nullptr;
-                alapanyagok=nullptr;
-                return;
-            }
         }
         ++index;
     }
@@ -153,11 +154,10 @@ bool Koktle::tartalmaz_e(const ital_tipus tipus) const {
 
 void Koktle::setNev() {
     std::cout<<"Koktel neve: ";
-    delete nev;
-    nev = hoszusor_olvas();
+    std::cin>>nev;
 }
 
-char *Koktle::getNev() const {
+String Koktle::getNev() const {
     return this->nev;
 }
 
@@ -189,13 +189,12 @@ void Koktle::Set(Italok &italok) {
 
 
 Koktle::~Koktle() {
-    delete [] this->nev;
     delete [] this->alapanyagok;
     delete [] this->menyiseg;
 }
 
-Koktle::Koktle(char *nev, size_t alapanyag_db, Ital **alapanyagok, unsigned int *menyiseg) {
-    this->nev = nev;
+Koktle::Koktle(String nev_kap, size_t alapanyag_db, Ital **alapanyagok, unsigned int *menyiseg) {
+    this->nev = nev_kap;
     this->alapanyag_db = alapanyag_db;
     this->alapanyagok = alapanyagok;
     this->menyiseg = menyiseg;
@@ -266,29 +265,10 @@ void Koktlok::removeKoktel() {
         std::cout<<"urse nem tartalz koktelokat"<<std::endl;
         return;
     }
-    Koktle** uj = new Koktle*[this->koktel_db-1];
-    for (size_t i=0; i<index; i++){
-        uj[i] = this->koktelok[i];
-    }
-    for (size_t i=index; i<this->koktel_db-1; i++){
-        uj[i] = this->koktelok[i+1];
-    }
-    delete this->koktelok[index];
-    delete [] this->koktelok;
-    this->koktelok = uj;
-    this->koktel_db--;
-    if(koktel_db==0)
+    if(koktel_db-1==0){
         delete [] this->koktelok;
         koktelok=nullptr;
-}
-
-void Koktlok::removeKoktel(size_t index) {
-    if(index>=this->koktel_db){
-        if(koktel_db==0) {
-            std::cout <<"urse a tomb"<<std::endl;
-            return;
-        }
-        std::cout<<"tulindexeles"<<std::endl;
+        koktel_db=0;
         return;
     }
     Koktle** uj = new Koktle*[this->koktel_db-1];
@@ -302,10 +282,34 @@ void Koktlok::removeKoktel(size_t index) {
     delete [] this->koktelok;
     this->koktelok = uj;
     this->koktel_db--;
-    if(koktel_db==0) {
-        delete [] koktelok;
-        koktelok=nullptr;
+}
+
+void Koktlok::removeKoktel(size_t index) {
+    if(index>=this->koktel_db){
+        if(koktel_db==0) {
+            std::cout <<"urse a tomb"<<std::endl;
+            return;
+        }
+        std::cout<<"tulindexeles"<<std::endl;
+        return;
     }
+    if(koktel_db-1==0){
+        delete [] this->koktelok;
+        koktelok=nullptr;
+        koktel_db=0;
+        return;
+    }
+    Koktle** uj = new Koktle*[this->koktel_db-1];
+    for (size_t i=0; i<index; i++){
+        uj[i] = this->koktelok[i];
+    }
+    for (size_t i=index; i<this->koktel_db-1; i++){
+        uj[i] = this->koktelok[i+1];
+    }
+    delete this->koktelok[index];
+    delete [] this->koktelok;
+    this->koktelok = uj;
+    this->koktel_db--;
 }
 
 

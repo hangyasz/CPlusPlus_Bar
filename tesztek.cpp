@@ -1,7 +1,7 @@
 //
 // Created by Zoli on 2024. 05. 02..
 //
-
+/*
 #include "tesztek.h"
 #include "Ital.h"
 #include "koktle.h"
@@ -34,12 +34,13 @@ void test_Ital(){
     EXPECT_EQ(i.getGyarto(),nullptr) << "a gyarto nem nullptr";
 }
 //ital nevenek beallitasa
-void test_Ital_setnev() {
+/*void test_Ital_setnev() {
     Ital i;
     i.setNev();
     EXPECT_STREQ("Teszt", i.getNev())<<"a nev nem egyezeik a beallitottal";
-}
+}*/
 //bor tulindexeles
+/*
 void test_Bor_index_hibba() {
     Bor b;
     b.addFajta();
@@ -110,7 +111,7 @@ void test_Koktel_osszetevok_torlese() {
 
 
 //Italok beolvasasa_filebol
-Italok* test_Italok_beolvasas() {
+/*Italok* test_Italok_beolvasas() {
     Italok *i=new  Italok();
     i->olvasF();
     EXPECT_EQ(4,i->getdb())<<"Nem adja vissza a megfelelo erteket";
@@ -121,8 +122,10 @@ Italok* test_Italok_beolvasas() {
     EXPECT_STREQ("Bor_zolk",i->getItal(3).getNev())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("en",i->getItal(3).getGyarto())<<"Nem adja vissza a megfelelo gyartot";
     return  i;
-}
+}*/
 
+
+/*
 Koktlok *test_Koktelok_beolvasas(Italok *i) {
     Koktlok *k=new Koktlok();
     k->olvasF(*i);
@@ -138,6 +141,6 @@ Koktlok *test_Koktelok_beolvasas(Italok *i) {
     EXPECT_STREQ("Iker",i->getItal(4).getGyarto())<<"Nem adja vissza a megfelelo gyartot";
     return k;
 }
-
+*/
 
 

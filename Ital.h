@@ -246,7 +246,6 @@ public:
     void setSzin(gin_szin kap);
     //a kapot számát sziné alakitja
     void setSzin(int kap);
-
     //gin iz visza adása
     String getIz() const;
 
@@ -301,7 +300,7 @@ public:
     //Tequila konstruktor
     Tequila(ital_tipus ital_tipus);
     Tequila();
-    Tequila(char *nev, ital_tipus tipus);
+    Tequila(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Tequila(std::ifstream &file);
     //Tequila fajta visza adása
@@ -336,7 +335,7 @@ public:
     //konstruktor fájlból beolvasáshoz
     Sor(std::ifstream &file);
     //Sor jeleg visza adása
-    char *getTipus_sor() const;
+    String getTipus_sor() const;
 
     //Sor jeleg beálitása
     void setTipus_sor();
@@ -362,7 +361,7 @@ public:
     //konstruktor
     Gyumolcsle(ital_tipus ital_tipus);
     Gyumolcsle();
-    Gyumolcsle(char *nev, ital_tipus tipus);
+    Gyumolcsle(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Gyumolcsle(std::ifstream &file);
     //visza adja a gyumolcsszazalekot
@@ -394,7 +393,7 @@ public:
     Italok &operator=(const Italok &italok); //másoló értékadás
     void addItal(); //ital hozzá adása
     void addItal(Ital* kap); //ital hozzá adása
-    void addItal(char *nev, ital_tipus tipus); //ital hozzá adása
+    void addItal(String nev, ital_tipus tipus); //ital hozzá adása
     void removeItal(Koktlok &k); //ital törlése
     void removeItal(); //ital törlése
     void kiir_index(); //italok kiirása index kell

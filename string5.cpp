@@ -11,6 +11,7 @@
 
 #include <iostream>             // Kiíratáshoz
 #include <cstring>              // Stringműveletekhez
+#include <fstream>              // Fájlkezeléshez
 
 #include "memtrace.h"           // a standard headerek után kell lennie
 #include "string5.h"
@@ -109,7 +110,7 @@ std::istream& operator>>(std::istream& is, String& s0) {
         if (ch=='\n') {
             is.putback(ch);             // na ezt nem kérjük
             break;
-        } else {
+        } else  if(!(ch=='<' or ch=='>') and (isalpha(ch) or isdigit(ch) or ispunct(ch) or isspace(ch))){
             s0 = s0 + ch;               // végére fűzzük a karaktert
         }
     }
@@ -126,4 +127,26 @@ bool operator==(const String& lhs, const String& rhs) {
         }
     }
     return false;
+}
+
+// Beolvas egy szoveget egy fajlbol
+std::ifstream &operator>>(std::ifstream& is, String& s0) {
+    unsigned char ch;
+    s0 = String("");            // üres string, ehhez fűzünk hozzá
+    std::ios_base::fmtflags fl = is.flags(); // eltesszük a régi flag-eket
+    is.setf(ios_base::skipws);			// az elején eldobjuk a ws-t
+    while (is >> ch) {
+        is.unsetf(ios_base::skipws);	// utána pedig már nem
+        if (ch=='<') {
+        }
+        else if(ch=='>') {
+            is.putback(ch);             // na ezt nem kérjük
+            break;
+        }
+        else  if(isalpha(ch) or isdigit(ch) or ispunct(ch) or isspace(ch)){
+            s0 = s0 + ch;               // végére fűzzük a karaktert
+        }
+    }
+    is.setf(fl);						// visszaállítjuk a flag-eket
+    return is;
 }
