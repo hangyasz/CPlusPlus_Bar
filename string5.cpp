@@ -94,7 +94,7 @@ String String::operator+(const String& rhs_s) const {
 }
 // << operator, ami kiír az ostream-re
 std::ostream& operator<<(std::ostream& os, const String& s0) {
-    os << s0.c_str();
+    os << s0.c_str(); 
     return os;
 }
 
@@ -106,7 +106,7 @@ std::istream& operator>>(std::istream& is, String& s0) {
 	is.setf(ios_base::skipws);			// az elején eldobjuk a ws-t
     while (is >> ch) {
 	    is.unsetf(ios_base::skipws);	// utána pedig már nem
-        if (isspace(ch)) {
+        if (ch=='\n') {
             is.putback(ch);             // na ezt nem kérjük
             break;
         } else {
@@ -117,3 +117,13 @@ std::istream& operator>>(std::istream& is, String& s0) {
     return is;
 }
 
+
+//String oszehasonlitasa
+bool operator==(const String& lhs, const String& rhs) {
+    if(lhs.size()==rhs.size()){
+        if(strcmp(lhs.c_str(),rhs.c_str())==0){
+            return true;
+        }
+    }
+    return false;
+}

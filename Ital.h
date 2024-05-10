@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstring>
 #include "bevitel_kezel.h"
+#include "string5.h"
 
 //elöre deklarációk
 class Koktlok;
@@ -43,25 +44,25 @@ enum tequli_fajta {
 
 //italok osztalya
 class Ital {
-    char* nev; //ital neve kerül eltárolásta dinamikus memóriába
-    char* gyarto; //ital gyártója kerül eltárolásta dinamikus memóriába
+    String nev; //ital neve kerül eltárolásta dinamikus memóriába
+    String gyarto; //ital gyártója kerül eltárolásta dinamikus memóriába
     ital_tipus tipus; //ital tipusa
 
 public:
     //konstruktor ami beállítja az ital nevét, gyártóját és tipusát
     Ital(ital_tipus tipus);
     Ital();
-    Ital(char *nev, ital_tipus tipus);
+    Ital(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Ital(std::ifstream &file);
     //desturktor ami felszabadítja a dinamikus memóriát
     virtual ~Ital();
 
     //visszaadja az ital nevét
-    char *getNev() const;
+    String getNev() const;
 
     //visszaadja az ital gyártóját
-    char *getGyarto() const;
+    String getGyarto() const;
 
     //visszaadja az ital tipusát
     ital_tipus getTipus() const ;
@@ -74,11 +75,11 @@ public:
 
     //beálitja/átálitja az ital nevét
     void setNev();
-    void setNev(char* kap );
+    void setNev(String kap );
 
     //beálitja/átálitja az ital gyártóját
     void setGyarto();
-    void setGyarto(char* kap);
+    void setGyarto(String kap);
 
     //beálitja/átálitja az ital tipusát
     void setTipus();
@@ -100,7 +101,7 @@ public:
     //konstruktor ami beállítja az alkohol tartalmat
     SzeszesItalok(ital_tipus tipus);
     SzeszesItalok();
-    SzeszesItalok(char *nev, ital_tipus tipus);
+    SzeszesItalok(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     SzeszesItalok(std::ifstream &file);
 
@@ -121,7 +122,7 @@ public:
 
 //Bor osztály
 class Bor : public SzeszesItalok {
-    char **fajta; //bor fajtái tartalmatát
+    String *fajta; //bor fajtái tartalmatát
     size_t fajta_db;  //bor fajtáinak száma
     int evjarat;  //bor éjrára
     szinek_bor szin; //bor szine
@@ -130,7 +131,7 @@ public:
     //bor konstruktor
     Bor(ital_tipus tipus);
     Bor();
-    Bor(char* nev, ital_tipus tipus);
+    Bor(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Bor(std::ifstream &file);
 
@@ -159,7 +160,7 @@ public:
     //fajta db beálitása
     void setFajta_db(size_t kap);
 
-    void setFajta_string(char **kap);
+    void setFajta_string(String *kap);
     //fajta hozzá adása
     void addFajta();
 
@@ -170,7 +171,7 @@ public:
     void removeFajta();
 
     //fajata index alapján visza adása
-    char *getFajtaindex(size_t index) const;
+    String getFajtaindex(size_t index) const;
 
     //fajta db visza adása
     size_t getFajta_db() const;
@@ -186,21 +187,21 @@ public:
 
 //Wiskey osztály
 class Wiskey : public SzeszesItalok {
-    char *jeleg; //wiskey tipusa pl: single malt, blended
+    String jeleg; //wiskey tipusa pl: single malt, blended
     unsigned int erleses; //wiskey erleses éve
 
 public:
     //wiskey konstruktor
     Wiskey(ital_tipus ital_tipus);
     Wiskey();
-    Wiskey(char *nev, ital_tipus tipus);
+    Wiskey(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Wiskey(std::ifstream &file);
     //destruktor
     ~Wiskey();
 
     //jeleg visza adása
-    char *getJeleg_wiskey() const;
+    String getJeleg_wiskey() const;
 
     //erleses visza adása
     unsigned int getErleses() const;
@@ -225,13 +226,13 @@ public:
 // Gin osztály
 class Gin : public SzeszesItalok {
     gin_szin szin;//gin szine
-    char *iz; //gin iz ha nem borokás
+    String iz; //gin iz ha nem borokás
 
 public:
     //gin konstruktor
     Gin(ital_tipus ital_tipus);
     Gin();
-    Gin(char *nev, ital_tipus tipus);
+    Gin(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Gin(std::ifstream &file);
     //gin szin visza adása
@@ -247,11 +248,11 @@ public:
     void setSzin(int kap);
 
     //gin iz visza adása
-    const char *getIz() const;
+    String getIz() const;
 
     // gin iz beálitása
     void setIz();
-    void setIz(char* kap);
+    void setIz(String kap);
 
     //gin adatok kiirása
     void kiir() const;
@@ -271,7 +272,7 @@ public:
     //rum konstruktor
     Rum(ital_tipus tipus);
     Rum();
-    Rum(char * nev, ital_tipus tipus);
+    Rum(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Rum(std::ifstream &file);
     //rum fajta visza adása
@@ -325,13 +326,13 @@ public:
 };
 //Sor osztály
 class Sor : public SzeszesItalok {
-    char *tipus_sor; //sor tipusa stringként
+    String tipus_sor; //sor tipusa stringként
 
 public:
     //Sor konstruktor
     Sor(ital_tipus tipuss);
     Sor();
-    Sor(char *nev, ital_tipus tipus);
+    Sor(String nev_kap, ital_tipus tipus);
     //konstruktor fájlból beolvasáshoz
     Sor(std::ifstream &file);
     //Sor jeleg visza adása
@@ -339,7 +340,7 @@ public:
 
     //Sor jeleg beálitása
     void setTipus_sor();
-    void setTipus_sor(char *kap);
+    void setTipus_sor(String kap);
 
     //Sor adatainak kiirása
     void kiir() const;

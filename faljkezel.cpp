@@ -144,7 +144,7 @@ void Bor::kiirF(std::ofstream& os) const {
     file.close();
 }
 
-char *szoveg_olvsa(std::ifstream &file) {
+char * szoveg_olvsa(std::ifstream &file) {
     char *szoveg = nullptr;
     size_t meret = 0;
     char karakter;

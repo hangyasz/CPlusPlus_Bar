@@ -61,30 +61,28 @@ switch (tipus) {
 }
 
 
-Ital::Ital(ital_tipus tipus):nev(nullptr),gyarto(nullptr),tipus(tipus){
+Ital::Ital(ital_tipus tipus):tipus(tipus){
     setNev();
     setGyarto();
 }
 
-Ital::Ital() :nev(nullptr),gyarto(nullptr){}
+Ital::Ital(){}
 
-Ital::Ital(char *nev, ital_tipus tipus):nev(nullptr), gyarto(nullptr), tipus(tipus){
-    this->nev=new char[strlen(nev)+1];
-    strcpy(this->nev,nev);
+Ital::Ital(String nev_kap, ital_tipus tipus): tipus(tipus){
+    this->nev=nev_kap;
     setGyarto();
 }
 
 Ital::~Ital() {
-    delete[] nev;
-    delete[] gyarto;
+
 }
 
-char * Ital::getNev() const
+String Ital::getNev() const
 {
     return nev;
 }
 
-char *Ital::getGyarto() const {
+String Ital::getGyarto() const {
     return gyarto;
 }
 
@@ -101,24 +99,22 @@ const char*  Ital::getTipusNev() const {
 }
 
 void Ital::setNev() {
-    delete[] this->nev;
     std::cout << "Adja meg az ital nevet: " << std::endl;
-    this->nev = hoszusor_olvas();
+    nev;
+    std::cin >> nev;
 }
 
-void Ital::setNev(char* kap ) {
-    delete [] this->nev;
+void Ital::setNev(String kap ) {
     nev=kap;
 }
 
 void Ital::setGyarto() {
-    delete[] this->gyarto;
     std::cout << "Adja meg az ital gyarojat: " << std::endl;
-    this->gyarto = hoszusor_olvas();
+    gyarto;
+    std::cin >> gyarto;
 }
 
-void Ital::setGyarto(char* kap) {
-    delete [] this->gyarto;
+void Ital::setGyarto(String kap) {
     gyarto=kap;
 }
 
@@ -167,7 +163,7 @@ SzeszesItalok::SzeszesItalok(ital_tipus tipus) : Ital(tipus) {
 SzeszesItalok::SzeszesItalok() : Ital(){
 }
 
-SzeszesItalok::SzeszesItalok(char *nev, ital_tipus tipus): Ital(nev,tipus) {
+SzeszesItalok::SzeszesItalok(String nev_kap, ital_tipus tipus): Ital(nev_kap,tipus) {
     setAlkoholTartalom();
 }
 
@@ -237,7 +233,7 @@ Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus),fajta(nullptr),fajta_db(0) {
 Bor::Bor():SzeszesItalok(), fajta(nullptr),fajta_db(0) {
 }
 
-Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus), fajta(nullptr),fajta_db(0) {
+Bor::Bor(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus), fajta(nullptr),fajta_db(0) {
     setEvjarat();
     setEvjarat();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
@@ -249,9 +245,6 @@ Bor::Bor(char* nev, ital_tipus tipus):SzeszesItalok(nev,tipus), fajta(nullptr),f
 }
 
 Bor::~Bor() {
-    for (size_t i = 0; i < fajta_db; i++) {
-        delete[] fajta[i];
-    }
     delete[] fajta;
 }
 
@@ -320,17 +313,17 @@ void Bor::setFajta_db(size_t kap) {
     fajta_db=kap;
 }
 
-void Bor::setFajta_string(char **kap) {
+void Bor::setFajta_string(String *kap) {
     fajta=kap;
 }
 
 void Bor::addFajta() {
-    char **temp = new char *[fajta_db + 1];
+    String * temp = new String [fajta_db + 1];
     for (size_t i = 0; i < fajta_db; i++) {
         temp[i] = fajta[i];
     }
     std::cout << "Adja meg a fajtat: " << std::endl;
-    temp[fajta_db] = hoszusor_olvas();
+    std::cin>> temp[fajta_db] ;
     delete[] fajta;
     fajta = temp;
     fajta_db++;
@@ -347,35 +340,30 @@ void Bor::fajtakiir() const
 void Bor::removeFajta() {
     this->fajtakiir();
     std::cout << "Melyik fajtat szeretne torolni?" << std::endl;
-    char *fajta_beolvas = hoszusor_olvas();
+    String fajta_beolvas;
+    std::cin>> fajta_beolvas;
     for (size_t i = 0; i < fajta_db; i++) {
-        if (strcmp(this->fajta[i], fajta_beolvas) == 0) {
-            char **temp = new char *[fajta_db-1];
+        if (fajta[i] == fajta_beolvas) {
+            String *temp = new String [fajta_db-1];
             for (size_t j = 0; j < i; j++) {
                 temp[j] = this->fajta[j];
             }
             for (size_t j = i; j < this->fajta_db; j++) {
                 temp[j] = this->fajta[j + 1];
             }
-            delete[] this->fajta[i];
-            delete[] fajta_beolvas;
+
             delete[] this->fajta;
             this->fajta = temp;
             --fajta_db;
             std::cout << "Sikeres torls!" << std::endl;
-            if(fajta_db==0) {
-                delete [] fajta_beolvas;
-                fajta_beolvas=nullptr;
-            }
             return;
         }
     }
     std::cout << "Nincs ilyen fajta!" << std::endl;
-    delete[] fajta_beolvas;
 }
 
 
-char * Bor::getFajtaindex(size_t index) const {
+String Bor::getFajtaindex(size_t index) const {
     if (index >= fajta_db) {
         throw "Tull indexeles";
     }
@@ -438,24 +426,23 @@ void Bor::Set() {
 
 //whiskey
 
-Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus), jeleg(nullptr) {
+Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
     setJeleg_wiskey();
     setErleses();
 }
 
-Wiskey::Wiskey():SzeszesItalok(),jeleg(nullptr) {}
+Wiskey::Wiskey():SzeszesItalok() {}
 
-Wiskey::Wiskey(char *nev,ital_tipus tipus):SzeszesItalok(nev,tipus),jeleg(nullptr) {
+Wiskey::Wiskey(String nev_kap,ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
     setJeleg_wiskey();
     setErleses();
 
 }
 
 Wiskey::~Wiskey() {
-    delete[] jeleg;
 }
 
-char * Wiskey::getJeleg_wiskey() const {
+String Wiskey::getJeleg_wiskey() const {
     return jeleg;
 }
 
@@ -464,13 +451,12 @@ unsigned int Wiskey::getErleses() const {
 }
 
 void Wiskey::setJeleg_wiskey() {
-    delete[] this->jeleg;
     std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    this->jeleg = hoszusor_olvas();
+    jeleg;
+    std::cin >> jeleg;
 }
 
 void Wiskey::setJeleg_wiskey(char * kap) {
-    delete [] this->jeleg;
     jeleg=kap;
 }
 
@@ -520,15 +506,15 @@ void Wiskey::Set() {
 
 //gin
 
-Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus),iz(nullptr) {
+Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
     setSzin();
     setIz();
 }
 
-Gin::Gin() :SzeszesItalok(), iz(nullptr){
+Gin::Gin() :SzeszesItalok(){
 }
 
-Gin::Gin(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus), iz(nullptr) {
+Gin::Gin(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
     setIz();
    setSzin();
 
@@ -574,25 +560,24 @@ void Gin::setSzin(gin_szin kap) {
     szin=kap;
 }
 
-const char *Gin::getIz() const {
+String Gin::getIz() const {
     return iz;
 }
 
 void Gin::setIz() {
-    delete[] this->iz;
     int iz_bevit = 0;
     std::cout << "A ginek van jelgzetes íze pl(levendulas)  1(igen), 0(nem)" << std::endl;
     iz_bevit=int_beolvas();
     if (iz_bevit == 1) {
         std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
-        this->iz = hoszusor_olvas();
+        iz;
+        std::cin >> iz;
     } else {
-        this->iz = nullptr;
+        iz;
     }
 }
 
-void Gin::setIz(char* kap) {
-    delete [] this->iz;
+void Gin::setIz(String kap) {
     iz=kap;
 }
 
@@ -647,7 +632,7 @@ Rum::Rum(ital_tipus tipus) : SzeszesItalok(tipus) {
 Rum::Rum():SzeszesItalok() {
 }
 
-Rum::Rum(char *nev, ital_tipus tipus):SzeszesItalok(nev,tipus) {
+Rum::Rum(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
     setFajta();
 }
 
@@ -811,30 +796,30 @@ void Tequila::Set() {
 }
 
 //sor
-Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss), tipus_sor(nullptr) {
+Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss) {
     setTipus_sor();
 }
 
 Sor::Sor():SzeszesItalok(),tipus_sor(nullptr) {}
 
-Sor::Sor(char *nev, ital_tipus tipus): SzeszesItalok(nev,tipus),tipus_sor(nullptr) {
+Sor::Sor(String nev_kap, ital_tipus tipus): SzeszesItalok(nev_kap,tipus) {
     setTipus_sor();
 }
 
 
 
-char * Sor::getTipus_sor() const{
+String Sor::getTipus_sor() const{
     return tipus_sor;
 }
 
 void Sor::setTipus_sor() {
-    delete[] this->tipus_sor;
     std::cout << "Adja meg a sor tipusat: " << std::endl;
-    this->tipus_sor = hoszusor_olvas();
+    tipus_sor;
+    std::cin >> tipus_sor;
+
 }
 
-void Sor::setTipus_sor(char *kap) {
-    delete[] this->tipus_sor;
+void Sor::setTipus_sor(String kap) {
     tipus_sor=kap;
 }
 
@@ -844,7 +829,7 @@ void Sor::kiir() const {
 }
 
 Sor::~Sor() {
-    delete[] tipus_sor;
+
 }
 
 void Sor::Set() {

@@ -103,4 +103,7 @@ std::istream& operator>>(std::istream& is, String& s0);
 /// @return új String, ami tartalmazza a karaktert és a sztringet egymás után
 inline String operator+(char ch, const String& str) { return String(ch) + str; }
 
+//két sztringet hasonlit oszze hogy megegyeznek e
+bool operator==(const String& lhs, const String& rhs);
+
 #endif
