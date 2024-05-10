@@ -140,7 +140,6 @@ std::ifstream &operator>>(std::ifstream& is, String& s0) {
         if (ch=='<') {
         }
         else if(ch=='>') {
-            is.putback(ch);             // na ezt nem kérjük
             break;
         }
         else  if(isalpha(ch) or isdigit(ch) or ispunct(ch) or isspace(ch)){

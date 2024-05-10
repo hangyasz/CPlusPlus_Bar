@@ -6,6 +6,7 @@
 #include <limits>
 #include "Ital.h"
 #include "koktle.h"
+#include "memtrace.h"
 
 Italok::Italok() :ListaItalok(nullptr), db(0) {}
 
@@ -126,8 +127,10 @@ void Italok::removeItal() {
         return;
     --index;
     if(db-1==0) {
+        delete ListaItalok[0];
         delete [] ListaItalok;
         ListaItalok=nullptr;
+        --db;
         return;
     }
     Ital **tmp = new Ital*[db - 1];
@@ -163,6 +166,7 @@ void Italok::removeItal(Koktlok &k) {
         }
     }
     if(db-1==0) {
+        delete ListaItalok[0];
         delete [] ListaItalok;
         ListaItalok=nullptr;
     }

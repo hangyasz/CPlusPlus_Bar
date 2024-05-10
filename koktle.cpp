@@ -266,6 +266,7 @@ void Koktlok::removeKoktel() {
         return;
     }
     if(koktel_db-1==0){
+        delete this->koktelok[0];
         delete [] this->koktelok;
         koktelok=nullptr;
         koktel_db=0;
@@ -294,6 +295,7 @@ void Koktlok::removeKoktel(size_t index) {
         return;
     }
     if(koktel_db-1==0){
+        delete koktelok[0];
         delete [] this->koktelok;
         koktelok=nullptr;
         koktel_db=0;

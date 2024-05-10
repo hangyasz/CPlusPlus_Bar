@@ -7,7 +7,7 @@
 #include "memtrace.h"
 
 int main() {
-    size_t valasz;
+    /*size_t valasz;
     Italok i;
     i.olvasF();
     Koktlok k;
@@ -33,7 +33,7 @@ int main() {
                 break;
         }
     }while (valasz!=0);
-
-    //oszes_teszt();
+    */
+    oszes_teszt();
     return 0;
 }
