@@ -122,9 +122,6 @@ void Ital:: kiir()  const{
     std::cout << " Fajtaja: " << getTipusNev();
 }
 
-void Ital::setTipus() {
-    tipus=tipus_valszto();
-}
 
 void Ital::setTipus(ital_tipus kap) {
     tipus=kap;
@@ -148,6 +145,7 @@ void Ital::Set() {
             break;
             case 3: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=3);
 }
@@ -172,10 +170,18 @@ float SzeszesItalok::getAlkoholTartalom() const {
 void SzeszesItalok::setAlkoholTartalom() {
     std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
     alkoholTartalom=float_beolvas();
+    while (alkoholTartalom>100 or alkoholTartalom<0) {
+        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
+        alkoholTartalom=float_beolvas();
+    }
 }
 
 void SzeszesItalok::setAlkoholTartalom(float kap) {
     alkoholTartalom=kap;
+    while (alkoholTartalom>100 or alkoholTartalom<0) {
+        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
+        alkoholTartalom=float_beolvas();
+    }
 }
 
 void SzeszesItalok::kiir() const {
@@ -202,6 +208,7 @@ void SzeszesItalok::Set() {
             break;
             case 4: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=4);
 }
@@ -459,17 +466,31 @@ void Wiskey::setJeleg_wiskey() {
     std::cin >> jeleg;
 }
 
-void Wiskey::setJeleg_wiskey(char * kap) {
-    jeleg=kap;
+
+bool alkohol_keszul(unsigned int ido) {
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    if (ido > 100+1900 + ltm->tm_year) {
+        return false;
+    }
+    return true;
+
 }
 
 void Wiskey::setErleses() {
     std::cout << "Adja meg az erleses evet: " << std::endl;
     erleses=unsigned_int_beolvas();
+    while (alkohol_keszul(erleses)) {
+        std::cout << "Hibas evjarat! Adjon meg egy helyes erelssi idot!" << std::endl;
+        erleses=unsigned_int_beolvas();
+    }
 }
 
 void Wiskey::setErleses(unsigned int kap) {
+    if(alkohol_keszul(kap))
     erleses=kap;
+    else
+        setErleses();
 }
 
 void Wiskey::kiir() const {
@@ -503,6 +524,7 @@ void Wiskey::Set() {
                     break;
                 case 6: return;
                 default: std::cout<<"Hibas bemenet!"<<std::endl;
+                break;
             }
         }while (valasz!=6);
     }
@@ -616,6 +638,7 @@ void Gin::Set() {
             break;
             case 6: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=7);
 }
@@ -709,6 +732,7 @@ void Rum::Set() {
             break;
             case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=5);
 }
@@ -793,6 +817,7 @@ void Tequila::Set() {
             break;
             case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=5);
 }
@@ -837,7 +862,7 @@ void Sor::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 5-Sor jeleg, 6-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Sor jeleg, 5-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -855,6 +880,7 @@ void Sor::Set() {
             break;
             case 5: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=5);
 }
@@ -880,7 +906,7 @@ unsigned int Gyumolcsle::getGyumolcsszazalek() const {
 void Gyumolcsle::setGyumolcsszazalek() {
     std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
     gyumolcsszazalek=unsigned_int_beolvas();
-    while (gyumolcsszazalek>100) {
+    while (gyumolcsszazalek>100 or gyumolcsszazalek<0) {
         std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
         gyumolcsszazalek=unsigned_int_beolvas();
     }
@@ -888,7 +914,7 @@ void Gyumolcsle::setGyumolcsszazalek() {
 
 void Gyumolcsle::setGyumolcsszazalek(unsigned int kap) {
     gyumolcsszazalek=kap;
-    while (gyumolcsszazalek>100) {
+    while (gyumolcsszazalek>100 or gyumolcsszazalek<0) {
         std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
         gyumolcsszazalek=unsigned_int_beolvas();
     }
@@ -903,7 +929,7 @@ void Gyumolcsle::Set() {
     size_t valasz;
     do {
         this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-gyumolcsszazalek, 5-viszalepes" << std::endl;
+        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-gyumolcsszazalek, 4-viszalepes" << std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valasz=size_beolvas();
         switch (valasz) {
@@ -918,6 +944,7 @@ void Gyumolcsle::Set() {
             break;
             case 4: return;
             default: std::cout<<"Hibas bemenet!"<<std::endl;
+            break;
         }
     }while (valasz!=4);
 }

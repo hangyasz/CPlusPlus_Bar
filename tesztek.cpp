@@ -12,7 +12,7 @@
 
 //meghivja a tesz fügvényeket
 void oszes_teszt() {
-    test_Ital();
+   test_Ital();
     test_Ital_setnev();
     test_Bor_index_hibba();
     test_Italok_hozadas();
@@ -161,9 +161,10 @@ void test_Italok_modositasa(Italok &i,Koktlok &k) {
     EXPECT_EQ(23,i.getdb())<<"Nem adja vissza a megfelelo erteket";
     i.setItalok(k);
     Ital *b=i.getItalCsilag(14);
-    EXPECT_STREQ("Bor_feher",b->getNev().c_str())<<"Nem adja vissza a megfelelo erteket";
-    //EXPECT_STREQ("hiba_Wiskey"<<"Nem adja vissza a megfelelo nevet";
-
+    EXPECT_STREQ("Bor_feher",b->getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    i.setItalok(k);
 }
+
+
 
 

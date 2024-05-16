@@ -82,7 +82,6 @@ public:
     void setGyarto(String kap);
 
     //beálitja/átálitja az ital tipusát
-    void setTipus();
     void setTipus(ital_tipus kap);
     //kiirja az ital adatait
     virtual void kiir() const;
@@ -208,7 +207,6 @@ public:
 
     //jeleg beálitása
     void setJeleg_wiskey();
-    void setJeleg_wiskey(char * kap);
 
     //ereleses beálitása
     void setErleses();
@@ -410,6 +408,8 @@ std::ostream& operator<<(std::ostream& os, const Ital& ital);
 
 //bor éjrárat elenöriz;
 bool evjarat_teszt(int evjarat);
+// emberiseg enyiideje készit alkoholt
+bool alkohol_keszul(unsigned int ido);
 //italok tipusának választása(bvitele)
 ital_tipus tipus_valszto();
 
