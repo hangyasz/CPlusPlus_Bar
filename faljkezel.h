@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include "koktle.h"
-#include "Ital.h"
+#include "Ital.hpp"
 
 
 //ki írja az italt a fájba

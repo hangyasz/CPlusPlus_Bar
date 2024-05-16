@@ -6,7 +6,7 @@
 #define KOKTLE_H
 
 
-#include  "Ital.h"
+#include  "Ital.hpp"
 #include "faljkezel.h"
 #include <fstream>
 

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(hazzi_lion main.cpp
         Ital.cpp
-        Ital.h
+        Ital.hpp
         koktle.cpp
         koktle.h
         italok_kezel.cpp

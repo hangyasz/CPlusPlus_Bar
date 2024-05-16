@@ -2,7 +2,7 @@
 // Created by Zoli on 2024. 04. 12..
 //
 
-#include "Ital.h"
+#include "Ital.hpp"
 #include <iostream>
 #include <cstring>
 #include "bevitel_kezel.h"
@@ -108,7 +108,7 @@ void Ital::setNev(String kap ) {
 }
 
 void Ital::setGyarto() {
-    std::cout << "Adja meg az ital gyarojat: " << std::endl;
+    std::cout << "Adja meg az ital gyartojat " << std::endl;
     std::cin >> gyarto;
 }
 
@@ -233,7 +233,7 @@ Bor::Bor():SzeszesItalok(), fajta(nullptr),fajta_db(0) {
 
 Bor::Bor(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus), fajta(nullptr),fajta_db(0) {
     setEvjarat();
-    setEvjarat();
+    setSzin();
     std::cout << "Adja meg a fajtak szamat: " << std::endl;
     size_t fajtak=size_beolvas();
     for (size_t i = 0; i < fajtak; i++) {
@@ -283,24 +283,24 @@ void Bor::setEvjarat(int kap) {
 
 void Bor::setSzin() {
     std::cout<< "Adja meg a bor szinet: [1]voros, [2]rose, [3]feher" << std::endl;
-    int szin_be = 0;
-    while (szin_be != 1 && szin_be != 2 && szin_be != 3) {
-        szin_be=int_beolvas();
+    size_t szin_be = size_beolvas();
+    do{
         switch (szin_be) {
             case 1:
                 this->szin = voros;
-                break;
+                return;
             case 2:
                 this->szin = rose;
-                break;
+                return;
             case 3:
                 this->szin = feher;
-                break;
+                return;
             default:
                 std::cout << "nem megfelelo szamot adott meg" << std::endl;
                 break;
         }
     }
+    while (szin_be != 1 && szin_be != 2 && szin_be != 3);
 }
 
 void Bor::setSzin(szinek_bor kap) {
@@ -349,17 +349,16 @@ void Bor::removeFajta() {
                 std::cout << "Sikeres torles!" << std::endl;
                 return;
             }
-            String *temp = new String [fajta_db-1];
+        String * temp = new String [fajta_db - 1];
             for (size_t j = 0; j < i; j++) {
-                temp[j] = this->fajta[j];
+                temp[j] = fajta[j];
             }
-            for (size_t j = i; j < this->fajta_db; j++) {
-                temp[j] = this->fajta[j + 1];
+            for (size_t j = i; j < fajta_db - 1; j++) {
+                temp[j] = fajta[j + 1];
             }
-
-            delete[] this->fajta;
-            this->fajta = temp;
-            --fajta_db;
+            delete[] fajta;
+            fajta = temp;
+            fajta_db--;
             std::cout << "Sikeres torls!" << std::endl;
             return;
         }
@@ -519,8 +518,8 @@ Gin::Gin() :SzeszesItalok(){
 }
 
 Gin::Gin(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
+    setSzin();
     setIz();
-   setSzin();
 
 }
 
@@ -576,7 +575,7 @@ void Gin::setIz() {
         std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
         std::cin >> iz;
     } else {
-        iz;
+        iz="";
     }
 }
 
@@ -817,7 +816,6 @@ String Sor::getTipus_sor() const{
 
 void Sor::setTipus_sor() {
     std::cout << "Adja meg a sor tipusat: " << std::endl;
-    tipus_sor;
     std::cin >> tipus_sor;
 
 }

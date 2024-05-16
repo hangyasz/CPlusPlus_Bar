@@ -5,7 +5,7 @@
 #include "faljkezel.h"
 #include <iostream>
 #include <fstream>
-#include "Ital.h"
+#include "Ital.hpp"
 #include <limits>
 #include "memtrace.h"
 
@@ -144,32 +144,6 @@ void Bor::kiirF(std::ofstream& os) const {
     file.close();
 }
 
-char * szoveg_olvsa(std::ifstream &file) {
-    char *szoveg = nullptr;
-    size_t meret = 0;
-    char karakter;
-    while (file.get(karakter) and karakter!='>') {
-        if (szoveg == nullptr) {
-            szoveg = new char[1];
-            strcpy(szoveg, "");
-        }
-        else {
-            char *temp = new char[meret + 2];
-            strcpy(temp, szoveg);
-            delete []szoveg;
-            temp[meret++] = karakter;
-            temp[meret] = '\0';
-            szoveg = temp;
-        }
-    }
-    if (strcmp(szoveg,"")==0) {
-        delete []szoveg;
-        szoveg=nullptr;
-    }
-    return szoveg;
-}
-
-
 int szam_olvas(std::ifstream &file) {
     char kacsacsor;
     int szam;
@@ -231,15 +205,23 @@ Bor::Bor(std::ifstream &file):SzeszesItalok(file),fajta(nullptr) {
     this->setEvjarat(szam_olvas(file));
     if(!evjarat_teszt(this->getEvjarat())) {
         std::cout<<"Hibás évjárat: "<<std::endl;
+        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<getSzinNev()<<std::endl;
         this->setEvjarat();
     }
     this->setSzin(szam_olvas(file));
     this->setFajta_db(size_olvas(file));
-    String *fajatk=new String[this->getFajta_db()];
-    for(size_t i=0;i<this->getFajta_db();i++){
-        file>>fajatk[i];
+    if(fajta_db!=0) {
+        String *fajatk=new String[this->getFajta_db()];
+        for(size_t i=0;i<this->getFajta_db();i++){
+            file>>fajatk[i];
+        }
+        this->setFajta_string(fajatk);
     }
-    this->setFajta_string(fajatk);
+    else {
+        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+
 }
 
 Wiskey::Wiskey(std::ifstream &file):SzeszesItalok(file) {

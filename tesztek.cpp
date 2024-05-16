@@ -3,7 +3,7 @@
 //
 
 #include "tesztek.h"
-#include "Ital.h"
+#include "Ital.hpp"
 #include "koktle.h"
 #include "gtest_lite.h"
 #include <iostream>
@@ -20,8 +20,10 @@ void oszes_teszt() {
     test_Koktel_hozzaadas();
     test_Koktel_torles();
     test_Koktel_osszetevok_hozzaadasa();
+    test_Koktel_osszetevok_torlese();
     Italok* i= test_Italok_beolvasas();
     Koktlok *k=test_Koktelok_beolvasas(i);
+    test_Italok_modositasa(*i,*k);
     delete k;
     delete i;
 }
@@ -107,7 +109,7 @@ void test_Koktel_osszetevok_torlese() {
     koktlok.addKoktel(i);
     Koktle *koktle= koktlok.getKoktel_csilag(0);
     koktle->removeAlapanyag();
-    EXPECT_EQ(false, koktle->tartalmaz_e(i.getItalCsilag(1)))<<"nem sikerult a torles";
+    EXPECT_EQ(false, koktle->tartalmaz_e(i.getItalCsilag(0)))<<"nem sikerult a torles";
 }
 
 
@@ -115,7 +117,7 @@ void test_Koktel_osszetevok_torlese() {
 Italok* test_Italok_beolvasas() {
     Italok *i=new  Italok();
     i->olvasF();
-    EXPECT_EQ(5,i->getdb())<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_EQ(4,i->getdb())<<"Nem adja vissza a megfelelo erteket";
     EXPECT_EQ(2,i->getItal(0).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
     EXPECT_STREQ("Nev",i->getItal(0).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("Gyarto",i->getItal(0).getGyarto().c_str())<<"Nem adja vissza a megfelelo gyartot";
@@ -130,17 +132,38 @@ Italok* test_Italok_beolvasas() {
 Koktlok *test_Koktelok_beolvasas(Italok *i) {
     Koktlok *k=new Koktlok();
     k->olvasF(*i);
-    EXPECT_EQ(3,k->getKoktelDb())<<"Nem adja vissza a megfelelo erteket";
+    EXPECT_EQ(12,k->getKoktelDb())<<"Nem adja vissza a megfelelo erteket";
     EXPECT_STREQ("Kedvenc",k->getKoktel(0).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
-    EXPECT_STREQ("Test_1",k->getKoktel(1).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
-    EXPECT_STREQ("Test_2",k->getKoktel(2).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Test_0",k->getKoktel(1).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Test_1",k->getKoktel(2).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_EQ(2,i->getItal(4).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
     Italok i2;
     i2.olvasF();
-    EXPECT_EQ(5,i->getdb())<<"Nem adja vissza a megfelelo erteket";
-    EXPECT_STREQ("hibaa",i->getItal(4).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_EQ(i->getdb(),i2.getdb())<<"Nem adja vissza a megfelelo erteket a falj es a tarolt ertek";
+    EXPECT_STREQ("hiba_Wiskey",i->getItal(4).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("Iker",i->getItal(4).getGyarto().c_str())<<"Nem adja vissza a megfelelo gyartot";
+    EXPECT_STREQ("hiba_bor",i->getItal(5).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_gin",i->getItal(6).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_rum",i->getItal(7).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_tequila",i->getItal(8).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_sor",i->getItal(9).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_gyumolcsle",i->getItal(10).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_alkohols",i->getItal(11).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hiba_alkohol_mentes",i->getItal(12).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("hibbas_tipus",i->getItal(13).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_EQ(alkohol_mentes,i->getItal(13).getTipus())<<"Nem adja vissza a megfelelo nevet";
     return k;
+}
+
+
+void test_Italok_modositasa(Italok &i,Koktlok &k) {
+    i.setItalok(k);
+    EXPECT_EQ(23,i.getdb())<<"Nem adja vissza a megfelelo erteket";
+    i.setItalok(k);
+    Ital *b=i.getItalCsilag(14);
+    EXPECT_STREQ("Bor_feher",b->getNev().c_str())<<"Nem adja vissza a megfelelo erteket";
+    //EXPECT_STREQ("hiba_Wiskey"<<"Nem adja vissza a megfelelo nevet";
+
 }
 
 

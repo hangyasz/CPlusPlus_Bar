@@ -14,34 +14,6 @@ void bufer_torles() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-char* hoszusor_olvas() {
-    size_t capacity = 25;  // Kezdeti kapacitás
-    char* s = new char[capacity];
-    size_t length = 0;  // A tömb jelenlegi hossza
-    std::cin.clear();
-    char c;
-    std::cin.get(c);
-    if(c!='\n'){
-        s[length++]=c;
-    }
-    while (std::cin.get(c) && c != '\n') {
-        if (length + 1 == capacity) {  // Ha betelt a tömb
-            capacity *= 2;  // Duplázzuk a kapacitást
-            char* temp = new char[capacity];
-            strcpy(temp,s); // Másoljuk az eddigi karaktereket
-            delete[] s;
-            s = temp;
-        }
-        s[length++] = c;
-    }
-    if(length==0){
-        delete[] s;
-        return nullptr;
-    }
-    s[length] = '\0';  // Lezárjuk a stringet
-    return s;
-}
-
 
 int int_beolvas() {
     int olvas;

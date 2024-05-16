@@ -391,6 +391,7 @@ public:
     ~Italok(); //destruktor
     Italok(const Italok &italok); //másoló konstruktor
     Italok &operator=(const Italok &italok); //másoló értékadás
+    bool tartaalmaz(String nev, ital_tipus tipus); //tartalmazza az adot nevü és tipusú italt
     void addItal(); //ital hozzá adása
     void addItal(Ital* kap); //ital hozzá adása
     void addItal(String nev, ital_tipus tipus); //ital hozzá adása

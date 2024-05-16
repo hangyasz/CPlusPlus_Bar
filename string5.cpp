@@ -19,15 +19,17 @@
 using std::cin;
 using std::ios_base;
 
+
+
 /// Konstruktor: egy char karakterből (createStrFromChar)
 String::String(char ch) {
-   // Meghatározzuk a hosszát
-    len = 1;
-    // Lefoglalunk a helyet a hossznak + a lezaró nullának
-    pData = new char[len+1];
-    // Betesszük a karaktert
-    pData[0] = ch;
-    pData[1] = '\0';
+        // Meghatározzuk a hosszát
+        len = 1;
+        // Lefoglalunk a helyet a hossznak + a lezaró nullának
+        pData = new char[len+1];
+        // Betesszük a karaktert
+        pData[0] = ch;
+        pData[1] = '\0';
 }
 
 

@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "koktle.h"
-#include "Ital.h"
+#include "Ital.hpp"
 #include "memtrace.h"
 
 //konstruktor ami beállítja a koktel
@@ -67,7 +67,7 @@ void Koktle::removeAlapanyag() {
     kiir();
     std::cout<<"torolni kivant Alapanyag index: ";
     size_t index=size_beolvas();
-    while (index>=this->alapanyag_db){
+    while (index>this->alapanyag_db){
         std::cout<<"Hibas index!"<<std::endl;
         kiir();
         std::cout<<"torolni kivant Alapanyag index: ";

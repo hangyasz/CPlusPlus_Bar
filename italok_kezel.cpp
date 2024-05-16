@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <limits>
-#include "Ital.h"
+#include "Ital.hpp"
 #include "koktle.h"
 #include "memtrace.h"
 
@@ -37,6 +37,15 @@ Italok &Italok:: operator=(const Italok &italok) {
     return *this;
 }
 
+bool Italok::tartaalmaz(String nev, ital_tipus tipus) {
+    for(size_t i=0;i<db;i++){
+        if(ListaItalok[i]->getNev()==nev && ListaItalok[i]->getTipus()==tipus)
+            return true;
+    }
+    return false;
+}
+
+
 void Italok::addItal() {
     Ital **uj=new Ital*[db+1];
     for(size_t i=0;i<db;i++){
@@ -61,38 +70,41 @@ void Italok::addItal(Ital *kap) {
 
 
 void Italok::addItal(String nev, ital_tipus tipus) {
-    switch(tipus) {
-        case bor:
-            this->addItal(new Bor(nev,bor));
+    if(!tartaalmaz(nev,tipus)) {
+        switch(tipus) {
+            case bor:
+                this->addItal(new Bor(nev,bor));
             break;
-        case whiskey:
-            this->addItal(new Wiskey(nev,whiskey));
+            case whiskey:
+                this->addItal(new Wiskey(nev,whiskey));
             break;
-        case gin:
-            this->addItal(new Gin(nev,gin));
+            case gin:
+                this->addItal(new Gin(nev,gin));
             break;
-        case rum:
-            this->addItal(new Rum(nev,rum));
+            case rum:
+                this->addItal(new Rum(nev,rum));
             break;
-        case tequila:
-            this->addItal(new Tequila(nev,tequila));
+            case tequila:
+                this->addItal(new Tequila(nev,tequila));
             break;
-        case sor:
-            this->addItal(new Sor(nev,sor));
+            case sor:
+                this->addItal(new Sor(nev,sor));
             break;
-        case gyumolcsle:
-            this->addItal(new Gyumolcsle(nev,gyumolcsle));
+            case gyumolcsle:
+                this->addItal(new Gyumolcsle(nev,gyumolcsle));
             break;
-        case alkohols:
-            this->addItal(new SzeszesItalok(nev,alkohols));
+            case alkohols:
+                this->addItal(new SzeszesItalok(nev,alkohols));
             break;
-        case alkohol_mentes:
-            this->addItal(new  Ital(nev,alkohol_mentes));
+            case alkohol_mentes:
+                this->addItal(new  Ital(nev,alkohol_mentes));
             break;
-        default:
-            std::cout << "Hibás típus! Nem létezik ilyen jeleg kerem vigye fel" << std::endl;
+            default:
+                std::cout << "Hibás típus! Nem létezik ilyen jeleg kerem vigye fel" << std::endl;
             this->addItal();
-        break;
+            break;
+        }
+        kiirF();
     }
 }
 
