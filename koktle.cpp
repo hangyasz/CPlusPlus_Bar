@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "koktle.h"
-#include "Ital.hpp"
+#include "Ital.h"
 #include "memtrace.h"
 
 //konstruktor ami beállítja a koktel
@@ -64,11 +64,15 @@ void Koktle::addAlapanyag(Italok &italok) {
 }
 
 void Koktle::removeAlapanyag() {
+    if(alapanyag_db==0) {
+        std::cout<<"a koktelnak nincsen alapnyagai!"<<std::endl;
+        return;
+    }
     kiir();
-    std::cout<<"torolni kivant Alapanyag index: ";
+    std::cout<<"\nTorolni kivant Alapanyag index: ";
     size_t index=size_beolvas();
-    while (index>this->alapanyag_db){
-        std::cout<<"Hibas index!"<<std::endl;
+    while (index>alapanyag_db){
+        std::cout<<"Hibas index!\n";
         kiir();
         std::cout<<"torolni kivant Alapanyag index: ";
         index=size_beolvas();
@@ -164,7 +168,7 @@ String Koktle::getNev() const {
 void Koktle::Set(Italok &italok) {
     size_t valaszto;
     do{
-        std::cout<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - szoveg_olvsa modositasa\n4 - viszalepes"<<std::endl;
+        std::cout<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - Nev modositasa\n4 - viszalepes"<<std::endl;
         std::cout<<"\nAdja meg az utasitas szamat: ";
         valaszto=size_beolvas();
         switch (valaszto) {
@@ -251,6 +255,10 @@ void Koktlok::addKoktel(Italok &italok) {
 }
 
 void Koktlok::removeKoktel() {
+    if(koktel_db==0) {
+        std::cout<<"Nincsen koktelok"<<std::endl;
+        return;
+    }
     this->kiir_index();
     std::cout<<"Torolni kivant koktel index: ";
     size_t index = size_beolvas();

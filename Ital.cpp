@@ -2,20 +2,22 @@
 // Created by Zoli on 2024. 04. 12..
 //
 
-#include "Ital.hpp"
+#include "Ital.h"
 #include <iostream>
 #include <cstring>
-#include "bevitel_kezel.h"
+#include "bevitel_kezel.hpp"
 #include <limits>
 #include <ctime>
 #include "memtrace.h"
 
+
+//ital tipusok kivalasztasa és viszadasa
 ital_tipus tipus_valszto() {
     int tipus;
     do{
         std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
-        tipus=int_beolvas();
-        switch(tipus) {
+        tipus=int_beolvas(); //szam beolvasasa
+        switch(tipus) { //a szam ertékének megfelelo tipus visszaadasa
             case 1:
                 return  bor;
             case 2:
@@ -38,13 +40,13 @@ ital_tipus tipus_valszto() {
                 std::cout << "Hibas tipus valaztas!" << std::endl;
                 break;
         }
-    } while(tipus<1 || tipus>9);
-    return alkohol_mentes;
+    } while(tipus<1 || tipus>9); //ha a tipus nem megfelelo akkor ujra kezfjuk a beolvasast
+    return alkohol_mentes; //ha nem sikerult a beolvasas akkor alapertelmezett tipus
 
 }
 
 
-
+//a tipusok neveinek visszaadasa char* kent
 const char* get_tipus_nev_str(ital_tipus tipus){
 switch (tipus) {
     case alkohols: return "alkohols";
@@ -56,70 +58,74 @@ switch (tipus) {
     case tequila: return "tequila";
     case sor: return "sor";
     case gyumolcsle: return "gyumolcsle";
-    default: return "ismeretlen";
+    default: return "ismeretlen"; //ha nem egyezik semire akkor ismeretlen
 }
 }
 
-
-Ital::Ital(ital_tipus tipus):tipus(tipus){
-    setNev();
-    setGyarto();
+//Italok Konstruktorok a mi az itall tipusat kapja parameter kent
+Ital::Ital(ital_tipus tipus):tipus(tipus){ //a tipust inicializalolistan alitjuk be
+    setNev(); //a nevet bealito fuggveny
+    setGyarto(); //a gyartot bealito fuggveny
 }
 
-Ital::Ital(){}
+Ital::Ital(){} //alap konstruktor semit nem álit be
 
-Ital::Ital(String nev_kap, ital_tipus tipus): tipus(tipus){
-    this->nev=nev_kap;
-    setGyarto();
+//konstruktor nevvel es tipussal kap
+Ital::Ital(String nev_kap, ital_tipus tipus): tipus(tipus){  //a tipust inicializalolistan alitjuk be
+    nev=nev_kap; //a nev legyen egynlo a kapot nevvel
+    setGyarto(); //a gyartot bealito fuggveny
 }
 
-Ital::~Ital() {
+Ital::~Ital() {}//destruktor semit nem csinal
 
-}
-
+//getter a nevhez
 String Ital::getNev() const
 {
     return nev;
 }
 
+//getter a gyartohoz
 String Ital::getGyarto() const {
     return gyarto;
 }
 
+//getter a tipushoz
 ital_tipus Ital::getTipus() const {
     return tipus;
 }
 
-const char*  Ital::getTipusNev(ital_tipus tipus_kap) const {
-    return  get_tipus_nev_str(tipus_kap);
-}
-
+//getter a tipus nevehez char* ként
 const char*  Ital::getTipusNev() const {
     return get_tipus_nev_str(tipus);
 }
 
+//setter a nevhez
 void Ital::setNev() {
     std::cout << "Adja meg az ital nevet: " << std::endl;
-    std::cin >> nev;
+    std::cin >> nev; //a nevet beolvasuk az inputrol
 }
 
+//setter a nevhez ami kap egy stringet
 void Ital::setNev(String kap ) {
-    nev=kap;
+    nev=kap; //a nevet beallitjuk a kapott stringre
 }
 
+//setter a gyartohoz
 void Ital::setGyarto() {
     std::cout << "Adja meg az ital gyartojat " << std::endl;
-    std::cin >> gyarto;
+    std::cin >> gyarto; //a gyartot beolvasuk az inputrol
 }
 
+//setter a gyartohoz ami kap egy stringet
 void Ital::setGyarto(String kap) {
-    gyarto=kap;
+    gyarto=kap; //a gyartot beallitjuk a kapott stringre
 }
 
+//kiirja az ital adatait
 void Ital:: kiir()  const{
-    std::cout << "Nev: " << nev;
-    std::cout << " Gyarto: " << gyarto;
-    std::cout << " Fajtaja: " << getTipusNev();
+    std::cout << "Nev: " << nev; //kiirja a nevet
+    std::cout << " Gyarto: " << gyarto; //kiirja a gyartot
+    std::cout << " Fajtaja: " << getTipusNev(); //és a tipusat stringkent
 }
 
 
@@ -470,7 +476,7 @@ void Wiskey::setJeleg_wiskey() {
 bool alkohol_keszul(unsigned int ido) {
     time_t now = time(0);
     tm *ltm = localtime(&now);
-    if (ido > 100+1900 + ltm->tm_year) {
+    if (ido > 100+1900 + static_cast<unsigned int> (ltm->tm_year)) {
         return false;
     }
     return true;
@@ -480,7 +486,7 @@ bool alkohol_keszul(unsigned int ido) {
 void Wiskey::setErleses() {
     std::cout << "Adja meg az erleses evet: " << std::endl;
     erleses=unsigned_int_beolvas();
-    while (alkohol_keszul(erleses)) {
+    while (!alkohol_keszul(erleses)) {
         std::cout << "Hibas evjarat! Adjon meg egy helyes erelssi idot!" << std::endl;
         erleses=unsigned_int_beolvas();
     }

@@ -172,7 +172,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "Ital.hpp",
+			"path" : "Ital.h",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -211,7 +211,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "bevitel_kezel.h",
+			"path" : "bevitel_kezel.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{

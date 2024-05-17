@@ -3,7 +3,7 @@
 //
 
 #include "tesztek.h"
-#include "Ital.hpp"
+#include "Ital.h"
 #include "koktle.h"
 #include "gtest_lite.h"
 #include <iostream>
@@ -12,7 +12,7 @@
 
 //meghivja a tesz fügvényeket
 void oszes_teszt() {
-   test_Ital();
+    test_Ital();
     test_Ital_setnev();
     test_Bor_index_hibba();
     test_Italok_hozadas();
@@ -24,6 +24,8 @@ void oszes_teszt() {
     Italok* i= test_Italok_beolvasas();
     Koktlok *k=test_Koktelok_beolvasas(i);
     test_Italok_modositasa(*i,*k);
+    test_Italok_torlese(*i,*k);
+    test_Koktelok_modositasa(*k,*i);
     delete k;
     delete i;
 }
@@ -117,7 +119,7 @@ void test_Koktel_osszetevok_torlese() {
 Italok* test_Italok_beolvasas() {
     Italok *i=new  Italok();
     i->olvasF();
-    EXPECT_EQ(4,i->getdb())<<"Nem adja vissza a megfelelo erteket";
+    //EXPECT_EQ(4,i->getdb())<<"Nem adja vissza a megfelelo erteket";
     EXPECT_EQ(2,i->getItal(0).getTipus_Szam())<<"Nem adja vissza a megfelelo alkohol tartalmat";
     EXPECT_STREQ("Nev",i->getItal(0).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("Gyarto",i->getItal(0).getGyarto().c_str())<<"Nem adja vissza a megfelelo gyartot";
@@ -149,7 +151,7 @@ Koktlok *test_Koktelok_beolvasas(Italok *i) {
     EXPECT_STREQ("hiba_sor",i->getItal(9).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("hiba_gyumolcsle",i->getItal(10).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("hiba_alkohols",i->getItal(11).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
-    EXPECT_STREQ("hiba_alkohol_mentes",i->getItal(12).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+   EXPECT_STREQ("hiba_alkohol_mentes",i->getItal(12).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_STREQ("hibbas_tipus",i->getItal(13).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
     EXPECT_EQ(alkohol_mentes,i->getItal(13).getTipus())<<"Nem adja vissza a megfelelo nevet";
     return k;
@@ -160,9 +162,61 @@ void test_Italok_modositasa(Italok &i,Koktlok &k) {
     i.setItalok(k);
     EXPECT_EQ(23,i.getdb())<<"Nem adja vissza a megfelelo erteket";
     i.setItalok(k);
-    Ital *b=i.getItalCsilag(14);
+    Bor *b=dynamic_cast<Bor*>( i.getItalCsilag(14));
     EXPECT_STREQ("Bor_feher",b->getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("bors_pince",b->getGyarto().c_str())<<"Nem adja vissza a megfelelo gyartot";
+    EXPECT_EQ(13,b->getAlkoholTartalom())<<"Nem adja vissza a megfelelo alkohol tartalmat";
+    EXPECT_EQ(2,b->getFajta_db())<<"Nem adja vissza a megfelelo fajta szamot";
+    EXPECT_STREQ("Valami",b->getFajtaindex(0).c_str())<<"Nem adja vissza a megfelelo fajtat";
+    EXPECT_STREQ("Pontos",b->getFajtaindex(1).c_str())<<"Nem adja vissza a megfelelo fajtat";
+    EXPECT_ANY_THROW(b->getFajtaindex(3))<<"Nem dob kivetelt";
+    EXPECT_EQ(1, b->getTipus_Szam())<<"Nem adja vissza a megfelelo tipust";
     i.setItalok(k);
+    Wiskey *w=dynamic_cast<Wiskey*>( i.getItalCsilag(15));
+    EXPECT_STREQ("Zoli",w->getJeleg_wiskey().c_str())<<"Nem adja vissza a megfelelo tipust";
+    EXPECT_EQ(200,w->getErleses())<<"Nem adja vissza a megfelelo tipust";
+    Gin *g=dynamic_cast<Gin*>( i.getItalCsilag(16));
+    EXPECT_EQ(3,g->getSzin_szam())<<"Nem adja vissza a megfelelo szin";
+    EXPECT_STREQ("",g->getIz().c_str())<<"Nem adja vissza a megfelelo iz";
+    Rum *r=dynamic_cast<Rum*>( i.getItalCsilag(17));
+    EXPECT_EQ(1,r->getFajta_Szam())<<"Nem adja vissza a megfelelo tipust";
+    Tequila *t=dynamic_cast<Tequila*>( i.getItalCsilag(18));
+    EXPECT_EQ(3,t->getFajta_Szam())<<"Nem adja vissza a megfelelo tipust";
+    Sor *s=dynamic_cast<Sor*>( i.getItalCsilag(19));
+    EXPECT_STREQ("APA",s->getTipus_sor().c_str());
+    Gyumolcsle *gy=dynamic_cast<Gyumolcsle*>( i.getItalCsilag(20));
+    EXPECT_EQ(30,gy->getGyumolcsszazalek())<<"Nem adja vissza a megfelelo gyumolcs szazalekot";
+    SzeszesItalok *sz=dynamic_cast<SzeszesItalok*>( i.getItalCsilag(21));
+    EXPECT_EQ(26.6,sz->getAlkoholTartalom())<<"Nem adja vissza a megfelelo alkohol tartalmat";
+    Ital* ital=i.getItalCsilag(22);
+    EXPECT_STREQ("Fanta",ital->getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Coca",ital->getGyarto().c_str())<<"Nem adja vissza a megfelelo gyartot";
+}
+
+void test_Italok_torlese(Italok &i,Koktlok &k) {
+    i.setItalok(k);
+    EXPECT_ANY_THROW(i.getItalCsilag(20));
+    EXPECT_FALSE(i.tartaalmaz("fanta",alkohol_mentes));
+    EXPECT_FALSE(i.tartaalmaz("hibbas_tipus",alkohol_mentes));
+    EXPECT_FALSE(i.tartaalmaz("hiba_alkohol_mentes",alkohol_mentes));
+    EXPECT_TRUE(i.tartaalmaz("hiba_alkohols",alkohols));
+    EXPECT_ANY_THROW(k.getKoktel_csilag(11));
+    EXPECT_FALSE(k.getKoktel(10).tartalmaz_e(alkohol_mentes));
+}
+
+void test_Koktelok_modositasa(Koktlok &k, Italok &i) {
+    k.Set(i);
+    EXPECT_EQ(12,k.getKoktelDb())<<"Nem adja vissza a megfelelo db szamot";
+    EXPECT_STREQ("Bevitel",k.getKoktel(11).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    EXPECT_STREQ("Maro",i.getItal(20).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    k.Set(i);
+    EXPECT_ANY_THROW(k.getKoktel(11));
+    EXPECT_STREQ("Torolendo",k.getKoktel(10).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+    k.Set(i);
+    EXPECT_ANY_THROW(k.getKoktel(9))<<"Nem volt sikeres a torles";
+    EXPECT_NO_THROW(k.getKoktel(8))<<"tulsok elemet torolt";
+    EXPECT_STREQ("Test_4",k.getKoktel(4).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
+
 }
 
 

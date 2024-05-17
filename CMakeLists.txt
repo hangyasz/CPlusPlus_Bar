@@ -6,14 +6,14 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(hazzi_lion main.cpp
         Ital.cpp
-        Ital.hpp
+        Ital.h
         koktle.cpp
         koktle.h
         italok_kezel.cpp
         memtrace.h
         memtrace.cpp
         bevitel_kezel.cpp
-        bevitel_kezel.h
+        bevitel_kezel.hpp
         faljkezel.cpp
         faljkezel.h
         tesztek.cpp

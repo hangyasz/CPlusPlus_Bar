@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Ital.hpp"
+#include "Ital.h"
 #include "faljkezel.h"
 #include "koktle.h"
 #include "tesztek.h"

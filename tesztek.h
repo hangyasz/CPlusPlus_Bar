@@ -5,7 +5,7 @@
 #ifndef TESZTEK_H
 #define TESZTEK_H
 
-#include "Ital.hpp"
+#include "Ital.h"
 #include "koktle.h"
 #include "memtrace.h"
 #include <iostream>
@@ -47,5 +47,11 @@ Koktlok* test_Koktelok_beolvasas(Italok* i);
 
 //Italok Modositasa
 void test_Italok_modositasa(Italok &i,Koktlok &k);
+
+//Italok torlese
+void test_Italok_torlese(Italok &i,Koktlok &k);
+
+//Koktelok modositasa
+void test_Koktelok_modositasa(Koktlok &k,Italok &i);
 
 #endif //TESZTEK_H

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <limits>
-#include "Ital.hpp"
+#include "Ital.h"
 #include "koktle.h"
 #include "memtrace.h"
 
@@ -17,29 +17,10 @@ Italok::~Italok() {
     delete [] ListaItalok;
 }
 
-Italok::Italok(const Italok &italok) {
-    db= italok.db;
-    ListaItalok = new Ital*[db];
-    for(size_t i=0;i<db;i++){
-        ListaItalok[i]=italok.ListaItalok[i];
-    }
-}
-
-Italok &Italok:: operator=(const Italok &italok) {
-    if(this!=&italok){
-        db=italok.db;
-        delete [] ListaItalok;
-        ListaItalok = new Ital*[db];
-        for(size_t i=0;i<db;i++){
-            ListaItalok[i]=italok.ListaItalok[i];
-        }
-    }
-    return *this;
-}
 
 bool Italok::tartaalmaz(String nev, ital_tipus tipus) {
     for(size_t i=0;i<db;i++){
-        if(ListaItalok[i]->getNev()==nev && ListaItalok[i]->getTipus()==tipus)
+        if(ListaItalok[i]->getTipus()==tipus and ListaItalok[i]->getNev()==nev )
             return true;
     }
     return false;
@@ -100,7 +81,7 @@ void Italok::addItal(String nev, ital_tipus tipus) {
                 this->addItal(new  Ital(nev,alkohol_mentes));
             break;
             default:
-                std::cout << "Hibás típus! Nem létezik ilyen jeleg kerem vigye fel" << std::endl;
+                std::cerr << "Hibás típus!\n a program ezt a tipust nem egeszen tudja kezelni vegye fel a kapcsolatot a fejlesztokel\n addig meg tegyuk el egy hasonlo csoportva" << std::endl;
             this->addItal();
             break;
         }

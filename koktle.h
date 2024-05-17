@@ -6,7 +6,7 @@
 #define KOKTLE_H
 
 
-#include  "Ital.hpp"
+#include  "Ital.h"
 #include "faljkezel.h"
 #include <fstream>
 
@@ -86,8 +86,7 @@ public:
 };
 
 
+//ki írja a koktelt a fájba
 std::ofstream& operator<<(std::ofstream& os,const Koktle &koktel);
-
-
 
 #endif //KOKTLE_H
