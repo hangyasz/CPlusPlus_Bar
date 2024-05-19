@@ -138,6 +138,9 @@ std::ifstream &operator>>(std::ifstream& is, String& s0) {
     std::ios_base::fmtflags fl = is.flags(); // eltesszük a régi flag-eket
     is.setf(ios_base::skipws);			// az elején eldobjuk a ws-t
     while (is >> ch) {
+        if (ch=='\n' or is.eof()) {
+            throw "hiba: nincs lezaro > a fajlban!";
+        }
         is.unsetf(ios_base::skipws);	// utána pedig már nem
         if (ch=='<') {
         }

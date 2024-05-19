@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 project(hazzi_lion)
-add_compile_options(-Wall -Wextra -pedantic)
+add_compile_options(-Wall -Wextra -Werror -pedantic)
 add_compile_definitions(MEMTRACE)
 set(CMAKE_CXX_STANDARD 11)
 
@@ -13,7 +13,7 @@ add_executable(hazzi_lion main.cpp
         memtrace.h
         memtrace.cpp
         bevitel_kezel.cpp
-        bevitel_kezel.hpp
+        bevitel_kezel.h
         faljkezel.cpp
         faljkezel.h
         tesztek.cpp
@@ -21,4 +21,6 @@ add_executable(hazzi_lion main.cpp
         gtest_lite.h
         string5.h
         string5.cpp
+        fugvenyek.hpp
+        fugvenyek.cpp
 )

@@ -6,177 +6,118 @@
 #include <limits>
 #include "Ital.h"
 #include "koktle.h"
+#include "fugvenyek.hpp"
 #include "memtrace.h"
 
-Italok::Italok() :ListaItalok(nullptr), db(0) {}
+//Italok osztaly parameter nelkuli konstruktora
+Italok::Italok() :ListaItalok(nullptr), db(0) {} //inicilitálo listan ListaItalok nullpointerre állítása és db 0-ra állítása
 
+//Italok osztaly destruktor
 Italok::~Italok() {
     for (size_t i = 0; i < db; i++) {
-        delete ListaItalok[i];
+        delete ListaItalok[i];  //minden tarolt ittal torlese
     }
-    delete [] ListaItalok;
+    delete [] ListaItalok; //lista torlese
 }
 
 
-bool Italok::tartaalmaz(String nev, ital_tipus tipus) {
-    for(size_t i=0;i<db;i++){
+//megmindja hogy az adott ital tipus szerepel e a listaban
+bool Italok::tartaalmaz(String nev, size_t tipus) const {
+    for(size_t i=0;i<db;i++){ //vegig megy a listan
         if(ListaItalok[i]->getTipus()==tipus and ListaItalok[i]->getNev()==nev )
-            return true;
+            return true; //ha megtalalja az adott italt akkor igazt add visza
     }
-    return false;
+    return false; //kulonben hamisat
 }
 
 
-void Italok::addItal() {
-    Ital **uj=new Ital*[db+1];
-    for(size_t i=0;i<db;i++){
-        uj[i]=ListaItalok[i];
-    }
-    uj[db]=italok_bevitel();
-    delete [] ListaItalok;
-    ListaItalok=uj;
-    db++;
+//Uj ittal hozzadas
+void Italok::addItal(std::ostream &os, std::istream &is) {
+    Ital **uj=new Ital*[db+1]; // egyel nagyobb tomb foglalas
+    //atmasoljuk az adatokat;
+    din_atmasol(uj,ListaItalok,db);
+    typedef Ital* (*CreateItalFunction)(size_t tipus,std::ostream &, std::istream &); //letrehozunk egy pointert ami egy fuggvenyt mutat
+    //letrehozunk egy tombot ami a fuggvenyeket tartalmazza
+    CreateItalFunction createItalFunction[]={italok_bevitel<Bor>,italok_bevitel<Wiskey>,italok_bevitel<Gin>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Gyumolcsle>,italok_bevitel<SzeszesItalok>,italok_bevitel<Ital>};
+    size_t tipus=tipus_valszto(os,is); //ital tipus valasztasa
+    uj[db]=createItalFunction[tipus-1](tipus,os,is); //uj ital hozzaadasa
+    delete [] ListaItalok; //regi tomb törlése
+    ListaItalok=uj;     //tomb legyen az uj tobb
+    db++;   //db növelése
 }
 
+//a kapot italt beleteszi a tombe
 void Italok::addItal(Ital *kap) {
-    Ital **uj=new Ital*[db+1];
-    for(size_t i=0;i<db;i++){
-        uj[i]=ListaItalok[i];
-    }
-    uj[db]=kap;
-    delete [] ListaItalok;
-    ListaItalok=uj;
+    Ital **uj=new Ital*[db+1]; //uj tomb foglalas
+    //adatok atmasolas
+    din_atmasol(uj,ListaItalok,db);
+    uj[db]=kap; //az uj tomb utols eleme legyen a kap ittal
+    delete [] ListaItalok; //toroljuk a tombot
+    ListaItalok=uj;     //a tomb legyen egynlő az uj tombel
     db++;
 }
 
-
-void Italok::addItal(String nev, ital_tipus tipus) {
+//uj italt adunk a listához aminek  már tudjuk a nevét és a tipusat
+void Italok::addItal(String nev, size_t tipus, std::ostream &os, std::istream &is) {
     if(!tartaalmaz(nev,tipus)) {
-        switch(tipus) {
-            case bor:
-                this->addItal(new Bor(nev,bor));
-            break;
-            case whiskey:
-                this->addItal(new Wiskey(nev,whiskey));
-            break;
-            case gin:
-                this->addItal(new Gin(nev,gin));
-            break;
-            case rum:
-                this->addItal(new Rum(nev,rum));
-            break;
-            case tequila:
-                this->addItal(new Tequila(nev,tequila));
-            break;
-            case sor:
-                this->addItal(new Sor(nev,sor));
-            break;
-            case gyumolcsle:
-                this->addItal(new Gyumolcsle(nev,gyumolcsle));
-            break;
-            case alkohols:
-                this->addItal(new SzeszesItalok(nev,alkohols));
-            break;
-            case alkohol_mentes:
-                this->addItal(new  Ital(nev,alkohol_mentes));
-            break;
-            default:
-                std::cerr << "Hibás típus!\n a program ezt a tipust nem egeszen tudja kezelni vegye fel a kapcsolatot a fejlesztokel\n addig meg tegyuk el egy hasonlo csoportva" << std::endl;
-            this->addItal();
-            break;
-        }
-        kiirF();
+        typedef Ital* (*CreateItalFunction)(String, size_t, std::ostream &, std::istream &);
+        CreateItalFunction createItalFunction[]={italok_bevitel<Bor>,italok_bevitel<Wiskey>,italok_bevitel<Gin>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Gyumolcsle>,italok_bevitel<SzeszesItalok>,italok_bevitel<Ital>};
+        addItal(createItalFunction[tipus-1](nev,tipus,os,is));
     }
 }
 
+//visza addja a tarolt italok db szamat
 size_t Italok::getdb() const {
     return db;
 }
 
-void Italok::kiir_index() {
-    if(db==0){
-        std::cout<<"Nincs ital a listaban!"<<std::endl;
+//kiirja az osszes italt indexükell együt
+void Italok::kiir_index(std::ostream &os) const {
+    if(db==0){//ha nincs ital a listaban
+        os<<"Nincs ital a listaban!"<<std::endl; //kiirja hogy nincs ital
         return;
     }
-    std::cout<<"["<<1<<"] "<<*ListaItalok[0];
-    for(size_t i=1;i<db;i++){
-        std::cout<<"\n["<<1+i<<"] "<<*ListaItalok[i];
+    for(size_t i=0;i<db;i++){ //vegig megy a listan
+        os<<"\n["<<1+i<<"] "<<*ListaItalok[i]; //kiirja az ital indexet es az ital adatait
     }
-    std::cout<<std::endl;
+    os<<std::endl;
 }
 
-
-
-void Italok::removeItal() {
-    kiir_index();
+//ital törlése a listáboll
+void Italok::removeItal(Koktlok &k, std::ostream &os, std::istream &is) {
+    kiir_index(os); //kiirja az italokat indexukkel egyutt
     size_t index;
-    std::cout << "\nAdja meg a torolni kivant ital indexet: ";
-    index = size_beolvas();
+    os << "\nAdja meg a torolni kivant ital indexet: ";
+    index = size_beolvas(os, is); //beolvasuk a torolni kivant ital indexet
     while (index > db) {
-        std::cout << "Hibas index!" << std::endl;
-        index = size_beolvas();
+        os << "Hibas index!" << std::endl;
+        index = size_beolvas(os, is); //ha hibas indexet adott meg akkor ujra beolvas
     }
-    if (index == 0)
+    if (index == 0) //0 akkor viszalepunk
         return;
-    --index;
-    if(db-1==0) {
-        delete ListaItalok[0];
-        delete [] ListaItalok;
-        ListaItalok=nullptr;
-        --db;
-        return;
-    }
-    Ital **tmp = new Ital*[db - 1];
-    for (size_t i = 0; i < index; i++) {
-        tmp[i] = ListaItalok[i];
-    }
-    for (size_t i = index; i < db - 1; i++) {
-        tmp[i] = ListaItalok[i + 1];
-    }
-    delete ListaItalok[index];
-    db--;
-    delete[] ListaItalok;
-    ListaItalok = tmp;
-}
-
-void Italok::removeItal(Koktlok &k) {
-    kiir_index();
-    size_t index;
-    std::cout << "\nAdja meg a torolni kivant ital indexet: ";
-    index = size_beolvas();
-    while (index > db) {
-        std::cout << "Hibas index!" << std::endl;
-        index = size_beolvas();
-    }
-    if (index == 0)
-        return;
-    --index;
-    for(size_t i=0; i<k.getKoktelDb();++i) {
-        Koktle* koktle=k.getKoktel_csilag(i);
-        if(koktle->tartalmaz_e(ListaItalok[index])) {
-            if(k.removeAlapanyag_Italok(i,ListaItalok[index]))
-                return;
+    --index; //atalakitas 0-tol vallo indexelesre
+    for(size_t i=0; i<k.getKoktelDb();++i) { //vegig megy a koktelokon
+        Koktle* koktle=&k.getKoktel(i);
+        if(koktle->tartalmaz_e(ListaItalok[index])!=0) {   //ha az ital szerepel a koktelben
+            if(k.removeAlapanyag_Italok(i,ListaItalok[index],os, is))  //megkerdezuk hogy toroljuk az italt vagy hogy bizosan toroljuk
+                return; //ha megesem akarjuk torolni akkor viszalépunk
         }
     }
-    if(db-1==0) {
+    if(db-1==0) { //ha csak egy ital van a listaban akkor toroljuk az italt
         delete ListaItalok[0];
         delete [] ListaItalok;
-        ListaItalok=nullptr;
+        ListaItalok=nullptr; //a listat nullpointerre allitjuk
+        return; //viszalepunk
     }
-    Ital **tmp = new Ital*[db - 1];
-    for (size_t i = 0; i < index; i++) {
-        tmp[i] = ListaItalok[i];
-    }
-    for (size_t i = index; i < db - 1; i++) {
-        tmp[i] = ListaItalok[i + 1];
-    }
-    delete ListaItalok[index];
-    db--;
-    delete[] ListaItalok;
-    ListaItalok = tmp;
+    Ital **tmp = new Ital*[db - 1]; //letrehozunk egy uj tombot egyel kisebbel
+    din_atmasol(tmp, ListaItalok, db, index); //atmasoljuk az adatokat
+    delete ListaItalok[index]; //toroljuk a kivalsztot  italt
+    db--; //csokentjuk a tatolr italok db szamat
+    delete[] ListaItalok; //toroljuk a regi tombot
+    ListaItalok = tmp; //a lista legyen az uj tomb
 }
 
-
+//viszaadja az adott indexu italt
 Ital &Italok::getItal(size_t index) const {
     if (index >= db) {
         throw "Hibas index!";
@@ -184,83 +125,51 @@ Ital &Italok::getItal(size_t index) const {
     return *ListaItalok[index];
 }
 
-Ital *Italok::getItalCsilag(size_t index) const {
-    if (index >= db) {
-        throw "Hibas index!";
-    }
-    return ListaItalok[index];
-}
 
-
-void Italok::setItalok(Koktlok &kap) {
+//Italok osztaly adatait lehet alitani
+void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
     size_t valaszto;
     size_t index;
-    Ital *modosit;
     do{
-        std::cout<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - Italok kiiras\n5 - viszalepes"<<std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valaszto=size_beolvas();
+        os<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - Italok kiiras\n5 - viszalepes"<<std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valaszto=size_beolvas(os, is); //beolvasuk a felhasznalo valasztasat
         switch (valaszto) {
             case 1:
-                this->addItal();
+                addItal(os, is); //ha 1 akkor uj ital hozzaadasa
                 break;
             case 2:
-                this->removeItal(kap);
+                removeItal(k, os, is); //ha 2 akkor ital torlese
                 break;
-            case 3:
-                this->kiir_index();
-                std::cout<<"\nAdja meg a modositani kivant ital indexet: ";
-                index=size_beolvas();
+            case 3: //ha 3 akkor ital modositasa
+                kiir_index(os); //kiirjuk az italokat indexukkel egyutt
+                os<<"\nAdja meg a modositani kivant ital indexet: ";
+                index=size_beolvas(os,is); //beolvasuk a modositani kivant ital indexet
                 if(index>db){
-                    std::cout<<"Hibas index!"<<std::endl;
+                    os<<"Hibas index!"<<std::endl;
                     break;
                 }
-                if(index==0)
+                if(index==0) //ha 0 akkor viszalepunk
                     break;
-                modosit=getItalCsilag(index-1);
-                modosit->Set();
+                getItal(index-1).Set(os,is); //az adott indexu ital adatainak modositasa
                 break;
             case 4:
-                this->kiir_index();
+                this->kiir_index(os); //ha 4 akkor kiirjuk az italokat
                 break;
-            case 5:
-                break;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 5: //ha 5 akkor viszalepunk
+                break;;
+            default: os<<"Hibas bemenet!"<<std::endl;
                 break;
         }
 
     }while (valaszto!=5);
-    kiirF();
-}
-
-
-Ital* Italok::italok_bevitel() {
-    ital_tipus tipus;
-    do {
-    tipus=tipus_valszto();
-    switch(tipus) {
-        case bor:
-            return new Bor(bor);
-        case whiskey:
-            return new Wiskey(whiskey);
-        case gin:
-            return new Gin(gin);
-        case rum:
-            return new Rum(rum);
-        case tequila:
-            return new Tequila(tequila);
-        case sor:
-            return new Sor(sor);
-        case gyumolcsle:
-            return new Gyumolcsle(gyumolcsle);
-        case alkohols:
-            return new SzeszesItalok(alkohols);
-        case alkohol_mentes:
-            return new  Ital(alkohol_mentes);
-        default:
-            std::cout << "Hibás típus!" << std::endl;
-        break;
+    try {
+        kiirF(); //kiirjuk az italokat a fajlba
+    } catch (const char *s) {
+        os << s << std::endl;
+        os<<"Nem sikerult az italokat kiirni a fajlba!"<<std::endl;
+        vait(os, is); //varakozas
     }
-}while (true);
 }
+
 

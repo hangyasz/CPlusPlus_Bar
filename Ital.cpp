@@ -5,78 +5,45 @@
 #include "Ital.h"
 #include <iostream>
 #include <cstring>
-#include "bevitel_kezel.hpp"
+#include "bevitel_kezel.h"
 #include <limits>
 #include <ctime>
+
+#include "fugvenyek.hpp"
+#include "gtest_lite.h"
 #include "memtrace.h"
 
-
-//ital tipusok kivalasztasa és viszadasa
-ital_tipus tipus_valszto() {
-    int tipus;
-    do{
-        std::cout << "Adja meg az ital tipusat (1 - Bor, 2 - Wiskey, 3 - Gin, 4 - Rum, 5 - Tequila, 6 - Sor, 7 - Gyumolcsle, 8 - Alkohols, 9 - Alkohol mentes ): ";
-        tipus=int_beolvas(); //szam beolvasasa
-        switch(tipus) { //a szam ertékének megfelelo tipus visszaadasa
-            case 1:
-                return  bor;
-            case 2:
-                return  whiskey;
-            case 3:
-                return  gin;
-            case 4:
-                return  rum;
-            case 5:
-                return  tequila;
-            case 6:
-                return  sor;
-            case 7:
-                return  gyumolcsle;
-            case 8:
-                return  alkohols;
-            case 9:
-                return  alkohol_mentes;
-            default:
-                std::cout << "Hibas tipus valaztas!" << std::endl;
-                break;
-        }
-    } while(tipus<1 || tipus>9); //ha a tipus nem megfelelo akkor ujra kezfjuk a beolvasast
-    return alkohol_mentes; //ha nem sikerult a beolvasas akkor alapertelmezett tipus
-
+size_t get_tipusok_szam() {
+    TipusInfo i;
+    return i.meret;
 }
 
 
-//a tipusok neveinek visszaadasa char* kent
-const char* get_tipus_nev_str(ital_tipus tipus){
-switch (tipus) {
-    case alkohols: return "alkohols";
-    case alkohol_mentes: return "alkohol_mentes";
-    case bor: return "bor";
-    case whiskey: return "whiskey";
-    case gin: return "gin";
-    case rum: return "rum";
-    case tequila: return "tequila";
-    case sor: return "sor";
-    case gyumolcsle: return "gyumolcsle";
-    default: return "ismeretlen"; //ha nem egyezik semire akkor ismeretlen
+const char* get_tipus_nev_str(size_t tipus) {
+    static const TipusInfo info;
+    if(tipus==0 or tipus>get_tipusok_szam())
+        throw "Hibas tipus!";
+    return info.italkok[tipus-1];
 }
-}
+
 
 //Italok Konstruktorok a mi az itall tipusat kapja parameter kent
-Ital::Ital(ital_tipus tipus):tipus(tipus){ //a tipust inicializalolistan alitjuk be
-    setNev(); //a nevet bealito fuggveny
-    setGyarto(); //a gyartot bealito fuggveny
+Ital::Ital(size_t tipus,std::ostream &os,std::istream &is):tipus(tipus){ //a tipust inicializalolistan alitjuk be
+    setNev(os, is); //a nevet bealito fuggveny
+    setGyarto(os,is); //a gyartot bealito fuggveny
 }
 
 Ital::Ital(){} //alap konstruktor semit nem álit be
 
 //konstruktor nevvel es tipussal kap
-Ital::Ital(String nev_kap, ital_tipus tipus): tipus(tipus){  //a tipust inicializalolistan alitjuk be
+Ital::Ital(String nev_kap, size_t tipus,std::ostream &os,std::istream &is): tipus(tipus){  //a tipust inicializalolistan alitjuk be
     nev=nev_kap; //a nev legyen egynlo a kapot nevvel
-    setGyarto(); //a gyartot bealito fuggveny
+    setGyarto(os,is); //a gyartot bealito fuggveny
 }
 
 Ital::~Ital() {}//destruktor semit nem csinal
+
+
 
 //getter a nevhez
 String Ital::getNev() const
@@ -90,19 +57,23 @@ String Ital::getGyarto() const {
 }
 
 //getter a tipushoz
-ital_tipus Ital::getTipus() const {
+size_t Ital::getTipus() const {
     return tipus;
 }
 
 //getter a tipus nevehez char* ként
 const char*  Ital::getTipusNev() const {
-    return get_tipus_nev_str(tipus);
+    try {
+        return get_tipus_nev_str(tipus);
+    } catch (const char *hiba) {
+        return hiba;
+    }
 }
 
 //setter a nevhez
-void Ital::setNev() {
-    std::cout << "Adja meg az ital nevet: " << std::endl;
-    std::cin >> nev; //a nevet beolvasuk az inputrol
+void Ital::setNev(std::ostream &os,std::istream &is) {
+    os << "Adja meg az ital nevet: " << std::endl;
+    is >> nev; //a nevet beolvasuk az inputrol
 }
 
 //setter a nevhez ami kap egy stringet
@@ -111,9 +82,9 @@ void Ital::setNev(String kap ) {
 }
 
 //setter a gyartohoz
-void Ital::setGyarto() {
-    std::cout << "Adja meg az ital gyartojat " << std::endl;
-    std::cin >> gyarto; //a gyartot beolvasuk az inputrol
+void Ital::setGyarto(std::ostream &os,std::istream &is) {
+    os << "Adja meg az ital gyartojat " << std::endl;
+    is >> gyarto; //a gyartot beolvasuk az inputrol
 }
 
 //setter a gyartohoz ami kap egy stringet
@@ -122,834 +93,810 @@ void Ital::setGyarto(String kap) {
 }
 
 //kiirja az ital adatait
-void Ital:: kiir()  const{
-    std::cout << "Nev: " << nev; //kiirja a nevet
-    std::cout << " Gyarto: " << gyarto; //kiirja a gyartot
-    std::cout << " Fajtaja: " << getTipusNev(); //és a tipusat stringkent
+void Ital:: kiir(std::ostream &os)  const{
+    os << "Nev: " << nev; //kiirja a nevet
+    os << " Gyarto: " << gyarto; //kiirja a gyartot
+    os << " Fajtaja: " << getTipusNev(); //és a tipusat stringkent
 }
 
-
-void Ital::setTipus(ital_tipus kap) {
+//a kapott tipust beáltja az ittal tipusanak;
+void Ital::setTipus(size_t kap) {
+    if(kap==0 or get_tipusok_szam())
+        throw "hibas tipus";
     tipus=kap;
 }
 
 
-
-void Ital::Set() {
+//Ez a fuggveny a beallitott adatokat modositja
+void Ital::Set(std::ostream & os,std::istream &is) {
     int valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=int_beolvas();
+        kiir(os); //kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=int_beolvas(os,is); //bekerjeuk a valaszt
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                this->setGyarto(os,is); //ha 2 akkor a gyartot allitjuk at
             break;
-            case 3: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 3: return; //ha 3 akkor viszalep
+            default: os<<"Hibas bemenet!"<<std::endl; //kirjuk hogy hibba elorol kezdokik a folyamt
             break;
         }
     }while (valasz!=3);
 }
 
 //szeszes italok
-
-SzeszesItalok::SzeszesItalok(ital_tipus tipus) : Ital(tipus) {
-    setAlkoholTartalom();
+//konstruktorok SzeszesItalok_hoz
+SzeszesItalok::SzeszesItalok(size_t tipus, std::ostream &os, std::istream &is) : Ital(tipus,os,is) { //inizalitálo listán meghivom az ital konstruktorát
+    intput(os,is); //az alkohol tartalmat beallito fuggveny
 }
 
+//parameter nelkuli konstruktor
 SzeszesItalok::SzeszesItalok() : Ital(){
 }
 
-SzeszesItalok::SzeszesItalok(String nev_kap, ital_tipus tipus): Ital(nev_kap,tipus) {
-    setAlkoholTartalom();
+//konstruktor nevvel es tipussal
+SzeszesItalok::SzeszesItalok(String nev_kap, size_t tipus,std::ostream &os, std::istream &is): Ital(nev_kap,tipus,os,is) {
+    intput(os, is); //az alkohol tartalmat beallito fuggveny
 }
 
+void SzeszesItalok::intput(std::ostream &os, std::istream &is) {
+    setAlkoholTartalom(os, is); //az alkohol tartalmat beallito fuggveny
+}
+
+
+//viszaadja az alkohol tartalmat
 float SzeszesItalok::getAlkoholTartalom() const {
     return alkoholTartalom;
 }
 
-void SzeszesItalok::setAlkoholTartalom() {
-    std::cout << "Adja meg az alkohol tartalmat: " << std::endl;
-    alkoholTartalom=float_beolvas();
-    while (alkoholTartalom>100 or alkoholTartalom<0) {
-        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
-        alkoholTartalom=float_beolvas();
+//belehet velle álitani az alkohol tartalmat
+void SzeszesItalok::setAlkoholTartalom(std::ostream &os, std::istream &is) {
+    os << "Adja meg az alkohol tartalmat: " << std::endl;
+    alkoholTartalom=float_beolvas(os,is); //beolvasunk egy float szamot
+    try {
+        szazalek_tests(alkoholTartalom); //elenorizzuk az alkohol tartalmat
+    } catch (const char *hiba) {
+        os << hiba << std::endl; //ha hibas akkor hibat irunk ki
+        setAlkoholTartalom(os,is); //es ujra beolvasunk
     }
 }
 
+//kapot alkohol tartalommal beallitja a kapot alkohol tartalmra
 void SzeszesItalok::setAlkoholTartalom(float kap) {
-    alkoholTartalom=kap;
-    while (alkoholTartalom>100 or alkoholTartalom<0) {
-        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
-        alkoholTartalom=float_beolvas();
-    }
+    szazalek_tests(kap); //elenorizzuk az alkohol tartalmat
+    alkoholTartalom=kap; //beallitjuk az alkohol tartalmat
 }
 
-void SzeszesItalok::kiir() const {
-    Ital::kiir();
-    std::cout << " Alkohol tartalom: " << alkoholTartalom;
+//kiirja az SzeszesItalok adatait
+void SzeszesItalok::kiir(std::ostream &os) const {
+    Ital::kiir(os); //kiirja az ital adatait
+    os << " Alkohol tartalom: " << alkoholTartalom; //kiirja az alkohol tartalmat
 }
 
-void SzeszesItalok::Set() {
+//modositja az SzeszesItalok adatait
+void SzeszesItalok::Set(std::ostream & os, std::istream& is) {
     int valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=int_beolvas();
+        kiir(os); //kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=int_beolvas(os, is); //bekerjeuk a valaszt
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os, is); //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom(os, is); //ha 3 akkor az alkohol tartalmat allitjuk at
             break;
-            case 4: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 4: return; //ha 4 akkor viszater
+            default: os<<"Hibas bemenet!"<<std::endl; //kirjuk hogy hibba elorol kezdokik a folyamt
             break;
         }
     }while (valasz!=4);
 }
 
 //bor
-
-bool evjarat_teszt(int evjarat) {
+//bornak az evjara ellenorzes
+void evjarat_teszt(int evjarat) {
     time_t now = time(0);
-    tm *ltm = localtime(&now);
-    if (evjarat > 1900 + ltm->tm_year) {
-        return false;
-    }
-    return true;
-}
-
-
-Bor::Bor(ital_tipus tipus) : SzeszesItalok(tipus),fajta(nullptr),fajta_db(0) {
-    setEvjarat();
-    setSzin();
-    std::cout << "Adja meg a fajtak szamat: " << std::endl;
-    size_t fajtak=size_beolvas();
-    for (size_t i = 0; i < fajtak; i++) {
-        addFajta();
+    tm *ltm = localtime(&now);//lekerjuk az aktualis idot
+    if (evjarat > 1900 + ltm->tm_year) { //ha az evjarat nagyobb mint az aktualis ev akkor hibas
+        throw"Hibas evjarat! Adjon meg egy helyes evjaratot!";
     }
 }
 
+//bor konstruktorok
+Bor::Bor(size_t tipus, std::ostream &os, std::istream &is) : SzeszesItalok(tipus, os,is),fajta(nullptr),fajta_db(0) { //inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    intput(os, is);
+}
+
+//parameter nelkuli konstruktor
 Bor::Bor():SzeszesItalok(), fajta(nullptr),fajta_db(0) {
 }
-
-Bor::Bor(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus), fajta(nullptr),fajta_db(0) {
-    setEvjarat();
-    setSzin();
-    std::cout << "Adja meg a fajtak szamat: " << std::endl;
-    size_t fajtak=size_beolvas();
-    for (size_t i = 0; i < fajtak; i++) {
-        addFajta();
-    }
+//konstruktor nevvel es tipussal
+Bor::Bor(String nev_kap, size_t tipus, std::ostream &os, std::istream &is):SzeszesItalok(nev_kap,tipus, os,is), fajta(nullptr),fajta_db(0) { //inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    intput(os,is); //a bor adatait beallito fuggveny
 
 }
-
+//destruktor
 Bor::~Bor() {
-    delete[] fajta;
+    delete[] fajta; //felszabaditjuk a fajtakat
 }
 
+void Bor::intput(std::ostream &os, std::istream &is) {
+    setEvjarat(os, is); //az evjaratot beallito fuggveny
+    setSzin(os, is);    //a szint beallito fuggveny
+    os << "Adja meg a fajtak szamat: " << std::endl;
+    size_t fajtak=size_beolvas(os,is); //beolvasuk a fajtak szamat
+    for (size_t i = 0; i < fajtak; i++) {   //hozadjuk a fajtakat
+        addFajta(os,is);
+    }
+}
+
+
+//getter az evjarathoz
 int Bor::getEvjarat() const {
     return evjarat;
 }
-
-szinek_bor Bor::getSzin() const {
+//getter a szinhez
+size_t Bor::getSzin() const {
     return szin;
 }
 
-
+//getter a szin nevehez
 const char* Bor::getSzinNev() const{
-    switch (szin) {
-        case voros: return "voros";
-        case rose: return "rose";
-        case feher: return "feher";
-        default: return "ismeretlen";
+    const char *szin_nev[]={"voros","rose","feher"};
+    return szin_nev[szin-1];
+}
+
+//setter az evjarathoz
+void Bor::setEvjarat(std::ostream &os, std::istream &is) {
+    os << "Adja meg az evjaratot: " << std::endl;
+    evjarat=int_beolvas(os, is); //beolvasunk egy int szamot
+    try {
+        evjarat_teszt(evjarat); //elenorizzuk az evjaratot
+    }catch (const char *hiba) {
+        os << hiba << std::endl; //ha hibas akkor hibat irunk ki
+        setEvjarat(os, is); //es ujra beolvasunk
     }
 }
 
-void Bor::setEvjarat() {
-    std::cout << "Adja meg az evjaratot: " << std::endl;
-    evjarat=int_beolvas();
-    while(!evjarat_teszt(evjarat)) {
-        std::cout << "Hibas evjarat! Adjon meg egy helyes evjaratot!" << std::endl;
-        evjarat=int_beolvas();
-    }
-}
-
+//setter az evjarathoz ami kap egy intet
 void Bor::setEvjarat(int kap) {
-    if(evjarat_teszt(kap))
-        evjarat=kap;
-    else
-        setEvjarat();
+    evjarat_teszt(kap); //elenorizzuk az evjaratot
+    evjarat=kap; //beallitjuk az evjaratot
 }
 
+//setter a szinhez
+void Bor::setSzin( std::ostream& os, std::istream &is) {
+    os<< "Adja meg a bor szinet: [1]voros, [2]rose, [3]feher" << std::endl;
+    try {
+        setSzin(size_beolvas(os,is));//beolvasunk egy szamot es beallitjuk a szint
+    }catch (const char *hiba) {
+        os << hiba << std::endl; //ha hibas akkor kirjuk a bibat hibat irunk ki
+        setSzin(os, is); //es ujra beolvasunk
 
-void Bor::setSzin() {
-    std::cout<< "Adja meg a bor szinet: [1]voros, [2]rose, [3]feher" << std::endl;
-    size_t szin_be = size_beolvas();
-    do{
-        switch (szin_be) {
-            case 1:
-                this->szin = voros;
-                return;
-            case 2:
-                this->szin = rose;
-                return;
-            case 3:
-                this->szin = feher;
-                return;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                break;
-        }
     }
-    while (szin_be != 1 && szin_be != 2 && szin_be != 3);
 }
 
-void Bor::setSzin(szinek_bor kap) {
+//setter a szinhez ami kap sint beallitja a bor szinere
+void Bor::setSzin(size_t kap) {
+    if(kap>3 or kap<1) //ha a szin nem 1,2,3 akkor hibas
+        throw "Hibas szin!";
     szin=kap;
 }
 
+//a kapot szamot beálitja a fajtak darab szamara
 void Bor::setFajta_db(size_t kap) {
     fajta_db=kap;
 }
 
+//a kapat string tombot bealitja a fajta String tombere
 void Bor::setFajta_string(String *kap) {
     fajta=kap;
 }
 
-void Bor::addFajta() {
-    String * temp = new String [fajta_db + 1];
-    for (size_t i = 0; i < fajta_db; i++) {
-        temp[i] = fajta[i];
-    }
-    std::cout << "Adja meg a fajtat: " << std::endl;
-    std::cin>> temp[fajta_db] ;
-    delete[] fajta;
-    fajta = temp;
-    fajta_db++;
+//a bor fajtaihoz lehett uj elemet felvini velle
+void Bor::addFajta(std::ostream &os, std::istream &is) {
+    String * temp = new String [fajta_db + 1]; //nagyobbat tombot hozunk letre
+    din_atmasol<String>(temp, fajta, fajta_db); //atmasoljuk a regit
+    os << "Adja meg a fajtat: " << std::endl;
+    is>> temp[fajta_db] ; //beolvasunk egy stringet
+    delete[] fajta; //felszabaditjuk a regit
+    fajta = temp;  //beallitjuk az ujat
+    fajta_db++; //noveljuk a fajtak szamat
 }
 
 
-void Bor::fajtakiir() const
+//a bornak a faktakit irja ki a kimenetre
+void Bor::fajtakiir_index( std::ostream &os) const
 {
-    for (size_t i = 0; i < fajta_db; i++) {
-        std::cout << fajta[i] << "\n";
+    for (size_t i = 0; i < fajta_db; i++) { //vegigmegyunk a fajtakon
+        os <<1+i<<" - "<< fajta[i] << "\n"; //kiirjuk oket a kimnetre
     }
 }
 
-void Bor::removeFajta() {
-    this->fajtakiir();
-    std::cout << "Melyik fajtat szeretne torolni?" << std::endl;
-    String fajta_beolvas;
-    std::cin>> fajta_beolvas;
-    for (size_t i = 0; i < fajta_db; i++) {
-        if (fajta[i] == fajta_beolvas) {
-            if(fajta_db-1==0) {
-                delete [] fajta;
-                fajta=nullptr;
-                fajta_db=0;
-                std::cout << "Sikeres torles!" << std::endl;
-                return;
-            }
+
+//a bor fajtajit lehet veletorolni
+void Bor::removeFajta(std::ostream &os, std::istream &is) {
+    fajtakiir_index(os); //kiirjuk a fajtakat indexelve
+    os << "Melyik fajtat szeretne torolni?" << std::endl;
+    size_t index=size_beolvas(os, is);
+    if(index> fajta_db)
+        throw "sikrteln torle  tul indexeles";
+    if(fajta_db-1==0)
+        delete [] fajta;
+    else {
         String * temp = new String [fajta_db - 1];
-            for (size_t j = 0; j < i; j++) {
-                temp[j] = fajta[j];
-            }
-            for (size_t j = i; j < fajta_db - 1; j++) {
-                temp[j] = fajta[j + 1];
-            }
-            delete[] fajta;
-            fajta = temp;
-            fajta_db--;
-            std::cout << "Sikeres torls!" << std::endl;
-            return;
-        }
+        din_atmasol<String>(temp, fajta,fajta_db, index-1); //atmasoljuk az elso reszt
+        delete[] fajta;
+        fajta = temp;
     }
-    std::cout << "Nincs ilyen fajta!" << std::endl;
+    fajta_db--;
+    os << "Sikeres torls!" << std::endl;
 }
 
 
-String Bor::getFajtaindex(size_t index) const {
-    if (index >= fajta_db) {
-        throw "Tull indexeles";
-    }
-    return fajta[index];
-}
-
+//viszaadja a fajtak darabb szamat
 size_t Bor::getFajta_db() const {
     return fajta_db;
 }
 
-void Bor::kiir() const {
-    SzeszesItalok::kiir();
-    std::cout << " Evjarat: " << evjarat;
-    std::cout << " Szin: " << getSzinNev();
-    if (fajta_db > 1) {
-        std::cout << " Fajtak:";
+//a bor osztaly adatait kirjuk az outputra
+void Bor::kiir(std::ostream &os) const {
+    SzeszesItalok::kiir(os); //szeszes ittal kiíro fugveny
+    os << " Evjarat: " << evjarat; //evjatar kirasa
+    os << " Szin: " << getSzinNev(); //bor szinenek kirasa
+    if (fajta_db > 1) { //a tobb fajta  van akkor fajtakat a csak egy akkor fajtat irunk
+        os << " Fajtak:";
     } else {
-        std::cout << " Fajta:";
+        os << " Fajta:";
     }
-    for (size_t i = 0; i < fajta_db; i++) {
-        std::cout <<" ["<<i<<"] "<< fajta[i];
+    for (size_t i = 0; i < fajta_db; i++) { //kirjuk a fajtakat
+        os <<" ["<<i<<"] "<< fajta[i];
     }
 }
-
-void Bor::Set() {
+//a borok osztály adatait lehet
+void Bor::Set(std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-evjart, 5-szin, 6-fajta hozzadas, 7-fajta torles 8-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os);
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-evjart, 5-szin, 6-fajta hozzadas, 7-fajta torles 8-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas(os, is);
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os, is); //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom(os, is); //ha 3 akkor az alkohol tartalmat allitjuk at
             break;
             case 4:
-                this->setEvjarat();
+                setEvjarat(os, is); //ha 4 akkor az evjaratot allitjuk at
             break;
             case 5:
-                this->setSzin();
+                setSzin(os, is);    //ha 5 akkor a szint allitjuk at
                 break;
             case 6:
-                this->addFajta();
+                addFajta(os, is); //ha 6 akkor uj fajtat adunk hozza
                 break;
             case 7:
-                this->removeFajta();
+                try {
+                    removeFajta(os, is); //ha 7 akkor fajtat torlünk
+                } catch (const char *hiba) {
+                    os << hiba << std::endl; //ha hibas akkor hibat irunk ki
+                }
                 break;
             case 8: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
             break;
         }
     }while (valasz!=8);
 }
 
 //whiskey
-
-Wiskey::Wiskey(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    setJeleg_wiskey();
-    setErleses();
+//wiskey osztály konstruktra bealitja az adatokat
+Wiskey::Wiskey(size_t ital_tipus,std::ostream& os, std::istream& is) : SzeszesItalok(ital_tipus, os, is) {
+    setJeleg_wiskey(os, is); //a wiskey tipusat beallito fuggveny
+    setErleses(os, is); //az erleses evet beallito fuggveny
 }
-
+//wiskey osztály parameter nelkuli konstruktor
 Wiskey::Wiskey():SzeszesItalok() {}
 
-Wiskey::Wiskey(String nev_kap,ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
-    setJeleg_wiskey();
-    setErleses();
+//wiskey osztály konstruktor nevvel es tipussal
+Wiskey::Wiskey(String nev_kap,size_t tipus, std::ostream &os, std::istream &is):SzeszesItalok(nev_kap,tipus, os, is) {
+    setJeleg_wiskey(os, is); //a wiskey tipusat beallito fuggveny
+    setErleses(os, is);   //a erleses evet beallito fuggveny
 
 }
 
+//wiskey osztály destruktor
 Wiskey::~Wiskey() {
 }
-
+//getter a wiskey tipusahoz
 String Wiskey::getJeleg_wiskey() const {
     return jeleg;
 }
-
+//getter az erleseshez
 unsigned int Wiskey::getErleses() const {
     return erleses;
 }
 
-void Wiskey::setJeleg_wiskey() {
-    std::cout << "Adja meg a wiskey tipust: " << std::endl;
-    std::cin >> jeleg;
+//setter a wiskey jelegezeshez
+void Wiskey::setJeleg_wiskey(std::ostream &os,std::istream& is) {
+    os << "Adja meg a wiskey tipust: " << std::endl;
+    is >> jeleg; //beolvasunk egy stringet
 }
 
-
-bool alkohol_keszul(unsigned int ido) {
+//elenorzi az erleses evet
+void alkohol_keszul(unsigned int ido) {
     time_t now = time(0);
     tm *ltm = localtime(&now);
-    if (ido > 100+1900 + static_cast<unsigned int> (ltm->tm_year)) {
-        return false;
+    if (ido > 100+1900 + static_cast<unsigned int> (ltm->tm_year)) { //kb ennel idosebb alkohol nem lehet
+        throw  "Hibas evjarat! Adjon meg egy helyes erelssi idot!";
+
     }
-    return true;
 
 }
-
-void Wiskey::setErleses() {
-    std::cout << "Adja meg az erleses evet: " << std::endl;
-    erleses=unsigned_int_beolvas();
-    while (!alkohol_keszul(erleses)) {
-        std::cout << "Hibas evjarat! Adjon meg egy helyes erelssi idot!" << std::endl;
-        erleses=unsigned_int_beolvas();
+//setter az erleseshez
+void Wiskey::setErleses(std::ostream &os, std::istream &is) {
+    os << "Adja meg az erleses evet: " << std::endl; //kiirjuk a felhasznalonak hogy adja meg az erleses evet
+    erleses=unsigned_int_beolvas(os, is); //beolvasunk egy elojelnelkuli intet
+    try {
+        alkohol_keszul(erleses); //elenorizzuk az erleses evet
+    } catch (const char *hiba) {
+        os << hiba << std::endl; //ha hibas akkor hibat irunk ki
+        setErleses(os, is); //es ujra beolvasunk
     }
 }
 
+//setter az erleseshez ami kap egy szamot és beálitja az erleses evet
 void Wiskey::setErleses(unsigned int kap) {
-    if(alkohol_keszul(kap))
-    erleses=kap;
-    else
-        setErleses();
+    alkohol_keszul(kap); //elenorizzuk az erleses evet
+    erleses=kap; //beálitjuk
 }
 
-void Wiskey::kiir() const {
-    SzeszesItalok::kiir();
-    std::cout << " Tipus: " << jeleg;
-    std::cout << " Erleses: " << erleses;
+//a wiskey osztály adatait kirjuk az outputra
+void Wiskey::kiir(std::ostream &os) const {
+    SzeszesItalok::kiir(os);
+    os << " Tipus: " << jeleg;
+    os << " Erleses: " << erleses;
 }
 
-void Wiskey::Set() {
+//a wiskey osztály adatait lehet modositani
+void Wiskey::Set(std::ostream &os, std::istream &is) {
         size_t valasz;
         do {
-            this->kiir();
-            std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto,3-alkohol, 4-wiskey tipud, 5-erleles, 6-viszalepes" << std::endl;
-            std::cout<<"\nAdja meg az utasitas szamat: ";
-            valasz=size_beolvas();
+            kiir(os); //kiirja az ital adatait
+            os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto,3-alkohol, 4-wiskey tipud, 5-erleles, 6-viszalepes" << std::endl;
+            os<<"\nAdja meg az utasitas szamat: ";
+            valasz=size_beolvas(os, is);
             switch (valasz) {
                 case 1:
-                    this->setNev();
+                    setNev(os, is); //ha 1 akkor a nevet allitjuk at
                     break;
                 case 2:
-                    this->setGyarto();
+                    setGyarto(os,is); //ha 2 akkor a gyartot allitjuk at
                     break;
                 case 3:
-                    this->setAlkoholTartalom();
+                    setAlkoholTartalom(os,is); //ha 3 akkor az alkohol tartalmat allitjuk at
                     break;
                 case 4:
-                    this->setJeleg_wiskey();
+                    setJeleg_wiskey(os,is); //ha 4 akkor a wiskey tipusat allitjuk at
                     break;
                 case 5:
-                    this->setErleses();
+                    setErleses(os, is); //ha 5 akkor az erleses evet allitjuk at
                     break;
-                case 6: return;
-                default: std::cout<<"Hibas bemenet!"<<std::endl;
+                case 6: return; //ha 6 akkor viszalep
+                default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
+                    break;
                 break;
             }
         }while (valasz!=6);
     }
 
 //gin
-
-Gin::Gin(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    setSzin();
-    setIz();
+//gin osztály konstruktorok
+Gin::Gin(size_t ital_tipus, std::ostream &os,std::istream &is) : SzeszesItalok(ital_tipus,os,is) { //inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    setSzin(os, is); //a szint beallito fuggveny
+    setIz(os,is); //a izt beallito fuggveny
 }
-
+//parameter nelkuli konstruktor
 Gin::Gin() :SzeszesItalok(){
 }
-
-Gin::Gin(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
-    setSzin();
-    setIz();
+//konstruktor nevvel es tipussal
+Gin::Gin(String nev_kap, size_t tipus,std::ostream &os,std::istream &is):SzeszesItalok(nev_kap,tipus, os,is) { //inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    setSzin(os, is); //a szint beallito fuggveny
+    setIz(os, is);  //a izt beallito fuggveny
 
 }
 
-
-gin_szin Gin::getSzin() const {
+//viszater a gin szinvel
+String Gin::getSzin() const {
     return szin;
 }
 
-const char* Gin::getSzinNev() const {
-    switch (szin) {
-        case szintelen: return "szintelen";
-        case pink: return "pink";
-        case egyeb: return "egyeb";
-        default: return "ismeretlen";
-    }
+
+//setter a gin szinhez
+void Gin::setSzin(std::ostream &os,std::istream &is) {
+    os<< "Adja meg a gin szinet: " << std::endl;
+    is >> szin; //beolvasunk egy stringet
 }
 
-void Gin::setSzin() {
-    std::cout<< "Adja meg a gin szinet: [1]szintelen, [2]pink, [3]egyeb" << std::endl;
-    int szin_olvas = 0;
-    while (szin_olvas != 1 && szin_olvas != 2 && szin_olvas != 3) {
-        szin_olvas=int_beolvas();
-        switch (szin_olvas) {
-            case 1:
-                this->szin = szintelen;
-                return;
-            case 2:
-                this->szin = pink;
-                return;
-            case 3:
-                this->szin = egyeb;
-                return;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                break;
-        }
-    }
-}
 
-void Gin::setSzin(gin_szin kap) {
+void Gin::setSzin(String kap) {
     szin=kap;
 }
 
+//viszater a gin izvel
 String Gin::getIz() const {
     return iz;
 }
 
-void Gin::setIz() {
-    int iz_bevit = 0;
-    std::cout << "A ginek van jelgzetes ize pl(levendulas)  1(igen), 0(nem)" << std::endl;
-    iz_bevit=int_beolvas();
-    if (iz_bevit == 1) {
-        std::cout << "Adja meg a ginek jellegzetes izet: " << std::endl;
-        std::cin >> iz;
+//setter a gin izhez
+void Gin::setIz(std::ostream &os, std::istream &is) {
+    os<< "A ginek van jelgzetes ize pl(levendulas)  1(igen), 0(nem)" << std::endl;
+    if (bool_beolvas(os,is)) { //ha igaz akkor beolvasunk egy stringet
+        os << "Adja meg a ginek jellegzetes izet: " << std::endl;
+        is >> iz; //és beallitjuk az izt
     } else {
-        iz="";
+        iz=""; //különben az izt üres stringre allitjuk
     }
 }
 
+//setter a gin izhez ami kap egy stringet es beallitja az izt
 void Gin::setIz(String kap) {
     iz=kap;
 }
 
-void Gin::kiir()  const{
-    SzeszesItalok::kiir();
-    std::cout << " Szin: " << getSzinNev();
-    if (iz.size() !=0 ) {
-        std::cout << " Iz: " << iz;
+//a gin osztály adatait kirjuk az outputra
+void Gin::kiir(std::ostream &os)  const{
+    SzeszesItalok::kiir(os); //kiirja az ital adatait
+    os << " Szin: " << szin; //kiirja a szint
+    if (iz.size() !=0 ) { //ha van iz akkor azt is kiirja
+        os << " Iz: " << iz;
     }
 }
 
-void Gin::Set() {
+//a gin osztály adatait lehet modositani
+void Gin::Set(std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Gin iz, 5-Szin, 6-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os); //kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Gin iz, 5-Szin, 6-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas(os, is);
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os, is);  //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom(os, is); //3 akkor az alkohol tartalmat allitjuk at
             break;
             case 4:
-                this->setIz();
+                setIz(os, is);  //ha 4 akkor az izt allitjuk at
                 break;
             case 5:
-                this->setSzin();
+                setSzin(os, is);    //ha 5 akkor a szint allitjuk at
             break;
-            case 6: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 6: return; //ha 6 akkor viszater
+            default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
             break;
         }
     }while (valasz!=7);
 }
 
-Gin::~Gin() {
+//gin osztály destruktor
+Gin::~Gin() {}
 
+
+//Fajta
+//rum osztály konstruktorok
+Fajta::Fajta(size_t tipus, std::ostream &os, std::istream &is) : SzeszesItalok(tipus, os, is) {//inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    setFajta(os, is); //a rum fajtajat beallito fuggveny
+}
+
+//parameter nelkuli konstruktor
+Fajta::Fajta():SzeszesItalok() {
+}
+
+//konstruktor nevvel es tipussal
+Fajta::Fajta(String nev_kap, size_t tipus, std::ostream &os, std::istream &is):SzeszesItalok(nev_kap,tipus, os ,is) {//inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    setFajta(os, is); //a rum fajtajat beallito fuggveny
 }
 
 
-//Rum
-
-Rum::Rum(ital_tipus tipus) : SzeszesItalok(tipus) {
-    setFajta();
-}
-
-Rum::Rum():SzeszesItalok() {
-}
-
-Rum::Rum(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
-    setFajta();
-}
-
-
-rum_fajta Rum::getFajta() const {
+//getter a rum fajtajahoz
+String Fajta::getFajta() const {
     return fajta;
 }
 
-void Rum::setFajta() {
-    std::cout<< "Adja meg a rum fajtajt: [1]fuszeres_rum, [2]fekete_rum, [3]arany_rum, [4]feher_rum" << std::endl;
-    int szin_beolvas = 0;
-    while (szin_beolvas != 1 && szin_beolvas != 2 && szin_beolvas != 3 && szin_beolvas != 4) {
-        szin_beolvas=int_beolvas();
-        switch (szin_beolvas) {
-            case 1:
-                this->fajta = fuszeres_rum;
-                return;
-            case 2:
-                this->fajta = fekete_rum;
-                return;
-            case 3:
-                this->fajta = arany_rum;
-                return;
-            case 4:
-                this->fajta = feher_rum;
-                return;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                break;
-        }
-    }
+//setter a rum fajtajahoz
+void Fajta::setFajta( std::ostream &os, std::istream &is) {
+    os<< "Adja meg a "<<getTipusNev() <<"fajtajt: "<< std::endl;
+    is >> fajta; //beolvasunk egy stringet
 }
 
-void Rum::setFajta(rum_fajta kap) {
+//setter a rum fajtajahoz ami kap ertekere alitja a fajtat
+void Fajta::setFajta(String kap) {
     fajta=kap;
 }
 
-const char* Rum::getFajtaNev() const{
-    switch (fajta) {
-        case fuszeres_rum: return "fuszeres_rum";
-        case fekete_rum: return "fekete_rum";
-        case arany_rum: return "arany_rum";
-        case feher_rum: return "feher_rum";
-        default: return "ismeretlen";
-    }
+
+//a rum osztály adatait kirjuk az outputra
+void Fajta::kiir(std::ostream &os) const {
+    SzeszesItalok::kiir( os); //kiirja az ital adatait
+    os << " Fajta: " << fajta; //kiirja a fajtat
 }
 
-void Rum::kiir() const {
-    SzeszesItalok::kiir();
-    std::cout << " Fajta: " << getFajtaNev();
-}
-
-void Rum::Set() {
+//a rum osztály adatait lehet modositani
+void Fajta::Set( std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Rum fajtaja, 5-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os); //kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Fajta fajtaja, 5-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas( os, is);
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os,is);
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os,is);
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom(os, is);
             break;
             case 4:
-                this->setFajta();
+                setFajta(os, is);
             break;
             case 5: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            default: os<<"Hibas bemenet!"<<std::endl;
             break;
         }
     }while (valasz!=5);
 }
 
+/*
 
 //tequila
-
-Tequila::Tequila(ital_tipus ital_tipus) : SzeszesItalok(ital_tipus) {
-    setFajta();
+//tequila osztály konstruktorok
+Tequila::Tequila(size_t ital_tipus, std::ostream& os, std::istream &is) : SzeszesItalok(ital_tipus,os,is) { //inizalitálo listán meghivom az SzeszesItalok konstruktorát
+    setFajta(os,is); //a tequila fajtajat beallito fuggveny
+    setAgave(os,is); //az agave alpanyag beallito fuggveny
 }
 
+//parameter nelkuli konstruktor
 Tequila::Tequila():SzeszesItalok() {}
 
-Tequila::Tequila(String nev_kap, ital_tipus tipus):SzeszesItalok(nev_kap,tipus) {
-    setFajta();
+//konstruktor nevvel es tipussal
+Tequila::Tequila(String nev_kap, size_t tipus, std::ostream &os, std::istream& is):SzeszesItalok(nev_kap,tipus,os,is) {
+    setFajta(os, is); //a tequila fajtajat beallito fuggveny
+    setAgave(os, is); //az agave alpanyag beallito fuggveny
 }
 
 
-tequli_fajta Tequila::getFajta() const {
+//Tequila fajtajat addja vissza
+String Tequila::getFajta() const {
     return fajta;
 }
 
-void Tequila::setFajta() {
-    int olvas_fajta;
-    do{
-        std::cout << "valasza ki a tequila tipisat [1]silver, [2]gold, [3]aged" << std::endl;
-        olvas_fajta=int_beolvas();
-        switch (olvas_fajta) {
-            case 1:
-                this->fajta = silver;
-                return;
-            case 2:
-                this->fajta = gold;
-                return;
-            case 3:
-                this->fajta = aged;
-                return;
-            default:
-                std::cout << "nem megfelelo szamot adott meg" << std::endl;
-                break;
-        }
-    }while (olvas_fajta != 1 && olvas_fajta != 2 && olvas_fajta != 3);
+//setter a tequila fajtajahoz
+void Tequila::setFajta(std::ostream &os, std::istream &is) {
+    os<< "Adja meg a tequila fajtajat: " << std::endl;
+    is >> fajta; //beolvasunk egy stringet
 }
 
-void Tequila::setFajta(tequli_fajta kap) {
+//setter a tequila fajtajahoz ami kap egy erteket es beallitja a fajtat
+void Tequila::setFajta(String kap) {
     fajta=kap;
 }
 
-const char* Tequila::getFajtaNev() const {
-    switch (fajta) {
-        case silver: return "silver";
-        case gold: return "gold";
-        case aged: return "aged";
-        default: return "ismeretlen";
+//getter az agavehoz
+bool Tequila::getAgave() const {
+    return  agave;
+}
+
+//setter az agavehoz
+void Tequila::setAgave(std::ostream &os, std::istream &is) {
+    os<< "Az 100% agave a tequila alapanyaga 1(igen), 0(nem)" << std::endl;
+    agave=bool_beolvas(os, is);
+}
+
+
+
+//setter az agavehoz ami kap egy bool erteket es beallitja az agavet
+void Tequila::setAgave(bool kap) {
+    agave=kap;
+}
+
+
+//a tequila osztály adatait irja ki az outputra
+void Tequila::kiir( std::ostream &os) const {
+    SzeszesItalok::kiir(os);
+    os << " Fajta: " << fajta;
+    if (agave) { //ha igaz akkor kiirjuk hogy igen
+        os << " 100% Agave";
+    } else { //különben hogy nem
+        os << " Nem tudjuk";
     }
 }
 
-void Tequila::kiir() const {
-    SzeszesItalok::kiir();
-    std::cout << " Fajta: " << getFajtaNev();
-}
-
-void Tequila::Set() {
+void Tequila::Set(std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Tequila fajtaja, 5-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os);
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Tequila fajtaja, 5-Agave, 6-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas(os, is); //beolvasunk egy szamot
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os ,is); //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom( os, is); //ha 3 akkor az alkohol tartalmat allitjuk at
             break;
             case 4:
-                this->setFajta();
+                setFajta(os, is); //ha 4 akkor a tequila fajtajat allitjuk at
             break;
-            case 5: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 5: //ha 5 akkor az agavet allitjuk at
+                setAgave(os, is);
+            case 6: return; //ha 5 akkor viszalep
+            default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
             break;
         }
     }while (valasz!=5);
 }
 
 //sor
-Sor::Sor(ital_tipus tipuss) : SzeszesItalok(tipuss) {
-    setTipus_sor();
+//sor osztály konstruktorok
+Sor::Sor(size_t tipuss, std::ostream &os, std::istream &is) : SzeszesItalok(tipuss, os,is) {
+    setTipus_sor(os, is); //a sor tipusat beallito fuggveny
 }
 
+//parameter nelkuli konstruktor
 Sor::Sor():SzeszesItalok(),tipus_sor(nullptr) {}
 
-Sor::Sor(String nev_kap, ital_tipus tipus): SzeszesItalok(nev_kap,tipus) {
-    setTipus_sor();
+Sor::Sor(String nev_kap, size_t tipus, std::ostream &os, std::istream &is): SzeszesItalok(nev_kap,tipus, os,is) {
+    setTipus_sor(os,is);    //a sor tipusat beallito fuggveny
 }
 
 
-
+//getter a sor tipusahoz
 String Sor::getTipus_sor() const{
     return tipus_sor;
 }
-
-void Sor::setTipus_sor() {
-    std::cout << "Adja meg a sor tipusat: " << std::endl;
-    std::cin >> tipus_sor;
+//setter a sor tipusahoz
+void Sor::setTipus_sor(std::ostream &os, std::istream &is) {
+    os << "Adja meg a sor tipusat: " << std::endl;
+    is >> tipus_sor; //beolvasunk egy stringet
 
 }
 
+//setter a sor tipusahoz ami kap egy stringet es beallitja a tipust
 void Sor::setTipus_sor(String kap) {
     tipus_sor=kap;
 }
 
-void Sor::kiir() const {
-    SzeszesItalok::kiir();
-    std::cout << " Tipus: " << tipus_sor;
+//a sor osztály adatait kirjuk az outputra
+void Sor::kiir(std::ostream &os) const {
+    SzeszesItalok::kiir(os); //meghivjuk a Szeszesital ital kiir fuggvenyt
+    os << " Tipus: " << tipus_sor; //kiirja a tipust
 }
 
+//destruktor a sor osztálynak
 Sor::~Sor() {
 
 }
 
-void Sor::Set() {
+//a sor osztály adatait lehet modositani
+void Sor::Set(std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Sor jeleg, 5-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os);//kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-alkohol, 4-Sor jeleg, 5-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas(os, is); //beolvasunk egy szamot
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os, is); //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setAlkoholTartalom();
+                setAlkoholTartalom(os, is); //ha 3 akkor az alkohol tartalmat allitjuk at
             break;
             case 4:
-                this->setTipus_sor();
+                setTipus_sor(os,is); //ha 4 akkor a sor tipusat allitjuk at
             break;
-            case 5: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 5: return; //ha 5 akkor viszalep
+            default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
             break;
         }
     }while (valasz!=5);
 }
+*/
 
 //gyumolcslev
-
-Gyumolcsle::Gyumolcsle(ital_tipus ital_tipus) : Ital(ital_tipus) {
-   setGyumolcsszazalek();
+//gyumolcsle osztály konstruktorok
+Gyumolcsle::Gyumolcsle(size_t ital_tipus,std::ostream &os, std::istream &is) : Ital(ital_tipus, os,is) {//inizalitálo listán meghivom az Ital konstruktorát
+    setGyumolcsszazalek(os, is); //a gyumolcsszazalek beallito fuggveny
 }
 
+//parameter nelkuli konstruktor
 Gyumolcsle::Gyumolcsle():Ital() {}
 
-Gyumolcsle::Gyumolcsle(String nev_kap, ital_tipus tipus):Ital(nev_kap,tipus) {
-    setGyumolcsszazalek();
+Gyumolcsle::Gyumolcsle(String nev_kap, size_t tipus, std::ostream & os, std::istream &is):Ital(nev_kap,tipus, os ,is) {//inizalitálo listán meghivom az Ital konstruktorát
+    setGyumolcsszazalek(os, is);//a gyumolcsszazalek beallito fuggveny
 }
 
 
-
+//getter a gyumolcsszazalekhez
 unsigned int Gyumolcsle::getGyumolcsszazalek() const {
     return gyumolcsszazalek;
 }
 
-void Gyumolcsle::setGyumolcsszazalek() {
-    std::cout << "Adja meg a gyumolcsszazalekot: " << std::endl;
-    gyumolcsszazalek=unsigned_int_beolvas();
-    while (gyumolcsszazalek>100 or gyumolcsszazalek<0) {
-        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
-        gyumolcsszazalek=unsigned_int_beolvas();
+//setter a gyumolcsszazalekhez
+void Gyumolcsle::setGyumolcsszazalek(std::ostream &os, std::istream &is) {
+    os << "Adja meg a gyumolcsszazalekot: " << std::endl; //kiirjuk a felhasznalonak hogy adja meg a gyumolcsszazalekot
+    gyumolcsszazalek=unsigned_int_beolvas(os, is); //beolvasunk egy elojelnelkuli intet
+    try {
+        szazalek_tests(gyumolcsszazalek); //elenorizzuk a gyumolcsszazalekot
+    }catch (const char *hiba) {
+        os << hiba << std::endl; //ha hibas akkor hibat irunk ki
+        setGyumolcsszazalek(os, is); //es ujra beolvasunk
     }
 }
 
 void Gyumolcsle::setGyumolcsszazalek(unsigned int kap) {
-    gyumolcsszazalek=kap;
-    while (gyumolcsszazalek>100 or gyumolcsszazalek<0) {
-        std::cout << "Hibas szazalek! Adjon meg egy helyes szazalekot!" << std::endl;
-        gyumolcsszazalek=unsigned_int_beolvas();
-    }
+    szazalek_tests(kap); //elenorizzuk a gyumolcsszazalekot
+    gyumolcsszazalek=kap; //beallitjuk
 }
 
-void Gyumolcsle::kiir() const {
-    Ital::kiir();
-    std::cout << "Gyumolcsszazalek: " << gyumolcsszazalek;
+//a gyumolcsle osztály adatait kirjuk az outputra
+void Gyumolcsle::kiir(std::ostream &os) const {
+    Ital::kiir(os); //kiirja az ital adatait
+    os << "Gyumolcsszazalek: " << gyumolcsszazalek; //kiirja a gyumolcsszazalekot
 }
 
-void Gyumolcsle::Set() {
+//a gyumolcsle osztály adatait lehet modositani
+void Gyumolcsle::Set(std::ostream &os, std::istream &is) {
     size_t valasz;
     do {
-        this->kiir();
-        std::cout<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-gyumolcsszazalek, 4-viszalepes" << std::endl;
-        std::cout<<"\nAdja meg az utasitas szamat: ";
-        valasz=size_beolvas();
+        kiir(os); //kiirja az ital adatait
+        os<< "\nMit szeretne modositani?\n 1-Nev, 2-Gyarto, 3-gyumolcsszazalek, 4-viszalepes" << std::endl;
+        os<<"\nAdja meg az utasitas szamat: ";
+        valasz=size_beolvas(os, is); //beolvasunk egy szamot
         switch (valasz) {
             case 1:
-                this->setNev();
+                setNev(os, is); //ha 1 akkor a nevet allitjuk at
             break;
             case 2:
-                this->setGyarto();
+                setGyarto(os, is); //ha 2 akkor a gyartot allitjuk at
             break;
             case 3:
-                this->setGyumolcsszazalek();
+                setGyumolcsszazalek(os, is); //ha 3 akkor a gyumolcsszazalekot allitjuk at
             break;
-            case 4: return;
-            default: std::cout<<"Hibas bemenet!"<<std::endl;
+            case 4: return; //ha 4 akkor viszalep
+            default: os<<"Hibas bemenet!"<<std::endl; //ha nem megfelelo a bemenet akkor hibat irunk ki és ujra kezdjük
             break;
         }
     }while (valasz!=4);
@@ -958,7 +905,6 @@ void Gyumolcsle::Set() {
 
 //os adatok kiíráas
 std::ostream& operator<<(std::ostream& os, const Ital& ital) {
-    ital.kiir();
+    ital.kiir(os);
     return os;
 }
-

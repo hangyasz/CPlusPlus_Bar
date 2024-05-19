@@ -19,70 +19,69 @@ class Koktle {
 public:
     //konstruktor ami beállítja a koktel
     Koktle();
-    Koktle(Italok &italok);
+    Koktle(Italok &italok, std::ostream &os, std::istream &is);
     // ezt használom a fajbol beolvasnal
-    Koktle(String nev_kap, size_t alapanyag_db, Ital** alapanyagok, unsigned int *menyiseg);
+    Koktle(String nev_kap, size_t alapanyag_db_kap, Ital** alapanyagok_kap, unsigned int *menyiseg_kap);
     //kiirja a koktelokat
-    void kiir() const;
+    void kiir(std::ostream &os) const;
     //alapanayg hozzá adása
-    void addAlapanyag(Italok &italok);
+    void addAlapanyag(Italok &italok, std::ostream &os, std::istream &is);
     //alapanyag torlese
-    void removeAlapanyag();
+    void removeAlapanyag(std::ostream &os, std::istream &is);
     void removeAlapanyag(Ital *ital);
     // koktel kiirasa fajlba
     void kiirF(std::ofstream& os) const;
-    //koktel tartalmaz e adott italt
-    bool tartalmaz_e(Ital* kap) const;
+    //koktel tartalmaz e adott italt és viszaadja az indexet
+    size_t tartalmaz_e(Ital* kap) const;
     //koktel tartalmaz e adott alapanyagot
-    bool tartalmaz_e(const ital_tipus tipus) const;
+    bool tartalmaz_e(const size_t tipus) const;
     //koktel atnevezese
-    void setNev();
+    void setNev(std::ostream &os, std::istream &is);
     //visszaadja a koktel nevét
     String getNev() const;
     //koktel belaites mennü
-    void Set(Italok &italok);
+    void Set(Italok &italok, std::ostream &os, std::istream &is);
     //destruktor ami felszabadítja a dinamikus memóriát
     ~Koktle();
 };
 
 //ez kezeli a koktelokat egy osztalyban
 class Koktlok {
-    Koktle** koktelok; //koktelok tömbje
-    size_t koktel_db; //koktelok száma
+    Koktle** koktelok; //koktelok tombje
+    size_t koktel_db; //koktelok szama
 public:
     //konstruktor ami beállítja a koktelokat
     Koktlok();
     //visszaadja a koktelok számát
     size_t getKoktelDb() const;
-    //visszaadja a koktelokat
-    Koktle* getKoktel_csilag(size_t index) const;
+    //visszaadja a megindexelt koktelt
     Koktle &getKoktel(size_t index) const;
     //kiirja a koktelokat
-    void kiir() const;
+    void kiir(std::ostream &os) const;
     //koktel hozzá adása
     void addKoktel(Koktle* kap);
-    void addKoktel(Italok &italok);
+    void addKoktel(Italok &italok, std::ostream &os, std::istream &is);
     //koktel törlése
-    void removeKoktel();
+    void removeKoktel(std::ostream &os, std::istream &is);
     void removeKoktel(size_t index);
     //koktelok kiirása index kell
-    void kiir_index() const;
+    void kiir_index(std::ostream& os) const;
     //koktelok kiirása fájlba
     void kiirF() const;
     //koktelok beolvasása fájlból
-    void olvasF(Italok &italok);
+    void olvasF(Italok &italok, std::ostream &os, std::istream &is);
     //viszaadja az ittalt ha létezik külöben felveszük
-    Ital* ital_letezik_e(Italok &italok, String nev, ital_tipus tipus);
+    Ital* ital_letezik_e(Italok &italok, String nev, size_t tipus, std::ostream &os, std::istream &is) const;
     //koktelok beolvasása
-    void Set(Italok &italok);
+    void Set(Italok &italok, std::ostream &os, std::istream &is);
     //veletlen szerü köktel ajánlás
-    void veltel_ajanlas();
+    void veltel_ajanlas(std::ostream &os, std::istream &is) const;
     //adott alapanyagot tartalmazó koktelok kiirása
-    void lista_alapanyagok_szerint() const;
+    void lista_alapanyagok_szerint(std::ostream &os, std::istream &is) const;
     //destruktor ami felszabadítja a dinamikus memóriát
     ~Koktlok();
     //alapanyagot törlünk az italokboll
-    bool removeAlapanyag_Italok(size_t index,Ital *alpanyg);
+    bool removeAlapanyag_Italok(size_t index,Ital *alpanyg, std::ostream &os, std::istream &is);
 };
 
 

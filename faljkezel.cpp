@@ -7,31 +7,15 @@
 #include <fstream>
 #include "Ital.h"
 #include <limits>
+#include "fugvenyek.hpp"
 #include "memtrace.h"
 
-//Ital tipust alakitja szama
-int Ital::getTipus_Szam() const {
-    switch (tipus) {
-        case bor: return 1;
-        case whiskey: return 2;
-        case gin: return 3;
-        case rum: return 4;
-        case tequila: return 5;
-        case sor: return 6;
-        case gyumolcsle: return 7;
-        case alkohols: return 8;
-        case alkohol_mentes: return 9;
-        default:
-            std::cerr<<"Hibás típus!"<<std::endl;
-        break;
-    }
-    return 0; //ha nem sikerult 0 adunk vissza
-}
+
 
 
 //Az ittal osztály altal tárolt adaokat kiirja egy fajlba <tipus(száma)><nev><gyarto> formátumban
 void Ital::kiirF(std::ofstream& os) const {
-    os<<getTipus_Szam()<<"<"<<nev<<"><"<<gyarto<<">";
+    os<<tipus<<"<"<<nev<<"><"<<gyarto<<">";
 }
 
 //A SzesszesItalok osztály altal tárolt adatokat kiirja egy fajlba <alkoholTartalom> formátumban
@@ -44,60 +28,36 @@ void Wiskey::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);//SzeszesItalok osztály adatok kiirása
     os<<"<"<<jeleg<<"><"<<erleses<<">";
 }
-//A Gin szinét számra alakítja
-int Gin::getSzin_szam() const {
-    switch (szin) {
-        case szintelen: return 1;
-        case pink: return 2;
-        case egyeb: return 3;
-        default: std::cerr<< "Hibás szín!"<<std::endl;
-        break;
-    }
-    return 0; //ha nem sikerult 0 adunk vissza
-}
+
+
 //A Gin osztály altal tárolt adatokat kiirja egy fajlba <szin(száma)><iz> formátumban
 void Gin::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os);//SzeszesItalok osztály adatok kiirása
-    os<<"<"<<getSzin_szam()<<"><";
+    os<<"<"<<szin<<"><";
     if(iz.size()!=0) //ha nem üres a string akkor kerul kiirásra
         os<<iz;
     os<<">";
 }
 
-//A Rum fajtáját számra alakítja
-int Rum::getFajta_Szam() const {
-    switch (fajta) {
-        case fuszeres_rum: return 1;
-        case fekete_rum: return 2;
-        case arany_rum: return 3;
-        case feher_rum: return 4;
-        default: std::cerr<<"Hibás fajta!"<<std::endl;
-        break;
-    }
-    return 0; //ha nem sikerult 0 adunk vissza
-}
 
-//A Rum osztály altal tárolt adatokat kiirja egy fajlba <fajta(száma)> formátumban
-void Rum::kiirF(std::ofstream& os) const {
+//A Fajta osztály altal tárolt adatokat kiirja egy fajlba <fajta(száma)> formátumban
+void Fajta::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os); //SzeszesItalok osztály adatok kiirása
-    os<<"<"<<getFajta_Szam()<<">";
+    os<<"<"<<fajta<<">";
 }
 
-//A Tequila fajtáját számra alakítja
-int Tequila::getFajta_Szam() const {
-    switch (fajta) {
-        case silver: return 1;
-        case gold: return 2;
-        case aged: return 3;
-        default: std::cerr<< "Hibás fajta!"<<std::endl;
-        break;
-    }
-    return 0; //ha nem sikerult 0 adunk vissza
-}
+/*
 //A Tequila osztály altal tárolt adatokat kiirja egy fajlba <fajta(száma)> formátumban
 void Tequila::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os); //SzeszesItalok osztály adatok kiirása
-    os<<"<"<<getFajta_Szam()<<">";
+    os<<"<"<<fajta<<"><";
+    if(agave) {
+        os<<1;
+    }
+    else {
+        os<<0;
+    }
+        os<<">";
 }
 
 //A Sor osztály altal tárolt adatokat kiirja egy fajlba <tipus_sor> formátumban
@@ -105,6 +65,7 @@ void Sor::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os); //SzeszesItalok osztály adatok kiirása
     os<<"<"<<tipus_sor<<">";
 }
+*/
 
 //A Gyumolcsle osztály altal tárolt adatokat kiirja egy fajlba <gyumolcsszazalek> formátumban
 void Gyumolcsle::kiirF(std::ofstream& os) const {
@@ -113,22 +74,10 @@ void Gyumolcsle::kiirF(std::ofstream& os) const {
 }
 
 
-//A bor szinét számra alakítja
-int Bor::getSzin_Szam() const {
-    switch (szin) {
-        case voros: return 1;
-        case rose: return 2;
-        case feher: return 3;
-        default: std::cerr<<"Hibás szín!"<<std::endl;
-        break;
-    }
-    return 0; //ha nem sikerult 0 adunk vissza
-}
-
 //A Bor osztály altal tárolt adatokat kiirja egy fajlba <evjarat><szin(száma)><fajta_db><fajta> formátumban
 void Bor::kiirF(std::ofstream& os) const {
     SzeszesItalok::kiirF(os); //SzeszesItalok osztály adatok kiirása
-    os<<"<"<<evjarat<<"><"<<getSzin_Szam()<<"><"<<fajta_db<<"><";
+    os<<"<"<<evjarat<<"><"<<szin<<"><"<<fajta_db<<"><";
     if(fajta_db>=1)
         os<<fajta[0];
     for(size_t i=1;i<fajta_db;i++){
@@ -151,78 +100,106 @@ void Bor::kiirF(std::ofstream& os) const {
 
 //szam_olvas függvény ami egy fajlban található számot olvasbe
 int szam_olvas(std::ifstream &file) {
-    char kacsacsor;
+    char kacsacsor1;
+    char kacsacsor2;
     int szam;
-    file>>kacsacsor>>szam>>kacsacsor; //kacsacsorok közötti szám olvasása
+    file>>kacsacsor1>>szam>>kacsacsor2; //kacsacsorok közötti szám olvasása
+    if(kacsacsor1!='<' or kacsacsor2!='>') //ha nem kacsacsorok között van a szám akkor hibát dob
+        throw "Hibás formátum!";
     return szam; //szam viszadása
 }
 //unsigned int_olvas függvény ami egy fajlban található unsigned int számot olvasbe
 unsigned int uszam_olvas(std::ifstream &file) {
-    char kacsacsor;
+    char kacsacsor1;
+    char kacsacsor2;
     unsigned int szam;
-    file>>kacsacsor>>szam>>kacsacsor; //kacsacsorok közötti szám olvasása
+    file>>kacsacsor1>>szam>>kacsacsor2; //kacsacsorok közötti szám olvasása
+    if(kacsacsor1!='<' or kacsacsor2!='>') //ha nem kacsacsorok között van a szám akkor hibát dob
+        throw "Hibás formátum!";
     return szam; //szam viszadása
 }
 
 //size_t_olvas függvény ami egy fajlban található size_t számot olvasbe
 size_t size_olvas(std::ifstream &file) {
-    char kacsacsor;
+    char kacsacsor1;
+    char kacsacsor2;
     size_t szam;
-    file>>kacsacsor>>szam>>kacsacsor; //kacsacsorok közötti szám olvasása
+    file>>kacsacsor1>>szam>>kacsacsor2; //kacsacsorok közötti szám olvasása
+    if(kacsacsor1!='<' or kacsacsor2!='>') //ha nem kacsacsorok között van a szám akkor hibát dob
+        throw "Hibás formátum!";
     return szam; //szam viszadása
 }
 
 //float_olvas függvény ami egy fajlban található float számot olvasbe
 float float_olvas(std::ifstream &file) {
-    char kacsacsor;
+    char kacsacsor1;
+    char kacsacsor2;
     float szam;
-    file>>kacsacsor>>szam>>kacsacsor; //kacsacsorok közötti szám olvasása
+    file>>kacsacsor1>>szam>>kacsacsor2; //kacsacsorok közötti szám olvasása
+    if(kacsacsor1!='<' or kacsacsor2!='>') //ha nem kacsacsorok között van a szám akkor hibát dob
+        throw "Hibás formátum!";
+    return szam; //szam viszadása
+}
+
+bool bool_olvas(std::ifstream &file) {
+    char kacsacsor1;
+    char kacsacsor2;
+    int szam;
+    file>>kacsacsor1>>szam>>kacsacsor2; //kacsacsorok közötti szám olvasása
+    if(kacsacsor1!='<' or kacsacsor2!='>') //ha nem kacsacsorok között van a szám akkor hibát dob
+        throw "Hibás formátum!";
     return szam; //szam viszadása
 }
 
 //Ital osztály konstruktora ami egy fajlban található adatokat olvas be
-Ital::Ital(std::ifstream &file) {
-    setTipus(alkohol_mentes); //alapértelmezett tipus beállítása minden ittal alkoholmentes
+Ital::Ital(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is) {
+    try{
+        setTipus(tipus); //tipus beállítása
+    } catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        vait(os, is);
+        throw "Hibás tipus!";
+    }
+    setTipus(tipus); //tipus beállítása
     file>>nev; //nev beolvasása
     file>>gyarto; //gyarto beolvasása
+
 }
 
 //SzeszesItalok osztály konstruktora ami egy fajlban található adatokat olvas be
-SzeszesItalok::SzeszesItalok(std::ifstream &file):Ital(file) {//inicializálo listán ital konstruktor hívása
-    setTipus(alkohols); //tipus beállítása alkoholosra
-    setAlkoholTartalom(float_olvas(file)); //alkohol tartalom beolvasása
-}
-
-//a kapott számot viszaalakítja a megfelelő szinre és beállítja
-void Bor::setSzin(int kap) {
-    switch (kap) {
-        case 1: szin= voros;
-        break;
-        case 2: szin= rose;
-        break;
-        case 3: szin= feher;
-        break;
-        default: std::cerr<< "Hibás szín!"<<std::endl; //hibbas szam esetén
-        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl; //kiírjuk a nevét és gyartojat
-        setSzin(); //megkérjuk hogy a felhasználo kezel vigye be adatot
-        break;
+SzeszesItalok::SzeszesItalok(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is):Ital(file,tipus,os,is) {//inicializálo listán ital konstruktor hívása
+    float szazalek=float_olvas(file); //szazalek beolvasása
+    try {
+        setAlkoholTartalom(szazalek); //alkohol tartalom beállítása
+    } catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        os<<"itall nev: "<<getNev()<<" gyarto: "<<getGyarto()<<"itall tupus "<<getTipusNev()<<"\n"; //ha hibás az alkohol tartalom akkor kiirja az adatotk
+        setAlkoholTartalom(os, is); //ha hibás az alkohol tartalom akkor megkeri a felhasználót hogy adja meg kezel
     }
 }
 
 //Bor osztály konstruktora ami egy fajlban található adatokat olvasbe
-Bor::Bor(std::ifstream &file):SzeszesItalok(file),fajta(nullptr) { //inicializálo listán szeszes italok konstruktor hívása és fajta nullptr-ra állítása
-    setTipus(bor); //tipus beállítása borra
-    setEvjarat(szam_olvas(file)); //evjarat beolvasása és beállítása
-    if(!evjarat_teszt(evjarat)){ //ha a beolvasott evjarat nem tobb mint az aktualis evjarat
-        std::cout<<"Hibás évjárat: "<<std::endl;
-        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<getSzinNev()<<std::endl;
-        setEvjarat(); //megkérjuk hogy a felhasználo kezel vigye be adatot
+Bor::Bor(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is):SzeszesItalok(file,tipus,os,is),fajta(nullptr) { //inicializálo listán szeszes italok konstruktor hívása és fajta nullptr-ra állítása
+    int evjarat=szam_olvas(file); //evjarat beolvasása
+try {
+        setEvjarat(evjarat); //evjarat beállítása
+    } catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        os<<"itall nev: "<<getNev()<<" gyarto: "<<getGyarto()<<"itall tupus "<<getTipusNev()<<"\n"; //ha hibás az evjarat akkor kiirja az adatotk
+        setEvjarat(os, is); //ha hibás az evjarat akkor megkeri a felhasználót hogy adja meg kezel
     }
-    setSzin(szam_olvas(file));//szin beolvasása és beállítása
-    setFajta_db(size_olvas(file)); //fajta db beolvasása
+    size_t szin=size_olvas(file); //szin beolvasása
+    try {
+        setSzin(szin); //szin beállítása
+    }catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        os<<"itall nev: "<<getNev()<<" gyarto: "<<getGyarto()<<"itall tupus "<<getTipusNev()<<"\n"; //ha hibás a szin akkor kiirja az adatotk
+        setSzin(os, is); //ha hibás a szin akkor megkeri a felhasználót hogy adja meg kezel
+    }
+    fajta_db=size_olvas(file); //fajta db beolvasása
     if(fajta_db!=0) {
         String *fajatk=new String[fajta_db]; //fajta db méretű string tömb létrehozása
-        for(size_t i=0;i<this->getFajta_db();i++){
+        for(size_t i=0;i<fajta_db;i++){
             file>>fajatk[i]; //fajtak beolvasása a tömbbe
         }
         setFajta_string(fajatk); //fajta string tömb beállítása
@@ -233,132 +210,74 @@ Bor::Bor(std::ifstream &file):SzeszesItalok(file),fajta(nullptr) { //inicializá
 }
 
 //Whiskey osztály konstruktora ami egy fajlban található adatokat olvasbe
-Wiskey::Wiskey(std::ifstream &file):SzeszesItalok(file) { //inicializálo listán SzeszesItalok konstruktor hívása
-    setTipus(whiskey); //tipus beállítása whiskey-re
+Wiskey::Wiskey(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is):SzeszesItalok(file, tipus ,os,is) { //inicializálo listán SzeszesItalok konstruktor hívása
     file>>jeleg; //jeleg beolvasása
-    setErleses(uszam_olvas(file)); //erleses beolvasása és beállítása
-}
-
-//a kapt számot viszaalakítja a Gin megfelelő szinre és beállítja
-void Gin::setSzin(int kap) {
-    switch (kap) {
-        case 1: szin= szintelen;
-        break;
-        case 2: szin= pink;
-        break;
-        case 3: szin= egyeb;
-        break;
-        default: std::cerr<< "Hibás szín!"<<std::endl;
-        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
-        setSzin(); //megkérjuk hogy a felhasználo kezel vigye be a szinet
-        break;
+    unsigned int erleses=uszam_olvas(file); //erleses beolvasása
+    try {
+        setErleses(erleses); //erleses beolvasása és beállítása
+    }catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        os<<"itall nev: "<<getNev()<<" gyarto: "<<getGyarto()<<"itall tupus "<<getTipusNev()<<"\n"; //ha hibás az erleses akkor kiirja az adatotk
+        setErleses(os, is); //ha hibás az erleses akkor megkeri a felhasználót hogy adja meg kezel
     }
 }
+
+
 //Gin osztály konstruktora ami egy fajlban található adatokat olvasbe
-Gin::Gin(std::ifstream &file):SzeszesItalok(file) { //inicializálo listán SzeszesItalok konstruktor hívása
-    setTipus(gin); //tipus beállítása gin-re
-    setSzin(szam_olvas(file)); //szin beolvasása és beállítása
+Gin::Gin(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is):SzeszesItalok(file,tipus, os,is) { //inicializálo listán SzeszesItalok konstruktor hívása
+    file>>szin; //szin beolvasása
     file>>iz; //iz beolvasása
 }
 
-//a kapott számot viszaalakítja a Rum megfelelő fajtájára és beállítja
-void Rum::setFajta(int kap) {
-    switch (kap) {
-        case 1: fajta= fuszeres_rum;
-        break;
-        case 2: fajta= fekete_rum;
-        break;
-        case 3: fajta= arany_rum;
-        break;
-        case 4: fajta= feher_rum;
-        break;
-        default: std::cerr<< "Hibás fajta!"<<std::endl;
-        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
-        setFajta(); //megkérjuk hogy a felhasználo kezel vigye be a fajtát
-        break;
-    }
-}
-//Rum osztály konstruktora ami egy fajlban található adatokat olvasbe
-Rum::Rum(std::ifstream &file):SzeszesItalok(file) { //inicializálo listán SzeszesItalok konstruktor hívása
-    setTipus(rum);  //tipus beállítása rum-ra
-    setFajta(szam_olvas(file)); //fajta beolvasása és beállítása
+//Fajta osztály konstruktora ami egy fajlban található adatokat olvasbe
+Fajta::Fajta(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is):SzeszesItalok(file,tipus,os,is) { //inicializálo listán SzeszesItalok konstruktor hívása
+    file>>fajta;//fajta beolvasása és beállítása
 }
 
-
-//a kapott számot viszaalakítja a Tequila megfelelő fajtájára és beállítja
-void Tequila::setFajta(int kap){
-    switch (kap) {
-        case 1: fajta= silver;
-        break;
-        case 2: fajta= gold;
-        break;
-        case 3: fajta= aged;
-        break;
-        default: std::cerr<<"Hibás fajta!"<<std::endl;
-        std::cout<<"Nev: "<<getNev()<<" Gyarto: "<<getGyarto()<<std::endl;
-        setFajta(); //megkérjuk hogy a felhasználo kezel vigye be a fajtát
-        break;
-    }
-}
+/*
 
 //Tequila osztály konstruktora ami egy fajlban található adatokat olvasbe
-Tequila::Tequila(std::ifstream &file):SzeszesItalok(file) { //inicializálo listán SzeszesItalok konstruktor hívása
-    setTipus(tequila); //tipus beállítása tequila-ra
-    setFajta(szam_olvas(file)); //fajta beolvasása és beállítása
+Tequila::Tequila(std::ifstream &file,std::ostream &os, std::istream &is):SzeszesItalok(file, os,is) { //inicializálo listán SzeszesItalok konstruktor hívása
+    setTipus(5); //tipus beállítása tequila-ra
+    file>>fajta; //fajta beolvasása
+    setAgave(bool_olvas(file)); //agave beolvasása és beállítása
 }
 
 //Sor osztály konstruktora ami egy fajlban található adatokat olvasbe
-Sor::Sor(std::ifstream &file):SzeszesItalok(file) { //inicializálo listán SzeszesItalok konstruktor hívása
-    setTipus(sor); //tipus beállítása sor-ra
+Sor::Sor(std::ifstream &file,std::ostream &os, std::istream &is):SzeszesItalok(file, os,is) { //inicializálo listán SzeszesItalok konstruktor hívása
+    setTipus(6); //tipus beállítása sor-ra
     file>>tipus_sor; //sornek a tipus beolvasása
 }
 
+*/
 //Gyumolcsle osztály konstruktora ami egy fajlban található adatokat olvasbe
-Gyumolcsle::Gyumolcsle(std::ifstream &file):Ital(file),gyumolcsszazalek(0) { //inicializálo listán Ital konstruktor hívása és gyumolcsszazalek 0-ra állítása
-    setTipus(gyumolcsle); //tipus beállítása gyumolcsle-re
+Gyumolcsle::Gyumolcsle(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is):Ital(file,tipus, os,is),gyumolcsszazalek(0) { //inicializálo listán Ital konstruktor hívása és gyumolcsszazalek 0-ra állítása
+    setTipus(7); //tipus beállítása gyumolcsle-re
     setGyumolcsszazalek(uszam_olvas(file)); //gyumolcsszazalek beolvasása és beállítása
 }
 
 //Italok osztály fáljbol olvaso függvénye
-void Italok::olvasF() {
+void Italok::olvasF(std::ostream & os, std::istream &is) {
     std::ifstream file;
     file.open("italok.txt"); //fajl megnyitása italok.txt
     if (!file.is_open())
         throw"nem nyilt meg az italok.txt";
-    int tipus; //tipus szám beolvasására
-    while ((file>>tipus)){
-        switch (tipus) { //tipus szám alapján a megfelelő ital létrehozása
-            case 1:
-                addItal(new Bor(file));
-                break;
-            case 2:
-                addItal(new Wiskey(file));
-                break;
-            case 3:
-                addItal(new Gin(file));
-                break;
-            case 4:
-               addItal(new Rum(file));
-                break;
-            case 5:
-               addItal(new Tequila(file));
-                break;
-            case 6:
-                addItal(new Sor(file));
-                break;
-            case 7:
-               addItal(new Gyumolcsle(file));
-                break;
-            case 8:
-                addItal(new SzeszesItalok(file));
-            break;
-            case 9:
-               addItal(new Ital(file));
-                break;
-            default:
-                std::cerr<<"Hibas tipus kreme vigye fell majd kezzel vagy vegye fell a kapcsolatot a feljlesztovel"<<std::endl;
-                file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //ha hibas tipus akkor a sor végéig olvasunk és a következő sorba lépünk
-                break;
+    size_t tipus; //tipus szám beolvasására
+    typedef Ital* (*CreateItalFunction)(std::ifstream &,size_t,std::ostream&,std::istream&); //letrehozunk egy pointert ami egy fuggvenyt mutat
+    //letrehozunk egy tombot ami a fuggvenyeket tartalmazza
+    CreateItalFunction createItalFunction[]={italok_olvas<Bor>,italok_olvas<Wiskey>,italok_olvas<Gin>,italok_olvas<Fajta>,italok_olvas<Fajta>,italok_olvas<Fajta>,italok_olvas<Gyumolcsle>,italok_olvas<SzeszesItalok>,italok_olvas<Ital>};
+    size_t max_tipus=get_tipusok_szam();
+    while (file>>tipus){
+        if(tipus>max_tipus or tipus==0) //akkor ugrunk a következő sorba ha a tipus szám nem megfelelő
+            file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        else
+        try {
+            addItal(createItalFunction[tipus-1](file,tipus,os,is)); //uj ital hozzaadasa
+        } catch (const char *hiba) {
+            os<<hiba<<std::endl;
+            os<<"kerem nezze majd att a beolvasos italokt mivel nem sikerult teljesen beolvasni";
+            vait(os, is);
+            file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //ha hibás az ital akkor a sor végéig olvasunk és a következő sorba lépünk
         }
     }
 }
@@ -368,7 +287,7 @@ void Koktle::kiirF(std::ofstream &os) const {
     os<<alapanyag_db; //alapanyagok számának kiirása
     os<<"<"<<nev<<">"; //nev kiirása kacsacsorok között
     for (size_t i=0; i<alapanyag_db; i++){ //alapanyagok kiirása
-        os<<"<"<<alapanyagok[i]->getTipus_Szam()<<"><"<<alapanyagok[i]->getNev()<<"><"; //tipus szám, nev kiirása
+        os<<"<"<<alapanyagok[i]->getTipus()<<"><"<<alapanyagok[i]->getNev()<<"><"; //tipus szám, nev kiirása
         os<<menyiseg[i]<<">"; //menyiseg kiirása
     }
 }
@@ -386,74 +305,61 @@ void Koktlok::kiirF() const {
 }
 
 //Koktelok osztály fáljbol olvaso függvénye
-void Koktlok::olvasF(Italok &italok ) {
+void Koktlok::olvasF(Italok &italok, std::ostream &os, std::istream &is) {
     std::ifstream file;
     file.open("koktelok.txt"); //fajl megnyitása koktelok.txt
     if (!file.is_open())
         throw"nem nyilt meg a koktelok.txt";
     size_t alapanyag_db;
+    Ital **alapanyagok=nullptr;
+    unsigned int *menyiseg=nullptr;
     while (file>>alapanyag_db){ //alapanyagok számának beolvasása
-        String nev;
-        file>>nev; //nev beolvasása0
-        Ital **alapanyagok=new Ital*[alapanyag_db]; //alapanyagok tömb létrehozása
-        unsigned int *menyiseg=new unsigned int[alapanyag_db]; //menyiseg tömb létrehozása
-        for (size_t i=0; i<alapanyag_db; i++){
-            int tipus=szam_olvas(file); //tipus szám beolvasása
-            String nev_ital;
-            file>>nev_ital; //ital nevének beolvasása
-            switch (tipus) {
-                case 1:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,bor); //viszaadja az ital cimet
-                    break;
-                case 2:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,whiskey); //viszaadja az ital cimet
-                    break;
-                case 3:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,gin); //viszaadja az ital cimet
-                    break;
-                case 4:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,rum); //viszaadja az ital cimet
-                    break;
-                case 5:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,tequila); //viszaadja az ital cimet
-                    break;
-                case 6:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,sor); //viszaadja az ital cimet
-                    break;
-                case 7:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,gyumolcsle); //viszaadja az ital cimet
-                    break;
-                case 8:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,alkohols); //viszaadja az ital cimet
-                    break;
-                case 9:
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,alkohol_mentes);  //
-                    break;
-                default: //ha nemtaljuk a tipust akkor kiirjuk az itall nevét és kérjük be a tipust
-                    std::cout<<"Hibas tipus ital nev: "<<nev_ital<<  " mi legyen az uj tipus: "<<std::endl;
-                    ital_tipus bevit=tipus_valszto(); //tipus beolvasása a felhasználótól
-                    alapanyagok[i]=ital_letezik_e(italok,nev_ital,bevit); //viszaadja az ital cimet
-                    break;
+        try {
+            alapanyagok=new Ital*[alapanyag_db]; //alapanyagok tömb létrehozása
+            menyiseg=new unsigned int[alapanyag_db]; //menyiseg tömb létrehozása
+            String nev;
+            file>>nev; //nev beolvasása0
+            for (size_t i=0; i<alapanyag_db; i++){
+                size_t tipus=size_olvas(file); //tipus szám beolvasása
+                String nev_ital;
+                file>>nev_ital; //ital nevének beolvasása
+                alapanyagok[i]=ital_letezik_e(italok,nev_ital,tipus, os,is); //ital létezik e függvény meghívása
+                menyiseg[i]=uszam_olvas(file); //menyiseg beolvasása
             }
-            menyiseg[i]=uszam_olvas(file); //menyiseg beolvasása
+            addKoktel(new Koktle(nev,alapanyag_db,alapanyagok,menyiseg)); //hozzáadjuk a koktelt a tömbhöz és létrehozzuk a kotelt a konstruktorral
+        }catch (const char *hiba) {
+            //ha hibás a beolvasa akkor töröljük a dinamikusan lefoglalt memóriát
+            delete [] alapanyagok;
+            delete [] menyiseg;
+            os<<hiba<<std::endl;
+            os<<"kerem nezze majd att a beolvasos italokt mivel nem sikerult teljesen beolvasni";
+            vait(os, is);
+            file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //ha hibás az ital akkor a sor végéig olvasunk és a következő sorba lépünk
         }
-        addKoktel(new Koktle(nev,alapanyag_db,alapanyagok,menyiseg)); //hozzáadjuk a koktelt a tömbhöz és létrehozzuk a kotelt a konstruktorral
     }
 }
 
 //Az italok tömbben nézuk hogy egy alapanyag benne van e ha nincsen hozzáadjuk
-Ital* Koktlok::ital_letezik_e(Italok &italok, String nev, ital_tipus tipus){
+Ital* Koktlok::ital_letezik_e(Italok &italok, String nev, size_t tipus, std::ostream &os, std::istream &is) const{
     size_t db=italok.getdb();
+    if(tipus==0 or tipus>get_tipusok_szam()) //ha hibás a tipus akkor hibát dob
+        throw "Hibás tipus! ital tipus: ";
     for(size_t i=0; i<db; i++){
-        Ital *akt=italok.getItalCsilag(i);
+        Ital *akt=&italok.getItal(i);
         if(akt->getTipus()==tipus and nev==akt->getNev()){ //ha a tipus és a nev megegyezik akkor visszaadjuk az italt
             return akt;
         }
     }
-    std::cout<<"\nNem talalhato az ital!: most hozaadjuk a tipus: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
-    italok.addItal(nev,tipus); //ha nem találjuk az italt akkor hozzáadjuk
-    italok.kiirF(); //kiirjuk az italokat a fajlba
-    return italok.getItalCsilag(db); //visszaadjuk az ujonal hozzáadott italt ami az utolsó helyen van
+    os<<"\nNem talalhato az ital!: most hozaadjuk a tipus: "<<get_tipus_nev_str(tipus)<<" Nev: "<<nev<<std::endl;
+    italok.addItal(nev,tipus,os ,is); //ha nem találjuk az italt akkor hozzáadjuk
+    try{
+        italok.kiirF(); //kiirjuk az italokat a fajlba
+    } catch (const char *hiba) {
+        os<<hiba<<std::endl;
+        os<<"nem sikerult kiirni az italokat a fajlba";
+        vait(os,is);
+    }
+    return &italok.getItal(db); //visszaadjuk az ujonal hozzáadott italt ami az utolsó helyen van
 }
 
 //felüldefiniált << operátor az Ital osztályhoz hogy kiirhassuk az adatokat egy fajlba

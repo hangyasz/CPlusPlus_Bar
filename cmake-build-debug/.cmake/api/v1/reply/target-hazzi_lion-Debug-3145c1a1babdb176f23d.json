@@ -64,6 +64,10 @@
 				},
 				{
 					"backtrace" : 2,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 2,
 					"fragment" : "-pedantic"
 				}
 			],
@@ -93,7 +97,8 @@
 				8,
 				10,
 				12,
-				16
+				16,
+				18
 			]
 		}
 	],
@@ -138,7 +143,8 @@
 				8,
 				10,
 				12,
-				16
+				16,
+				18
 			]
 		},
 		{
@@ -152,7 +158,8 @@
 				11,
 				13,
 				14,
-				15
+				15,
+				17
 			]
 		}
 	],
@@ -211,7 +218,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "bevitel_kezel.hpp",
+			"path" : "bevitel_kezel.h",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -250,6 +257,17 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "string5.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "fugvenyek.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "fugvenyek.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
