@@ -107,6 +107,7 @@ void Italok::removeItal(Koktlok &k, std::ostream &os, std::istream &is) {
         delete ListaItalok[0];
         delete [] ListaItalok;
         ListaItalok=nullptr; //a listat nullpointerre allitjuk
+        db=0; //db 0-ra allitjuk
         return; //viszalepunk
     }
     Ital **tmp = new Ital*[db - 1]; //letrehozunk egy uj tombot egyel kisebbel
@@ -151,7 +152,11 @@ void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
                 }
                 if(index==0) //ha 0 akkor viszalepunk
                     break;
-                getItal(index-1).Set(os,is); //az adott indexu ital adatainak modositasa
+                try {
+                    getItal(index-1).Set(os,is); //az adott indexu ital adatainak modositasa
+                }catch (const char *s){
+                    os<<s<<std::endl;
+                }
                 break;
             case 4:
                 this->kiir_index(os); //ha 4 akkor kiirjuk az italokat

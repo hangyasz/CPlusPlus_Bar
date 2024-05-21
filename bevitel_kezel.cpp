@@ -13,8 +13,8 @@
 
 //Buffer torlese
 void bufer_torles(std::istream &is) {
-    is.clear(); //hibaflag torlese
-    is.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //beolvasott adatok torlese
+    is.clear(); // Hibaflag törlése
+    is.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Beolvasott adatok törlése
 }
 
 //szamam beolvasasa
@@ -55,9 +55,8 @@ size_t size_beolvas(std::ostream &os, std::istream &is) {
 }
 //vait fuggveny
 void vait(std::ostream &os, std::istream &is) {
-    os << "Nyomjon meg az enetert a folytatashoz...";
-    bufer_torles(is); //buffer torlese
-    std::getchar(); //enter lenyomasara var
+    os << "Nyomjon meg az enter-t a folytatashoz...";
+    std::getchar(); //enter megnyomasa
 }
 
 bool bool_beolvas(std::ostream &os, std::istream &is) {

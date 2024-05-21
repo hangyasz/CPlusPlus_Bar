@@ -31,7 +31,6 @@ class Ital {
 public:
     //konstruktor ami beállítja az ital nevét, gyártóját és tipusát
     Ital(size_t tipus,std::ostream &os,std::istream &is);
-    Ital();
     Ital(String nev_kap, size_t tipus,std::ostream &os,std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Ital(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is);
@@ -49,11 +48,9 @@ public:
     const char*  getTipusNev() const;
     //beálitja/átálitja az ital nevét
     void setNev(std::ostream &os,std::istream &is);
-    void setNev(String kap );
 
     //beálitja/átálitja az ital gyártóját
     void setGyarto(std::ostream &os,std::istream &is);
-    void setGyarto(String kap);
 
     //beálitja/átálitja az ital tipusát
     void setTipus(size_t kap);
@@ -73,7 +70,6 @@ class SzeszesItalok : public Ital {
 public:
     //konstruktor ami beállítja az alkohol tartalmat
     SzeszesItalok(size_t tipus,std::ostream &os, std::istream &is);
-    SzeszesItalok();
     SzeszesItalok(String nev_kap, size_t tipus, std::ostream &os, std::istream &is);
     //konstruktor fájlból beolvasáshoz
     SzeszesItalok(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is);
@@ -105,7 +101,6 @@ class Bor : public SzeszesItalok {
 public:
     //bor konstruktor
     Bor(size_t tipus,std::ostream &os, std::istream &is);
-    Bor();
     Bor(String nev_kap, size_t tipus, std::ostream &os, std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Bor(std::ifstream &file, size_t tipus, std::ostream &os, std::istream &is);
@@ -130,10 +125,6 @@ public:
     //bor szine átalitása
     void setSzin(std::ostream &os, std::istream &is);
     void setSzin(size_t kap);
-    //fajta db beálitása
-    void setFajta_db(size_t kap);
-
-    void setFajta_string(String *kap);
     //fajta hozzá adása
     void addFajta(std::ostream &os, std::istream &is);
 
@@ -161,19 +152,19 @@ class Wiskey : public SzeszesItalok {
 public:
     //wiskey konstruktor
     Wiskey(size_t ital_tipus,std::ostream & os, std::istream &is);
-    Wiskey();
     Wiskey(String nev_kap, size_t tipus, std::ostream &os, std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Wiskey(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is);
     //destruktor
     ~Wiskey();
 
+    //adatok bekese
+    void intput(std::ostream &os, std::istream &is);
     //jeleg visza adása
     String getJeleg_wiskey() const;
 
     //erleses visza adása
     unsigned int getErleses() const;
-
     //jeleg beálitása
     void setJeleg_wiskey(std::ostream & os, std::istream &is);
 
@@ -198,15 +189,15 @@ class Gin : public SzeszesItalok {
 public:
     //gin konstruktor
     Gin(size_t ital_tipus, std::ostream &os,std::istream &is);
-    Gin();
     Gin(String nev_kap, size_t tipus,std::ostream &os,std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Gin(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is);
+    //adatok bekese
+    void intput(std::ostream &os, std::istream &is);
     //gin szin visza adása
     String getSzin() const;
     //gin szin beálitása
     void setSzin(std::ostream &os,std::istream &is);
-    void setSzin(String kap);
     //a kapot számát sziné alakitja
     void setSzin(int kap);
     //gin iz visza adása
@@ -214,7 +205,6 @@ public:
 
     // gin iz beálitása
     void setIz(std::ostream &os,std::istream &is);
-    void setIz(String kap);
 
     //gin adatok kiirása
     void kiir(std::ostream &os) const;
@@ -236,15 +226,16 @@ class Fajta : public SzeszesItalok {
 public:
     //Fajtak konstruktor
     Fajta(size_t tipus, std::ostream &os, std::istream &is);
-    Fajta();
     Fajta(String nev_kap, size_t tipus,std::ostream &os, std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Fajta(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is);
+
+    //adatok bekese
+    void intput(std::ostream &os, std::istream &is);
     //a fajta visza adása
     String getFajta() const;
     // fajta beálitása
     void setFajta(std::ostream &os, std::istream &is);
-    void setFajta(String kap);
     // adatainak kiirása
     void kiir(std::ostream &os) const;
     //kiirja az ital adatait fájlba
@@ -253,74 +244,7 @@ public:
     void Set( std::ostream &os, std::istream &is);
 };
 
-/*
 
-//Tequila osztály
-class Tequila : public SzeszesItalok {
-    String fajta; //tequila fajta
-
-public:
-    //Tequila konstruktor
-    Tequila(size_t ital_tipus, std::ostream &os, std::istream &is);
-    Tequila();
-    Tequila(String nev_kap, size_t tipus, std::ostream &os, std::istream &is);
-    //konstruktor fájlból beolvasáshoz
-    Tequila(std::ifstream &file,std::ostream &os, std::istream &is);
-    //Tequila fajta visza adása
-    String getFajta() const;
-    //Tequila fajta nevének visza adása
-    const char* getFajtaNev() const;
-    //Tequila fajta beálitása
-    void setFajta(std::ostream &os, std::istream &is);
-    void setFajta(String kap);
-    //Tequila agave visza adása
-    bool getAgave() const;
-    //Tequila agave beálitása
-    void setAgave(std::ostream &os, std::istream &is);
-    void setAgave(bool kap);
-    //a kapot számát fajta alakitja
-    void setFajta(int kap);
-    //Tequila adatainak kiirása
-    void kiir(std::ostream & os) const;
-
-    //kiirja az ital adatait fájlba
-    void kiirF(std::ofstream& os) const;
-
-    //valtoztatas menü
-    void Set(std::ostream &os, std::istream &is);
-};
-//Sor osztály
-class Sor : public SzeszesItalok {
-    String tipus_sor; //sor tipusa stringként
-
-public:
-    //Sor konstruktor
-    Sor(size_t tipuss, std::ostream &os, std::istream &is);
-    Sor();
-    Sor(String nev_kap, size_t tipus,std::ostream &os, std::istream &is);
-    //konstruktor fájlból beolvasáshoz
-    Sor(std::ifstream &file,std::ostream &os, std::istream &is);
-    //Sor jeleg visza adása
-    String getTipus_sor() const;
-
-    //Sor jeleg beálitása
-    void setTipus_sor(std::ostream &os ,std::istream &is);
-    void setTipus_sor(String kap);
-
-    //Sor adatainak kiirása
-    void kiir(std::ostream &os) const;
-
-    //kiirja az ital adatait fájlba
-    void kiirF(std::ofstream& os) const;
-
-    //sor destruktor
-    ~Sor();
-
-    //valtoztatas menü
-    void Set(std::ostream &os, std::istream &is);
-};
-
-*/
 //gyumolcsle osztály
 class Gyumolcsle : public Ital {
     unsigned int gyumolcsszazalek; //gyumolcsszazalek
@@ -328,10 +252,11 @@ class Gyumolcsle : public Ital {
 public:
     //konstruktor
     Gyumolcsle(size_t ital_tipus, std::ostream &os, std::istream &is);
-    Gyumolcsle();
     Gyumolcsle(String nev_kap, size_t tipus, std::ostream &os, std::istream &is);
     //konstruktor fájlból beolvasáshoz
     Gyumolcsle(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is);
+    //adatok bekese
+    void intput(std::ostream &os, std::istream &is);
     //visza adja a gyumolcsszazalekot
     unsigned int getGyumolcsszazalek() const;
 

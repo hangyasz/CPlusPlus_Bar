@@ -22,8 +22,14 @@ Koktle::Koktle(Italok &italok, std::ostream &os, std::istream &is): alapanyag_db
     setNev(os, is); //beallitja a koktel nevet
     os<<"Alapanyagok szama: ";
     size_t alapanyag_szam = size_beolvas(os ,is); //beolvasni az alapanyagok szamat
-    for (size_t i=0; i<alapanyag_szam; i++){
-        addAlapanyag(italok,os,is); //anyyiszor hivjuk meg az addAlapanyag fuggvenyt amennyi az alapanyag db
+    for (size_t i=0; i<alapanyag_szam; i++) {
+        try{
+            addAlapanyag(italok,os,is); //anyyiszor hivjuk meg az addAlapanyag fuggvenyt amennyi az alapanyag db
+        }catch (const char *s){
+            os<<s<<std::endl;
+            os<<"ujra probaljuk ha tobszor sem sikrul inditsa ujra a programot"<<std::endl;
+            i--; //ha nem sikerult az alapanyagot hozzaadni akkor ujra probaljuk
+        }
     }
 }
 
@@ -57,7 +63,14 @@ void Koktle::addAlapanyag(Italok &italok, std::ostream &os, std::istream &is) {
         index=italok.getdb(); //az uj alapanyag indexe a legutolso lesz
         italok.kiirF();
     }
-    uj_alapanyagok[alapanyag_db] = &italok.getItal(index-1); //a tobb uj eleme legyen a kivalsztot indexu elem
+    try {
+        uj_alapanyagok[alapanyag_db] = &italok.getItal(index-1); //a tobb uj eleme legyen a kivalsztot indexu elem
+    } catch (const char *s) {
+        os<<"Nem sikerult az italt hozadni "<<std::endl;
+        delete [] uj_alapanyagok;
+        delete [] uj_mennyiseg;
+        throw   "Nem sikerult az italt hozadni ";
+    }
     os<<" Mennyiseg: ";
     uj_mennyiseg[this->alapanyag_db] = unsigned_int_beolvas(os, is); //beolvasuk a menyiseget
     //töroljuk az eredeti alapanyagokat es mennyisegeket
@@ -84,10 +97,10 @@ void Koktle::removeAlapanyag(std::ostream &os, std::istream &is) {
         index=size_beolvas(os, is);
     }
     if(index==0) {
-        os<<"a koktelnak nincsen alapnyagai!"<<std::endl;
         return;
     }
     if(alapanyag_db-1==0) {
+        alapanyag_db=0;//alapnyag szam nullara allitasa
         //ha csak egy alapanyag van akkor toroljuk
         delete [] this->alapanyagok;
         delete [] this->menyiseg;
@@ -113,11 +126,12 @@ void Koktle::removeAlapanyag(std::ostream &os, std::istream &is) {
 
 //Eltalvoltja a kapot italt a kotelbol
 void Koktle::removeAlapanyag(Ital *ital) {
-    size_t index=tartalmaz_e(ital);
-    while (index!=0) {
-            if(alapanyag_db-1==0) {
-                delete [] this->alapanyagok;
-                delete [] this->menyiseg;
+    size_t index=tartalmaz_e(ital); //megnezzuk hogy benne van e az ital
+    while (index!=0) {  //amig benne van az ital
+            if(alapanyag_db-1==0) { //ha csak egy alapanyag van akkor toroljuk
+                alapanyag_db=0;//alapnyag szam nullara allitasa
+                delete [] alapanyagok;
+                delete [] menyiseg;
                 menyiseg=nullptr;
                 alapanyagok=nullptr;
                 return;
@@ -127,14 +141,8 @@ void Koktle::removeAlapanyag(Ital *ital) {
             Ital **uj_alapanyagok = new Ital*[alapanyag_db-1];
             unsigned int *uj_mennyiseg = new unsigned int[alapanyag_db-1];
             //atmasoljuk az eredeti alapanyagokat es mennyisegeket az uj tombokbe
-            for (size_t i=0; i<index; i++){
-                uj_alapanyagok[i] = alapanyagok[i];
-                uj_mennyiseg[i] = menyiseg[i];
-            }
-            for (size_t i=index; i<this->alapanyag_db-1; i++){
-                uj_alapanyagok[i] = this->alapanyagok[i+1];
-                uj_mennyiseg[i] = this->menyiseg[i+1];
-            }
+            din_atmasol(uj_alapanyagok, alapanyagok, alapanyag_db, index);
+            din_atmasol(uj_mennyiseg, menyiseg, alapanyag_db, index);
             //toroljuk az eredeti alapanyagokat es mennyisegeket
             delete [] this->alapanyagok;
             delete [] this->menyiseg;
@@ -281,11 +289,10 @@ void Koktlok::removeKoktel(std::ostream &os, std::istream &is) {
         os<<"Torolni kivant koktel index: ";
         index = size_beolvas(os, is);
     }
-    --index;
-    if(koktel_db==0) {//ha nincsenek koktelok akkor kiirjuk hogy ures es visszaterunk
-        os<<"urse nem tartalz koktelokat"<<std::endl;
+    if(index==0) {//ha nincsenek koktelok akkor kiirjuk hogy ures es visszaterunk
         return;
     }
+    --index;
     //ha csak egy koktel van akkor toroljuk és visszaterunk
     if(koktel_db-1==0){
         delete koktelok[0];
@@ -309,27 +316,26 @@ void Koktlok::removeKoktel(std::ostream &os, std::istream &is) {
 
 //toruljuk az adot indexu koktelt
 void Koktlok::removeKoktel(size_t index) {
-    if(index>=this->koktel_db){
+    if(index>=koktel_db){
         if(koktel_db==0) {
             throw "urse a tomb";
             return;
         }
         throw "tulindexeles";
-
     }
     if(koktel_db-1==0){
         delete koktelok[0];
-        delete [] this->koktelok;
+        delete [] koktelok;
         koktelok=nullptr;
         koktel_db=0;
         return;
     }
     Koktle** uj = new Koktle*[this->koktel_db-1];
     din_atmasol(uj,koktelok,koktel_db, index);//atmasoljuk az eredeti koktelokat az uj tombokbe (dinamikus tomb atmasolasa fuggveny
-    delete this->koktelok[index];
-    delete [] this->koktelok;
-    this->koktelok = uj;
-    this->koktel_db--;
+    delete koktelok[index];
+    delete [] koktelok;
+    koktelok = uj;
+    koktel_db--;
 }
 
 //kiirja a koktelokat tombjuket indexekkel+1
@@ -366,7 +372,11 @@ void Koktlok::Set(Italok &italok, std::ostream &os, std::istream &is) {
                 }
                 if(index==0) //ha 0-t valasztott akkor visszaterunk
                     break;
-                getKoktel(index-1).Set(italok, os, is); //a kivalasztott koktel modositasa
+                try {
+                    getKoktel(index-1).Set(italok, os, is); //a kivalasztott koktel modositasa
+                }catch (const char *s){
+                    os<<s<<std::endl;
+                }
                 break;
             case 4: //ha 4-t valasztott akkor koktelok kiirasa outputra
                 kiir_index(os);
@@ -408,10 +418,10 @@ void Koktlok::lista_alapanyagok_szerint(std::ostream &os, std::istream &is) cons
 
 //Koktelok Destruktor
 Koktlok::~Koktlok() {
-    //vegigmegy a koktelokon es torli oket
-    for (size_t i=0; i<this->koktel_db; i++){
-        delete koktelok[i];
+    for (size_t i=0; i<koktel_db; i++){
+        delete koktelok[i]; //torli a koktet
     }
+
     delete [] koktelok; //torli a koktelok tombot
 }
 
@@ -428,7 +438,13 @@ bool Koktlok::removeAlapanyag_Italok(size_t index, Ital *alpanyg, std::ostream &
         valaszto=size_beolvas(os, is); //beolvasni a valasztast
         switch (valaszto) {
             case 1: //ha 1-et valasztott akkor az egesz koktel torles
-                removeKoktel(index);
+                try {
+                    removeKoktel(index);
+                }catch (const char *hiba) {
+                    os<<hiba<<std::endl;
+                    os<<"Nem sikerult a koktel torlese!"<<std::endl;
+                    vait(os, is); //varakozas
+                }
                 try{
                     kiirF(); //kiirjuk a koktelokat fajlba
                 } catch (const char *s) {
