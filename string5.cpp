@@ -101,7 +101,7 @@ std::ostream& operator<<(std::ostream& os, const String& s0) {
     return os;
 }
 
-// << operátor, ami beolvas az istreamről egy szót
+// << operátor, ami beolvas az istreamről egy sort
 std::istream& operator>>(std::istream& is, String& s0) {
     unsigned char ch;
     s0 = String("");            // üres string, ehhez fűzünk hozzá

@@ -12,8 +12,8 @@
 
 //ki írja az italt a fájba
 std::ofstream& operator<<(std::ofstream& os,const Ital &ital);
-//egy szoveg részt olvas be
-char *szoveg_olvsa(std::ifstream &file);
+//ki írja a koktelt a fájba
+std::ofstream& operator<<(std::ofstream& os,const Koktle &koktel);
 //egy számot olvas be
 int szam_olvas(std::ifstream &file);
 //egy unsigned számot olvas be

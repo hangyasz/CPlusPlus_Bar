@@ -71,10 +71,10 @@ bool bool_beolvas(std::ostream &os, std::istream &is) {
 //ital tipusok kivalasztasa és viszadasa
 size_t tipus_valszto(std::ostream & os,std::istream &is) {
     TipusInfo info; //ital tipusokat tartalmazo struktura
-    size_t db=info.meret; //ital tipusok szama
+    size_t db=info.db; //ital tipusok szama
     os << "Valassz egy ital tipust!" << std::endl;
     for (size_t i = 0; i < db; i++) { //kiirjuk az ital tipusokat
-        os << i+1 << ". " << info.italkok[i] <<' ';
+        os << i+1 << ". " << info.ital_nevek[i] <<' ';
     }
     os << std::endl;
     while (true) {

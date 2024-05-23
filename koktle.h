@@ -7,7 +7,6 @@
 
 
 #include  "Ital.h"
-#include "faljkezel.h"
 #include <fstream>
 
 //koktelok osztalya
@@ -18,7 +17,6 @@ class Koktle {
     unsigned int *menyiseg; //alapanyagok mennyisége menyi kell belőle
 public:
     //konstruktor ami beállítja a koktel
-    Koktle();
     Koktle(Italok &italok, std::ostream &os, std::istream &is);
     // ezt használom a fajbol beolvasnal
     Koktle(String nev_kap, size_t alapanyag_db_kap, Ital** alapanyagok_kap, unsigned int *menyiseg_kap);
@@ -43,6 +41,8 @@ public:
     void Set(Italok &italok, std::ostream &os, std::istream &is);
     //destruktor ami felszabadítja a dinamikus memóriát
     ~Koktle();
+    //egy kiválasztott alapanyag adatai kiirasa
+    void alapanyagok_adatok(std::ostream &os, std::istream &is) const;
 };
 
 //ez kezeli a koktelokat egy osztalyban
@@ -56,8 +56,6 @@ public:
     size_t getKoktelDb() const;
     //visszaadja a megindexelt koktelt
     Koktle &getKoktel(size_t index) const;
-    //kiirja a koktelokat
-    void kiir(std::ostream &os) const;
     //koktel hozzá adása
     void addKoktel(Koktle* kap);
     void addKoktel(Italok &italok, std::ostream &os, std::istream &is);
@@ -84,8 +82,5 @@ public:
     bool removeAlapanyag_Italok(size_t index,Ital *alpanyg, std::ostream &os, std::istream &is);
 };
 
-
-//ki írja a koktelt a fájba
-std::ofstream& operator<<(std::ofstream& os,const Koktle &koktel);
 
 #endif //KOKTLE_H

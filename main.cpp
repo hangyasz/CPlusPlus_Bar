@@ -55,7 +55,8 @@ int main() {
 
     Italok *i3=new Italok;
     TEST(Italok, olvasF) {
-        EXPECT_NO_THROW(i3->olvasF(std::cout, std::cin));
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        EXPECT_NO_THROW(i3->olvasF(oss, std::cin));
         EXPECT_EQ(7,i3->getdb())<<"Nem adja vissza a megfelelo erteket";
         EXPECT_EQ(2,i3->getItal(0).getTipus())<<"Nem adja vissza a megfelelo alkohol tartalmat";
         EXPECT_STREQ("Nev",i3->getItal(0).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
@@ -67,14 +68,15 @@ int main() {
 
     Koktlok *k2=new Koktlok;
     TEST(Koktlok, olvas) {
-        EXPECT_NO_THROW(k2->olvasF(*i3, std::cout, std::cin)) << "Hiba tortent az olvasas soran";
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        EXPECT_NO_THROW(k2->olvasF(*i3, oss, std::cin)) << "Hiba tortent az olvasas soran";
         EXPECT_EQ(11,k2->getKoktelDb())<<"Nem adja vissza a megfelelo erteket";
         EXPECT_STREQ("Kedvenc",k2->getKoktel(0).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
         EXPECT_STREQ("Test_0",k2->getKoktel(1).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
         EXPECT_STREQ("Test_1",k2->getKoktel(2).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
         EXPECT_EQ(8,i3->getItal(4).getTipus())<<"Nem adja vissza a megfelelo alkohol tartalmat";
         Italok i2;
-        EXPECT_NO_THROW(i2.olvasF(std::cout, std::cin)) << "Hiba tortent az olvasas soran";
+        EXPECT_NO_THROW(i2.olvasF(oss, std::cin)) << "Hiba tortent az olvasas soran";
 
         EXPECT_EQ(i3->getdb(),i2.getdb())<<"Nem adja vissza a megfelelo erteket a falj es a tarolt ertek";
         EXPECT_STREQ("hiba_Wiskey",i3->getItal(7).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
@@ -89,33 +91,29 @@ int main() {
         EXPECT_STREQ("hiba_alkohol_mentes",i3->getItal(15).getNev().c_str())<<"Nem adja vissza a megfelelo nevet";
         /*
         std::ostringstream oss;
-        std::cout<<'1';
         i3->kiir_index(oss);
-        std::cout<<'2';
         String toss=oss.str().c_str();
-        std::cout<<'3';
         std::ostringstream oss2;
-        std::cout<<'4';
         i2.kiir_index(oss2);
-        std::cout<<'5';
         String toss2=oss2.str().c_str();
-        std::cout<<'6';
         EXPECT_STREQ(toss.c_str(),toss2.c_str())<<"Nem egyezik a ket kiiras";
-        std::cout<<'7';
+        //JPorta nem engedte
         */
     }ENDM;
 
     TEST(Italok + Koktlok, torles) {
-        i3->setItalok(*k2, std::cout, std::cin);
-        k2->Set(*i3, std::cout, std::cin);
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        i3->setItalok(*k2, oss, std::cin);
+        k2->Set(*i3, oss, std::cin);
         EXPECT_EQ(14, i3->getdb()) << "Nem torote az alapnyagot";
         EXPECT_EQ(8, k2->getKoktelDb()) << "Nem torolte a koktelt";
     }ENDM;
 
     TEST(Koktle, torlles) {
+        std::ostringstream oss1; //csak hogy jobban nézen ki a kimenet
         while (k2->getKoktelDb()) {
             std::istringstream iss("1");
-            k2->removeKoktel(std::cout, iss);
+            k2->removeKoktel(oss1, iss);
         }
         std::ostringstream oss;
         k2->removeKoktel(oss,std::cin);
@@ -147,7 +145,8 @@ int main() {
     Italok i;
     Koktlok k;
     TEST(Italok, addital) {
-        i.setItalok(k, std::cout, std::cin);
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        i.setItalok(k, oss, std::cin);
         EXPECT_EQ(1, i.getdb()) << "Nem egy az elemei szama";
         SzeszesItalok *test;
         EXPECT_NO_THROW(test=dynamic_cast<SzeszesItalok *>( &i.getItal(0))) << "dob kivetelt";
@@ -155,14 +154,15 @@ int main() {
         EXPECT_STREQ("Gyarto", test->getGyarto().c_str()) << "Nem egyezik az alkohol";
         EXPECT_EQ(8, test->getTipus()) << "Nem egyezik az ar";
         EXPECT_EQ(10, test->getAlkoholTartalom()) << "Nem egyezik az alkohol";
-        i.setItalok(k, std::cout, std::cin);
+        i.setItalok(k, oss, std::cin);
         EXPECT_EQ(9, i.getdb()) << "Nem 9 az elemei szama";
         EXPECT_EQ(1, i.getItal(8).getTipus())<<"Nem egyezik a tipus";
         EXPECT_STREQ("Bor", i.getItal(8).getNev().c_str()) << "Nem egyezik a nev";
     }ENDM;
 
     TEST(Ital , set) {
-        i.setItalok(k, std::cout, std::cin);
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        i.setItalok(k, oss, std::cin);
         SzeszesItalok *test;
         EXPECT_NO_THROW(test=dynamic_cast<SzeszesItalok *>( &i.getItal(0))) << "dob kivetelt";
         EXPECT_STREQ("Proba", test->getNev().c_str()) << "Nem egyezik a nev";
@@ -199,7 +199,8 @@ int main() {
     }ENDM;
 
     TEST(Koktlok, add) {
-        k.Set(i, std::cout, std::cin);
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        k.Set(i, oss, std::cin);
         EXPECT_EQ(1, k.getKoktelDb()) << "Nem egy az elemei szama";
         Koktle *test;
         EXPECT_NO_THROW(test=&k.getKoktel(0)) << "dob kivetelt";
@@ -210,7 +211,8 @@ int main() {
     }ENDM;
 
     TEST( Koktle, modosit) {
-        k.Set(i, std::cout, std::cin);
+        std::ostringstream oss; //csak hogy jobban nézen ki a kimenet
+        k.Set(i, oss, std::cin);
         Koktle *test;
         EXPECT_NO_THROW(test=&k.getKoktel(0)) << "dob kivetelt";
         EXPECT_STREQ("Mas nev", test->getNev().c_str()) << "Nem egyezik a nev";
@@ -219,15 +221,48 @@ int main() {
         EXPECT_TRUE(test->tartalmaz_e(9))<<"nem tartalmazza az italt";
     }ENDM;
 
+    TEST(Kokte, torles) {
+        std::ostringstream oss2; //csak hogy jobban nézen ki a kimenet
+        k.addKoktel(i,oss2, std::cin);
+        Koktle *test=&k.getKoktel(1);
+        test->removeAlapanyag(&i.getItal(0));
+        EXPECT_FALSE(test->tartalmaz_e(8))<<"Tartalmazza az italt";
+        test->addAlapanyag(i,oss2, std::cin);
+        EXPECT_TRUE(test->tartalmaz_e(8))<<"Nem tartalmazza az italt";
+        test->removeAlapanyag(oss2, std::cin);
+        EXPECT_FALSE(test->tartalmaz_e(8))<<"Tartalmazza az italt";
+        std::ostringstream oss;
+        test->removeAlapanyag(oss,std::cin);
+        EXPECT_STREQ("A koktelnak nincsen alapnyagai!\n",oss.str().c_str())<<"Nem ures a lista";
+        k.removeKoktel(1);
+        EXPECT_ANY_THROW(k.getKoktel(1))<<"Nem dob hibat";
+    }ENDM;
+
+    TEST(Koktle, ajalas) {
+        std::ostringstream oss;
+        k.veltel_ajanlas(oss, std::cin);
+        EXPECT_STREQ("Koktel neve: Mas nev [1] alapanyag: Alkohol mentes Miranda Mennyiseg: 2 [2] alapanyag: Alkohols Proba Mennyiseg: 1 [3] alapanyag: Gin Gin Mennyiseg: 7 [4] alapanyag: Alkohol mentes Valami Mennyiseg: 9\nNyomjon meg az enter-t a folytatashoz...",oss.str().c_str())<<"Csak ez az egy lehet benne";
+        std::istringstream iss("3");
+        oss.str("");
+        k.lista_alapanyagok_szerint(oss,iss);
+        EXPECT_STREQ("Valassz egy ital tipust!\n1. Bor 2. Whiskey 3. Gin 4. Rum 5. Tequila 6. Sor 7. Gyumolcsle 8. Alkohols 9. Alkohol mentes \nKoktel neve: Mas nev [1] alapanyag: Alkohol mentes Miranda Mennyiseg: 2 [2] alapanyag: Alkohols Proba Mennyiseg: 1 [3] alapanyag: Gin Gin Mennyiseg: 7 [4] alapanyag: Alkohol mentes Valami Mennyiseg: 9\nNyomjon meg az enter-t a folytatashoz...",oss.str().c_str())<<"nem egyezik az elvartal";
+        oss.str("");
+        std::istringstream iss2("3");
+        k.getKoktel(0).alapanyagok_adatok(oss, iss2);
+        EXPECT_STREQ("Koktel neve: Mas nev [1] alapanyag: Alkohol mentes Miranda Mennyiseg: 2 [2] alapanyag: Alkohols Proba Mennyiseg: 1 [3] alapanyag: Gin Gin Mennyiseg: 7 [4] alapanyag: Alkohol mentes Valami Mennyiseg: 9\nAlapanyag index: Nev: Gin Gyarto: Gines Fajtaja: Gin Alkohol tartalom: 40 Szin: feher\nNyomjon meg az enter-t a folytatashoz...",oss.str().c_str())<<"Nem egyezik az elvartal";
+    }ENDM;
+
     TEST(Italok ,remove) {
-        i.setItalok(k, std::cout, std::cin);
+        std::ostringstream oss2; //csak hogy jobban nézen ki a kimenet
+        i.setItalok(k, oss2, std::cin);
         EXPECT_EQ(9, i.getdb()) << "Nem torote az alapnyagot";
         EXPECT_EQ(0, k.getKoktelDb())<<"Nem torolte a koktelt";
+        EXPECT_ANY_THROW(k.getKoktel(0))<<"Nem dob hibat";
         EXPECT_TRUE(i.tartaalmaz("Bor",1))<<"Az ittal nem tartlmaza az utolso elemet";
         EXPECT_FALSE(i.tartaalmaz("Gin",3))<<"Rosz elem torlese";
         while (i.getdb()!=0) {
             std::istringstream iss("1");
-            i.removeItal(k, std::cout, iss);
+            i.removeItal(k, oss2, iss);
         }
         std::ostringstream oss;
         i.kiir_index(oss);

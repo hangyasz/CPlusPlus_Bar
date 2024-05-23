@@ -15,7 +15,7 @@
 
 size_t get_tipusok_szam() {
     TipusInfo i;
-    return i.meret;
+    return i.db;
 }
 
 
@@ -23,7 +23,7 @@ const char* get_tipus_nev_str(size_t tipus) {
     static const TipusInfo info;
     if(tipus==0 or tipus>get_tipusok_szam())
         throw "Hibas tipus!";
-    return info.italkok[tipus-1];
+    return info.ital_nevek[tipus-1];
 }
 
 
@@ -308,7 +308,9 @@ void Bor::removeFajta(std::ostream &os, std::istream &is) {
     os << "Melyik fajtat szeretne torolni?" << std::endl;
     size_t index=size_beolvas(os, is);
     if(index> fajta_db or fajta_db==0)
-        throw "sikrteln torle  tul indexeles";
+        throw "sikrteln torles  tul indexeles";
+    if(index==0) //ha 0 akkor nem torolunk
+        return;
     if(fajta_db-1==0) {
         delete [] fajta;
         fajta=nullptr;
@@ -340,7 +342,7 @@ void Bor::kiir(std::ostream &os) const {
         os << " Fajta:";
     }
     for (size_t i = 0; i < fajta_db; i++) { //kirjuk a fajtakat
-        os <<" ["<<i<<"] "<< fajta[i];
+        os <<" ["<<i+1<<"] "<< fajta[i];
     }
 }
 //a borok osztály adatait lehet

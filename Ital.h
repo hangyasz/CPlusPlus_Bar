@@ -12,8 +12,8 @@
 #include "string5.h"
 
 struct TipusInfo {
-    const char italkok[9][20] = {"Bor", "Whiskey", "Gin", "Rum", "Tequila", "Sor", "Gyumolcsle", "Alkohols", "Alkohol mentes"};
-    const size_t meret=9;
+    const char ital_nevek[9][20] = {"Bor", "Whiskey", "Gin", "Rum", "Tequila", "Sor", "Gyumolcsle", "Alkohols", "Alkohol mentes"};
+    const size_t db=9;
 };
 
 //elöre deklarációk
@@ -43,7 +43,7 @@ public:
     String getGyarto() const;
 
     //visszaadja az ital tipusát
-    size_t getTipus() const ;
+    size_t getTipus() const;
     //visszaadja az ital tipusát szövegesen
     const char*  getTipusNev() const;
     //beálitja/átálitja az ital nevét
@@ -96,7 +96,7 @@ class Bor : public SzeszesItalok {
     String *fajta; //bor fajtái tartalmatát
     size_t fajta_db;  //bor fajtáinak száma
     int evjarat;  //bor éjrára
-    size_t szin; //bor szine 1 voros 2 rozé 3 fehér
+    size_t szin; //bor szine 1 vörös 2 rose 3 fehér
 
 public:
     //bor konstruktor
@@ -198,8 +198,6 @@ public:
     String getSzin() const;
     //gin szin beálitása
     void setSzin(std::ostream &os,std::istream &is);
-    //a kapot számát sziné alakitja
-    void setSzin(int kap);
     //gin iz visza adása
     String getIz() const;
 
@@ -239,7 +237,7 @@ public:
     // adatainak kiirása
     void kiir(std::ostream &os) const;
     //kiirja az ital adatait fájlba
-     void kiirF(std::ofstream& os) const;
+    void kiirF(std::ofstream& os) const;
     //valtoztatas menü
     void Set( std::ostream &os, std::istream &is);
 };
@@ -312,7 +310,7 @@ std::ostream& operator<<(std::ostream& os, const Ital& ital);
 //bor éjrárat elenöriz;
 void evjarat_teszt(int evjarat);
 // emberiseg enyiideje készit alkoholt
-void alkohol_keszul(unsigned int ido);
+void  alkohol_keszul(unsigned int ido);
 
 
 

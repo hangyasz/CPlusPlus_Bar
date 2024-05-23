@@ -213,9 +213,17 @@ Fajta::Fajta(std::ifstream &file,size_t tipus,std::ostream &os, std::istream &is
 
 
 //Gyumolcsle osztály konstruktora ami egy fajlban található adatokat olvasbe
-Gyumolcsle::Gyumolcsle(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is):Ital(file,tipus, os,is),gyumolcsszazalek(0) { //inicializálo listán Ital konstruktor hívása és gyumolcsszazalek 0-ra állítása
-    setTipus(7); //tipus beállítása gyumolcsle-re
-    setGyumolcsszazalek(uszam_olvas(file)); //gyumolcsszazalek beolvasása és beállítása
+Gyumolcsle::Gyumolcsle(std::ifstream &file,size_t tipus, std::ostream &os, std::istream &is):Ital(file,tipus, os,is),gyumolcsszazalek(0) {
+    //inicializálo listán Ital konstruktor hívása és gyumolcsszazalek 0-ra állítása
+    unsigned int szazlel=uszam_olvas(file); //szazalek beolvasása
+    try {
+        setGyumolcsszazalek(szazlel); //szazalek beállítása
+    }catch (const char * hiba) {
+        os<<hiba<<std::endl;
+        os<<"itall nev: "<<getNev()<<" gyarto: "<<getGyarto()<<" itall tipus: "<<getTipusNev()<<"\n"; //ha hibás az alkohol tartalom akkor kiirja az adatotk
+        setGyumolcsszazalek(os, is); //ha hibás az erleses akkor megkeri a felhasználót hogy adja meg kezel
+
+    }
 }
 
 //Italok osztály fáljbol olvaso függvénye

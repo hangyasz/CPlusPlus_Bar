@@ -12,10 +12,6 @@
 #include "Ital.h"
 #include "memtrace.h"
 
-//Kotek parameter nelkul konstruktor
-Koktle::Koktle():alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
-    //az alapanyagok es a menyiseg tomboket nullpointerre allitjuk és az alapanyag_db-t 0-ra
-}
 
 
 Koktle::Koktle(Italok &italok, std::ostream &os, std::istream &is): alapanyag_db(0), alapanyagok(nullptr), menyiseg(nullptr){
@@ -83,20 +79,20 @@ void Koktle::addAlapanyag(Italok &italok, std::ostream &os, std::istream &is) {
 }
 
 void Koktle::removeAlapanyag(std::ostream &os, std::istream &is) {
-    if(alapanyag_db==0) {
-        os<<"a koktelnak nincsen alapnyagai!"<<std::endl;
+    if(alapanyag_db==0) { //ha nincsenek alapanyagok akkor kiirjuk hogy nincsenek es visszaterunk
+        os<<"A koktelnak nincsen alapnyagai!"<<std::endl;
         return;
     }
-    kiir(os);
+    kiir(os); //kiirjuk a koktelt
     os<<"\nTorolni kivant Alapanyag index: ";
-    size_t index=size_beolvas(os, is);
+    size_t index=size_beolvas(os, is); //beolvasni a torolni kivant alapanyag indexet
     while (index>alapanyag_db){
         os<<"Hibas index!\n";
         kiir(os);
         os<<"torolni kivant Alapanyag index: ";
         index=size_beolvas(os, is);
     }
-    if(index==0) {
+    if(index==0) { //ha 0-t valasztott akkor visszaterunk
         return;
     }
     if(alapanyag_db-1==0) {
@@ -107,6 +103,7 @@ void Koktle::removeAlapanyag(std::ostream &os, std::istream &is) {
         //es a pointereket nullpointerre allitjuk
         alapanyagok=nullptr;
         menyiseg=nullptr;
+        return;
     }
     Ital **uj_alapanyagok = new Ital*[alapanyag_db-1]; //letrehozunk egy uj alapanyagok tombot ami egyel kisebb mint az eredeti az alapanyagnak
     unsigned int *uj_mennyiseg = new unsigned int[this->alapanyag_db-1]; //letrehozunk egy uj mennyiseg tombot ami egyel kisebb mint az eredeti a menyisegnek
@@ -190,7 +187,7 @@ String Koktle::getNev() const {
 void Koktle::Set(Italok &italok, std::ostream &os, std::istream &is) {
     size_t valaszto;
     do{
-        os<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - Nev modositasa\n4 - viszalepes"<<std::endl;
+        os<<"Mit szeretne csinalni?\n1 - alapanyag hozzaadasa\n2 - alapanyag torlese\n3 - Nev modositasa\n4 - viszalepes \n5 - alapanyag adatok"<<std::endl;
         os<<"\nAdja meg az utasitas szamat: ";
         valaszto=size_beolvas(os, is); //beolvasni a valasztast
         switch (valaszto) {
@@ -205,6 +202,8 @@ void Koktle::Set(Italok &italok, std::ostream &os, std::istream &is) {
                 break;
             case 4: //ha 4-t valasztott akkor nem csinal semmit
                 break;
+            case 5:
+                alapanyagok_adatok(os, is); //ha 5-t valasztott akkor egy alapanyagok adatait irjuk ki
             default: os<<"Hibas bemenet!"<<std::endl; //ha mas szamot valasztott akkor hibat irunk ki és ujra kezdjuk
             break;
         }
@@ -217,6 +216,30 @@ void Koktle::Set(Italok &italok, std::ostream &os, std::istream &is) {
 Koktle::~Koktle() {
     delete [] alapanyagok;
     delete [] menyiseg;
+}
+
+//kirja egy kiválsztot alapanyag adatait
+void Koktle::alapanyagok_adatok(std::ostream &os, std::istream &is) const {
+    if(alapanyag_db==0) { //ha nincsenek alapanyagok akkor kiirjuk hogy nincsenek es visszaterunk
+        os<<"A koktelnak nincsen alapnyagai!"<<std::endl;
+        return;
+    }
+    kiir(os); //kiirjuk a koktelt
+    os<<"\nAlapanyag index: ";
+    size_t index=size_beolvas(os, is); //beolvasni a torolni kivant alapanyag indexet
+    while (index>alapanyag_db){
+        os<<"Hibas index!\n";
+        kiir(os);
+        os<<"torolni kivant Alapanyag index: ";
+        index=size_beolvas(os, is);
+    }
+    if(index==0) { //ha 0-t valasztott akkor visszaterunk
+        return;
+    }
+    --index;
+    alapanyagok[index]->kiir(os); //kiirjuk az adott indexu alapanyagot
+    os<<"\n";
+    vait(os, is); //varakozas
 }
 
 //konstruktor Koktle parameter kent kapott adatokat beallitja
@@ -247,13 +270,6 @@ Koktle& Koktlok::getKoktel(size_t index) const {
     return *this->koktelok[index];
 }
 
-//kiirja a koktelokat
-void Koktlok::kiir(std::ostream& os) const {
-    //vegigmegy a koktelokon es mindegyiket kiirja
-    for (size_t i=0; i<this->koktel_db; i++){
-        this->koktelok[i]->kiir(os);
-    }
-}
 
 //a kapot koktelt hozzaadasa a koktelokhoz
 void Koktlok::addKoktel(Koktle *kap) {
@@ -289,7 +305,7 @@ void Koktlok::removeKoktel(std::ostream &os, std::istream &is) {
         os<<"Torolni kivant koktel index: ";
         index = size_beolvas(os, is);
     }
-    if(index==0) {//ha nincsenek koktelok akkor kiirjuk hogy ures es visszaterunk
+    if(index==0) {//ha 0-t valasztott akkor visszaterunk
         return;
     }
     --index;
@@ -319,7 +335,6 @@ void Koktlok::removeKoktel(size_t index) {
     if(index>=koktel_db){
         if(koktel_db==0) {
             throw "urse a tomb";
-            return;
         }
         throw "tulindexeles";
     }
