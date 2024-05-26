@@ -1,3 +1,15 @@
-1<1><1><1><1><1><4><rwwrwr><wrrwrw><wrwr><werwe>
-2<2><2><2><2><2>
-3<3><3><3><3><
+2<Nev><Gyarto><2.6><2><2>
+3<Vaalami><Zoli><6><3><>
+3<Zold><kirnf><12><1><Zolis>
+1<Bor_zolk><en><3><2024><3><3><masodik><harmadik><elso>
+10<Zold><kirnf><12><1><Zolis>
+0<Zold><kirnf><12><1><Zolis>
+8<Zold><kirnf><108>
+1<Bor_zolk_ev><en><3><2026><4><3><masodik><harmadik><el
+so>
+2<Nev><Gyarto><2.6><valami><-11>
+2<><><2.6><2><2>
+2<Nev><><2.6><2><2>
+3<gin iz_hiba><Zoli><6><><
+
+7<Zold2><kirnf><108>
