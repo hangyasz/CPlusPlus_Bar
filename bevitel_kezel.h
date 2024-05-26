@@ -6,25 +6,35 @@
 #define BEVITEL_KEZEZ_H
 
 #include <iostream>
+#include "string5.h"
 
-//bemeneti puffer torlese
-void bufer_torles(std::istream &is);
-//szam beolvasasa
-int int_beolvas(std::ostream &os, std::istream &is);
-//float beolvasasa
-float float_beolvas(std::ostream &os, std::istream &is);
-//unsigned int beolvasasa
-unsigned int unsigned_int_beolvas(std::ostream &os, std::istream &is);
-//size_t beolvasasa
-size_t size_beolvas(std::ostream &os, std::istream &is);
-//várakozás a billentyű lenyomására
-void vait(std::ostream &os, std::istream &is);
-//bool beolvasasa
-bool bool_beolvas(std::ostream &os, std::istream &is);
-//tipus valaszto az italnak
-size_t tipus_valszto(std::ostream & os,std::istream &is);
-//adatok kiirasa outputara
-void adatok_kiirasa(const char* szoveg, std::ostream &os);
+struct Komunikacio{
+    //bemeneti puffer torlese
+   static void bufer_torles(std::istream &is);
+    //szam beolvasasa
+    static int int_beolvas(std::ostream &os, std::istream &is);
+    //float beolvasasa
+    static float float_beolvas(std::ostream &os, std::istream &is);
+    //unsigned int beolvasasa
+    static unsigned int unsigned_int_beolvas(std::ostream &os, std::istream &is);
+    //size_t beolvasasa
+    static size_t size_beolvas(std::ostream &os, std::istream &is);
+    //várakozás a billentyű lenyomására
+    static void vait(std::ostream &os, std::istream &is);
+    //bool beolvasasa
+    static bool bool_beolvas(std::ostream &os, std::istream &is);
+    //tipus valaszto az italnak
+    static size_t tipus_valszto(std::ostream & os,std::istream &is);
+    //Szöveg beolvasása
+    static String szoveg_beolvas(std::istream &is);
+    //adatok kiirasa outputara
+    static void adatok_kiirasa(const char* szoveg, std::ostream &os);
+    //menyiseg bekerese
+    static unsigned int mennyiseg_beker(std::ostream &os, std::istream &is);
+    //alapanyagok db bekerese
+    static size_t db_bekeres(std::ostream &os, std::istream &is);
+};
+
 
 
 

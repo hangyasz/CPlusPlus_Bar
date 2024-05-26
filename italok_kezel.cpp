@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <limits>
+#include "bevitel_kezel.h"
 #include "Ital.h"
 #include "koktle.h"
 #include "fugvenyek.hpp"
@@ -35,11 +35,11 @@ bool Italok::tartaalmaz(String nev, size_t tipus) const {
 void Italok::addItal(std::ostream &os, std::istream &is) {
     Ital **uj=new Ital*[db+1]; // egyel nagyobb tomb foglalas
     //atmasoljuk az adatokat;
-    din_atmasol(uj,ListaItalok,db);
+    Dinamikus::din_atmasol(uj,ListaItalok,db);
     typedef Ital* (*CreateItalFunction)(size_t tipus,std::ostream &, std::istream &); //letrehozunk egy pointert ami egy fuggvenyt mutat
     //letrehozunk egy tombot ami a fuggvenyeket tartalmazza
-    CreateItalFunction createItalFunction[]={italok_bevitel<Bor>,italok_bevitel<Wiskey>,italok_bevitel<Gin>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Gyumolcsle>,italok_bevitel<SzeszesItalok>,italok_bevitel<Ital>};
-    size_t tipus=tipus_valszto(os,is); //ital tipus valasztasa
+    CreateItalFunction createItalFunction[]={Dinamikus::italok_bevitel<Bor>,Dinamikus::italok_bevitel<Wiskey>,Dinamikus::italok_bevitel<Gin>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Gyumolcsle>,Dinamikus::italok_bevitel<SzeszesItalok>,Dinamikus::italok_bevitel<Ital>};
+    size_t tipus=Komunikacio::tipus_valszto(os,is); //ital tipus valasztasa
     uj[db]=createItalFunction[tipus-1](tipus,os,is); //uj ital hozzaadasa
     delete [] ListaItalok; //regi tomb törlése
     ListaItalok=uj;     //tomb legyen az uj tobb
@@ -50,7 +50,7 @@ void Italok::addItal(std::ostream &os, std::istream &is) {
 void Italok::addItal(Ital *kap) {
     Ital **uj=new Ital*[db+1]; //uj tomb foglalas
     //adatok atmasolas
-    din_atmasol(uj,ListaItalok,db);
+    Dinamikus::din_atmasol(uj,ListaItalok,db);
     uj[db]=kap; //az uj tomb utols eleme legyen a kap ittal
     delete [] ListaItalok; //toroljuk a tombot
     ListaItalok=uj;     //a tomb legyen egynlő az uj tombel
@@ -61,7 +61,7 @@ void Italok::addItal(Ital *kap) {
 void Italok::addItal(String nev, size_t tipus, std::ostream &os, std::istream &is) {
     if(!tartaalmaz(nev,tipus)) {
         typedef Ital* (*CreateItalFunction)(String, size_t, std::ostream &, std::istream &);
-        CreateItalFunction createItalFunction[]={italok_bevitel<Bor>,italok_bevitel<Wiskey>,italok_bevitel<Gin>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Fajta>,italok_bevitel<Gyumolcsle>,italok_bevitel<SzeszesItalok>,italok_bevitel<Ital>};
+        CreateItalFunction createItalFunction[]={Dinamikus::italok_bevitel<Bor>,Dinamikus::italok_bevitel<Wiskey>,Dinamikus::italok_bevitel<Gin>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Fajta>,Dinamikus::italok_bevitel<Gyumolcsle>,Dinamikus::italok_bevitel<SzeszesItalok>,Dinamikus::italok_bevitel<Ital>};
         addItal(createItalFunction[tipus-1](nev,tipus,os,is));
     }
 }
@@ -83,15 +83,23 @@ void Italok::kiir_index(std::ostream &os) const {
     os<<std::endl;
 }
 
+//removeItal fuggveny ami egyelemü listabol torol
+void Italok::removeItal() {
+    delete ListaItalok[0];
+    delete [] ListaItalok;
+    ListaItalok=nullptr; //a listat nullpointerre allitjuk
+    db=0; //db 0-ra allitjuk
+}
+
 //ital törlése a listáboll
 void Italok::removeItal(Koktlok &k, std::ostream &os, std::istream &is) {
     kiir_index(os); //kiirja az italokat indexukkel egyutt
     size_t index;
     os << "\nAdja meg a torolni kivant ital indexet: ";
-    index = size_beolvas(os, is); //beolvasuk a torolni kivant ital indexet
+    index = Komunikacio::size_beolvas(os, is); //beolvasuk a torolni kivant ital indexet
     while (index > db) {
         os << "Hibas index!" << std::endl;
-        index = size_beolvas(os, is); //ha hibas indexet adott meg akkor ujra beolvas
+        index = Komunikacio::size_beolvas(os, is); //ha hibas indexet adott meg akkor ujra beolvas
     }
     if (index == 0) //0 akkor viszalepunk
         return;
@@ -104,14 +112,11 @@ void Italok::removeItal(Koktlok &k, std::ostream &os, std::istream &is) {
         }
     }
     if(db-1==0) { //ha csak egy ital van a listaban akkor toroljuk az italt
-        delete ListaItalok[0];
-        delete [] ListaItalok;
-        ListaItalok=nullptr; //a listat nullpointerre allitjuk
-        db=0; //db 0-ra allitjuk
+       removeItal();
         return; //viszalepunk
     }
     Ital **tmp = new Ital*[db - 1]; //letrehozunk egy uj tombot egyel kisebbel
-    din_atmasol(tmp, ListaItalok, db, index); //atmasoljuk az adatokat
+    Dinamikus::din_atmasol(tmp, ListaItalok, db, index); //atmasoljuk az adatokat
     delete ListaItalok[index]; //toroljuk a kivalsztot  italt
     db--; //csokentjuk a tatolr italok db szamat
     delete[] ListaItalok; //toroljuk a regi tombot
@@ -128,13 +133,13 @@ Ital &Italok::getItal(size_t index) const {
 
 
 //Italok osztaly adatait lehet alitani
-void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
+void Italok::modosit(Koktlok &k, std::ostream &os, std::istream &is) {
     size_t valaszto;
     size_t index;
     do{
-        os<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - Italok kiiras\n5 - viszalepes"<<std::endl;
-        os<<"\nAdja meg az utasitas szamat: ";
-        valaszto=size_beolvas(os, is); //beolvasuk a felhasznalo valasztasat
+        os<<"Mit szeretne csinalni?\n1 - Ital hozzaadasa\n2 - Ital torlese\n3 - Ital modositasa\n4 - Italok kiiras";
+        Menu::menu_vege(os); //kiirjuk a menut
+        valaszto=Komunikacio::size_beolvas(os, is); //beolvasuk a felhasznalo valasztasat
         switch (valaszto) {
             case 1:
                 addItal(os, is); //ha 1 akkor uj ital hozzaadasa
@@ -145,7 +150,7 @@ void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
             case 3: //ha 3 akkor ital modositasa
                 kiir_index(os); //kiirjuk az italokat indexukkel egyutt
                 os<<"\nAdja meg a modositani kivant ital indexet: ";
-                index=size_beolvas(os,is); //beolvasuk a modositani kivant ital indexet
+                index=Komunikacio::size_beolvas(os,is); //beolvasuk a modositani kivant ital indexet
                 if(index>db){
                     os<<"Hibas index!"<<std::endl;
                     break;
@@ -153,7 +158,7 @@ void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
                 if(index==0) //ha 0 akkor viszalepunk
                     break;
                 try {
-                    getItal(index-1).Set(os,is); //az adott indexu ital adatainak modositasa
+                    getItal(index-1).modosit(os,is); //az adott indexu ital adatainak modositasa
                 }catch (const char *s){
                     os<<s<<std::endl;
                 }
@@ -161,19 +166,19 @@ void Italok::setItalok(Koktlok &k, std::ostream &os, std::istream &is) {
             case 4:
                 this->kiir_index(os); //ha 4 akkor kiirjuk az italokat
                 break;
-            case 5: //ha 5 akkor viszalepunk
+            case 0: //ha 0 akkor viszalepunk
                 break;;
-            default: os<<"Hibas bemenet!"<<std::endl;
+            default: Menu::hibba(os); //ha hibas bemenetet kapunk akkor hibat irunk ki
                 break;
         }
 
-    }while (valaszto!=5);
+    }while (valaszto!=0);
     try {
         kiirF(); //kiirjuk az italokat a fajlba
     } catch (const char *s) {
         os << s << std::endl;
         os<<"Nem sikerult az italokat kiirni a fajlba!"<<std::endl;
-        vait(os, is); //varakozas
+        Komunikacio::vait(os, is); //varakozas
     }
 }
 
